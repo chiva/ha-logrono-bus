@@ -1,0 +1,32 @@
+{
+  "result": {
+    "activities": [
+      {
+        "vehicleMonitoringRef": "0609",
+        "vehicleRef": "0609",
+        "lineRef": "10",
+        "directionRef": "Ida",
+        "publishedLineName": "EL ARCO-HOSPITAL SAN PEDRO",
+        "latitude": 42.4652,
+        "longitude": -2.4387,
+        "locationRecordedAtTime": "2026-07-20T07:55:30Z",
+        "delaySeconds": 26,
+        "monitored": true,
+        "confidenceLevel": "CERTAIN",
+        "nextStopRef": "0100",
+        "nextStopExpectedArrivalTime": "2026-07-20T09:57:54Z"
+      },
+      {
+        "vehicleMonitoringRef": "1125",
+        "vehicleRef": "1125",
+        "lineRef": "[object Object]",
+        "directionRef": "",
+        "publishedLineName": "[object Object]",
+        "latitude": 42.46,
+        "longitude": -2.41,
+        "delaySeconds": 0,
+        "monitored": true
+      }
+    ]
+  }
+}

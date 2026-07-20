@@ -1,0 +1,39 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Logroño Bus",
+        "description": "Pick the bus line you want to track.",
+        "data": { "line_id": "Line" }
+      },
+      "direction": {
+        "title": "Direction",
+        "description": "Which way is the bus going on line {line}?",
+        "data": { "direction": "Direction" }
+      },
+      "stop": {
+        "title": "Stop",
+        "description": "Choose your stop on line {line} ({direction}).",
+        "data": { "stop_id": "Stop" }
+      }
+    },
+    "abort": {
+      "cannot_connect": "Could not reach the Logroño transport service. Try again later.",
+      "already_configured": "That stop and line are already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "description": "How often to refresh arrival predictions.",
+        "data": { "scan_interval": "Refresh interval (seconds)" }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "next_bus": { "name": "Next bus" }
+    }
+  }
+}

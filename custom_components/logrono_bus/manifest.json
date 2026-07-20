@@ -1,0 +1,12 @@
+{
+  "domain": "logrono_bus",
+  "name": "Logroño Bus",
+  "codeowners": ["@chiva"],
+  "config_flow": true,
+  "documentation": "https://github.com/chiva/ha-logrono-bus",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/chiva/ha-logrono-bus/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}
