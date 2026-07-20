@@ -1,0 +1,67 @@
+# Example Lovelace view for Logroño Bus.
+#
+# Replace the entity ids with yours (Developer Tools → States → filter "next_bus").
+# For the map cards, first copy www/logrono-bus-map-card.js into your HA `config/www/`
+# and add it as a dashboard Resource (URL /local/logrono-bus-map-card.js, type: module).
+
+title: Autobuses
+views:
+  - title: Bus
+    path: bus
+    cards:
+      # --- 1. Live countdown list (ticks every second) --------------------
+      - type: entities
+        title: Próximos autobuses
+        state_color: true
+        entities:
+          - entity: sensor.l10_ayuntamiento_artesanos_next_bus
+            name: L10 → Hospital San Pedro
+          - entity: sensor.l2_ayuntamiento_artesanos_next_bus
+            name: L2 → Artesanos
+
+      # --- 2. Details (frequency, first/last, delay, next departures) ------
+      - type: markdown
+        content: >
+          {% set s = states.sensor.l10_ayuntamiento_artesanos_next_bus %}
+          ### 🚌 Línea {{ s.attributes.line }} · {{ s.attributes.direction_label }}
+
+          {% if s.state not in ['unknown','unavailable'] -%}
+          **Próximo:** {{ ((as_timestamp(s.state) - as_timestamp(now())) / 60) | round(0) }} min
+          {%- if s.attributes.delay_minutes and s.attributes.delay_minutes != 0 %}
+          ({{ '+' if s.attributes.delay_minutes > 0 }}{{ s.attributes.delay_minutes }} min)
+          {%- endif %}
+          {% else -%}
+          **Sin servicio ahora** (fuera de horario o sin estimación)
+          {%- endif %}
+
+          Frecuencia: cada ~{{ s.attributes.interval_minutes }} min ·
+          Primer paso: {{ s.attributes.first_pass }} ·
+          Último: {{ s.attributes.last_pass }}
+
+          {% if s.attributes.next_arrivals %}
+          Siguientes:
+          {% for t in s.attributes.next_arrivals -%}
+          {{ as_timestamp(t) | timestamp_custom('%H:%M') }}{{ ', ' if not loop.last }}
+          {%- endfor %}
+          {% endif %}
+
+      # --- 3. Map: the whole line + every live bus ------------------------
+      - type: custom:logrono-bus-map-card
+        entity: sensor.l10_ayuntamiento_artesanos_next_bus
+        mode: line
+        title: Línea 10 — recorrido y buses
+
+      # --- 4. Map: zoom to the stop + the nearest approaching bus ---------
+      - type: custom:logrono-bus-map-card
+        entity: sensor.l10_ayuntamiento_artesanos_next_bus
+        mode: stop
+        zoom: 15
+        title: Parada Ayuntamiento — bus más cercano
+
+      # --- 5. Native HA map (device_tracker buses over OSM) ---------------
+      #   Uncomment and use the real tracker entity ids once buses are running.
+      # - type: map
+      #   title: Buses en directo
+      #   default_zoom: 14
+      #   entities:
+      #     - device_tracker.bus_l10_7290

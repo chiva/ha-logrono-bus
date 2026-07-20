@@ -1,0 +1,13 @@
+{
+  "result": {
+    "frequencies": [
+      { "from": "07:00", "to": "22:45", "intervalMinutes": 15, "firstPass": "07:00", "lastPass": "22:45", "passCount": 68, "intervalMinutesMax": 15 }
+    ],
+    "frequenciesByDirection": {
+      "Ida": [ { "from": "07:00", "to": "22:45", "intervalMinutes": 15, "firstPass": "07:00", "lastPass": "22:45", "passCount": 66, "intervalMinutesMax": 15 } ],
+      "Vuelta": [ { "from": "07:00", "to": "22:45", "intervalMinutes": 15, "firstPass": "07:00", "lastPass": "22:45", "passCount": 66, "intervalMinutesMax": 15 } ]
+    },
+    "passes": ["07:00", "07:15", "07:30"],
+    "passesByDirection": { "Ida": ["07:00"], "Vuelta": ["07:00"] }
+  }
+}

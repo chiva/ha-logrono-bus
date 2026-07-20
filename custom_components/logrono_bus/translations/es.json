@@ -1,0 +1,39 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Autobús de Logroño",
+        "description": "Elige la línea de autobús que quieres seguir.",
+        "data": { "line_id": "Línea" }
+      },
+      "direction": {
+        "title": "Sentido",
+        "description": "¿En qué sentido circula el autobús de la línea {line}?",
+        "data": { "direction": "Sentido" }
+      },
+      "stop": {
+        "title": "Parada",
+        "description": "Elige tu parada en la línea {line} ({direction}).",
+        "data": { "stop_id": "Parada" }
+      }
+    },
+    "abort": {
+      "cannot_connect": "No se pudo conectar con el servicio de transporte de Logroño. Inténtalo más tarde.",
+      "already_configured": "Esa parada y línea ya están configuradas."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones",
+        "description": "Cada cuánto actualizar las predicciones de llegada.",
+        "data": { "scan_interval": "Intervalo de actualización (segundos)" }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "next_bus": { "name": "Próximo autobús" }
+    }
+  }
+}

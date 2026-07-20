@@ -1,0 +1,51 @@
+name: Live contract
+
+# Hits the real Logroño transport API to catch the day its shape/invariants
+# change (we don't control it). Deselected from normal CI; a red run here — or
+# a failure notice issue — is the drift alert.
+on:
+  schedule:
+    - cron: "0 7 * * 1" # weekly, Mondays 07:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  contract:
+    name: Live contract tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.14"
+          cache: pip
+      - run: pip install -r requirements_test.txt
+      # `-p no:homeassistant` disables the HA test plugin, which otherwise blocks
+      # all outbound network ("DNS resolution disabled in tests"). A transient 503
+      # / off-hours empty feed is a skip, not a failure; only a genuine
+      # shape/invariant change fails here.
+      - run: pytest tests_live/ -p no:homeassistant
+      - if: failure()
+        uses: actions/github-script@ffc2c79a5b2490bd33e0a41c1de74b877714d736 # v8
+        with:
+          script: |
+            const title = "Live API contract drift detected";
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: "open", labels: "contract-drift",
+            });
+            if (existing.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title,
+                labels: ["contract-drift"],
+                body: `The nightly live contract run failed: the upstream API shape or a key `
+                  + `invariant may have changed. See the run: ${context.serverUrl}/`
+                  + `${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              });
+            }
