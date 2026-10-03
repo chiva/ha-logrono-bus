@@ -1,0 +1,26 @@
+{
+  "domain": "logrono_bus",
+  "name": "Logroño Bus",
+  "after_dependencies": [
+    "frontend"
+  ],
+  "codeowners": [
+    "@chiva"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "http"
+  ],
+  "documentation": "https://chiva.github.io/logrono-bus/guia/07-home-assistant/",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/chiva/ha-logrono-bus/issues",
+  "loggers": [
+    "logrono_bus"
+  ],
+  "requirements": [
+    "logrono-bus==0.1.0"
+  ],
+  "single_config_entry": true,
+  "version": "0.1.0"
+}

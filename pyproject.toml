@@ -1,0 +1,76 @@
+# Tooling for the Logroño Bus Home Assistant integration. This is a HACS custom integration, not a
+# distributable package: its version lives in custom_components/logrono_bus/manifest.json (bumped
+# by release-please) and its runtime dependency is the `logrono-bus` library from PyPI, declared in
+# the manifest's `requirements`.
+[project]
+name = "ha-logrono-bus"
+version = "0.0.0"
+requires-python = ">=3.14.2,<3.15"
+dependencies = []
+
+[tool.uv]
+package = false
+default-groups = ["dev"]
+
+[dependency-groups]
+# Must match custom_components/logrono_bus/manifest.json "requirements" (Renovate keeps both in step).
+runtime = ["logrono-bus==0.1.0"]
+test = [
+    { include-group = "runtime" },
+    # Pins Home Assistant itself (and pytest, syrupy…) to a consistent, released set.
+    "pytest-homeassistant-custom-component==0.13.367",
+]
+lint = ["ruff==0.16.10"]
+typing = ["mypy==2.4.0"]
+dev = [
+    { include-group = "test" },
+    { include-group = "lint" },
+    { include-group = "typing" },
+    "pre-commit==4.6.2",
+]
+
+# Until logrono-bus 0.1.0 is published on PyPI, install it from the monorepo at a fixed commit (CI
+# can reach it; Home Assistant itself installs the PyPI release named in manifest.json). Remove
+# this table once it is published, then `uv lock`. To develop against a local checkout instead:
+# `uv pip install -e ../logrono-bus/packages/logrono-bus`.
+[tool.uv.sources]
+logrono-bus = { git = "https://github.com/chiva/logrono-bus", subdirectory = "packages/logrono-bus", rev = "a07d2f4bf4c9e72d9f30221ff2e14a8efeaaa786" }
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+src = ["custom_components", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "PTH", "RUF", "ASYNC", "SIM"]
+ignore = ["E501", "RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["custom_components"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+files = ["custom_components"]
+# The integration's domain equals the library's import name (logrono_bus). Anchor module names at
+# the repository root so mypy sees custom_components.logrono_bus, as Home Assistant imports it,
+# instead of mistaking the integration for the library.
+mypy_path = "."
+explicit_package_bases = true
+# Home Assistant's typing is complete enough for strict mode except for some untyped helpers.
+disallow_untyped_decorators = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = ["--tb=short"]
+
+[tool.coverage.run]
+source = ["custom_components/logrono_bus"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = true

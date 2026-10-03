@@ -1,0 +1,101 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Logroño Bus",
+        "description": "Estimaciones de paso de los autobuses urbanos de Logroño (proyecto no oficial, con los datos públicos del Ayuntamiento). Después de añadirla, usa «Añadir parada» para elegir tus paradas."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Logroño Bus ya está configurado. Añade más paradas desde su tarjeta con «Añadir parada»."
+    }
+  },
+  "config_subentries": {
+    "stop": {
+      "entry_type": "Parada",
+      "initiate_flow": {
+        "user": "Añadir parada"
+      },
+      "step": {
+        "user": {
+          "title": "Elige la parada",
+          "description": "Escribe para buscar. Las más cercanas a tu casa aparecen primero; «hacia …» indica adónde van sus autobuses, para distinguir paradas con el mismo nombre.",
+          "data": {
+            "stop_id": "Parada"
+          }
+        },
+        "lines": {
+          "title": "Líneas de {stop}",
+          "description": "Marca las líneas y sentidos que quieres seguir. Cada una crea un sensor con la próxima llegada y otro con los minutos que faltan.",
+          "data": {
+            "patterns": "Líneas y sentidos"
+          }
+        },
+        "reconfigure": {
+          "title": "Líneas de {stop}",
+          "description": "Cambia las líneas y sentidos que sigues en esta parada.",
+          "data": {
+            "patterns": "Líneas y sentidos"
+          }
+        }
+      },
+      "error": {
+        "no_lines": "Marca al menos una línea."
+      },
+      "abort": {
+        "already_configured": "Ya sigues esta parada. Para cambiar sus líneas, usa «Reconfigurar».",
+        "not_loaded": "Logroño Bus no está cargado todavía (¿sin conexión con el servicio del Ayuntamiento?). Inténtalo en unos minutos.",
+        "reconfigure_successful": "Líneas actualizadas."
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opciones de Logroño Bus",
+        "data": {
+          "scan_interval": "Cada cuánto actualizar",
+          "following": "Llegadas a tener en cuenta por línea"
+        },
+        "data_description": {
+          "scan_interval": "Entre 30 y 300 segundos. El servicio del Ayuntamiento es público: no hace falta consultarlo más a menudo.",
+          "following": "Cuántas llegadas se guardan; las siguientes aparecen en el atributo «siguientes»."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "next_arrival": {
+        "name": "{line} → {headsign} próxima llegada"
+      },
+      "minutes": {
+        "name": "{line} → {headsign} minutos"
+      }
+    }
+  },
+  "exceptions": {
+    "catalog_unavailable": {
+      "message": "No se pudo cargar la lista de líneas y paradas: {detail}"
+    },
+    "upstream_unavailable": {
+      "message": "El servicio de autobuses del Ayuntamiento no responde: {detail}"
+    },
+    "upstream_changed": {
+      "message": "El servicio de autobuses del Ayuntamiento ha cambiado de formato: {detail}"
+    },
+    "stop_removed": {
+      "message": "La parada {stop} ya no existe en el servicio del Ayuntamiento."
+    }
+  },
+  "issues": {
+    "upstream_changed": {
+      "title": "El servicio de autobuses del Ayuntamiento ha cambiado",
+      "description": "Las últimas consultas han fallado porque el servicio del Ayuntamiento responde con un formato distinto. Hace falta actualizar la integración Logroño Bus: busca una versión nueva en HACS. Este aviso desaparece solo cuando vuelva a funcionar."
+    },
+    "stop_removed": {
+      "title": "La parada {stop} ya no existe",
+      "description": "La parada {stop} ha desaparecido del servicio del Ayuntamiento (por ejemplo, tras un cambio de líneas). Elimínala en la integración Logroño Bus y añade la nueva con «Añadir parada»."
+    }
+  }
+}
