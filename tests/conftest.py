@@ -15,7 +15,9 @@ from homeassistant.config_entries import ConfigSubentryData
 from homeassistant.core import HomeAssistant
 from logrono_bus.providers.logrono.client import DEFAULT_BASE_URL
 from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
+from syrupy.assertion import SnapshotAssertion
 
 from custom_components.logrono_bus.const import CONF_PATTERNS, CONF_STOP_ID, DOMAIN, SUBENTRY_STOP
 
@@ -45,6 +47,17 @@ def load(name: str) -> Any:
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations: None) -> None:
     """Let Home Assistant load custom_components/ in every test."""
+
+
+@pytest.fixture
+def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
+    """Home Assistant's snapshot format, always.
+
+    Both syrupy and pytest-homeassistant-custom-component define ``snapshot``; which plugin wins
+    depends on load order, which differs between macOS and Linux CI. A conftest fixture wins
+    over both.
+    """
+    return snapshot.use_extension(HomeAssistantSnapshotExtension)
 
 
 @pytest.fixture(autouse=True)
