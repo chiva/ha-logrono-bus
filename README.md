@@ -11,11 +11,6 @@ elijas. Para paneles, automatizaciones y widgets de Android.
 
 ## Instalación
 
-> [!WARNING]
-> **Aún no se puede instalar.** La librería `logrono-bus` 0.1.0 todavía no está publicada en
-> PyPI y Home Assistant la instala desde ahí al arrancar la integración, así que la configuración
-> fallaría. Este aviso desaparecerá con la primera versión publicada.
-
 1. Con [HACS](https://hacs.xyz/): pulsa el botón de arriba (o añade este repositorio como
    *repositorio personalizado* de tipo **Integración**), descarga **Logroño Bus** y reinicia.
 2. *Ajustes → Dispositivos y servicios → Añadir integración* → **Logroño Bus**.
@@ -87,9 +82,8 @@ uv run pytest --cov        # tests (pytest-homeassistant-custom-component, syrup
 uv run ruff check . && uv run mypy
 ```
 
-Mientras `logrono-bus` no esté publicado en PyPI, `uv` lo instala desde un commit fijo de
-[chiva/logrono-bus](https://github.com/chiva/logrono-bus) (ver `[tool.uv.sources]` en
-`pyproject.toml`). Para probar cambios de la librería sin publicarlos:
+La librería [`logrono-bus`](https://pypi.org/project/logrono-bus/) viene de PyPI, la misma versión
+que instala Home Assistant. Para probar cambios de la librería sin publicarlos:
 `uv pip install -e ../logrono-bus/packages/logrono-bus`.
 
 ## Ecosistema
