@@ -7,6 +7,7 @@ direction. Data comes from the `logrono-bus` library (https://github.com/chiva/l
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import logging
 from pathlib import Path
@@ -21,7 +22,7 @@ from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
-from logrono_bus import LogronoBusProvider, UpstreamError
+from logrono_bus import LogronoBusProvider, UpstreamError, UpstreamSchemaError
 
 from .const import (
     CARD_FILENAME,
@@ -29,9 +30,10 @@ from .const import (
     CONF_STOP_ID,
     DOMAIN,
     ISSUE_STOP_REMOVED,
+    ISSUE_UPSTREAM_CHANGED,
     SUBENTRY_STOP,
 )
-from .coordinator import StopArrivalsCoordinator
+from .coordinator import StopArrivalsCoordinator, create_repair_issue
 from .models import LogronoBusConfigEntry, LogronoBusData
 
 PLATFORMS: list[Platform] = [Platform.SENSOR]
@@ -65,6 +67,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: LogronoBusConfigEntry) -
     try:
         catalog = await provider.get_catalog()
     except UpstreamError as err:
+        if isinstance(err, UpstreamSchemaError):
+            # Retrying cannot fix a changed catalogue: say so in Repairs. The first successful
+            # refresh of any stop clears it.
+            create_repair_issue(hass, ISSUE_UPSTREAM_CHANGED, ISSUE_UPSTREAM_CHANGED)
         raise ConfigEntryNotReady(
             translation_domain=DOMAIN,
             translation_key="catalog_unavailable",
@@ -74,13 +80,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: LogronoBusConfigEntry) -
     data = LogronoBusData(provider=provider, catalog=catalog)
     entry.runtime_data = data
     for subentry_id, subentry in entry.subentries.items():
-        if subentry.subentry_type != SUBENTRY_STOP:
-            continue
-        coordinator = StopArrivalsCoordinator(hass, entry, subentry)
-        # Not async_config_entry_first_refresh: one stop failing must not block the others, and
-        # its sensors simply show as unavailable until the next successful refresh.
-        await coordinator.async_refresh()
-        data.coordinators[subentry_id] = coordinator
+        if subentry.subentry_type == SUBENTRY_STOP:
+            data.coordinators[subentry_id] = StopArrivalsCoordinator(hass, entry, subentry)
+    # Not async_config_entry_first_refresh: one stop failing must not block the others, and its
+    # sensors simply show as unavailable until the next successful refresh. All stops at once, so
+    # a slow upstream delays a reload by one request, not one per stop.
+    await asyncio.gather(*(c.async_refresh() for c in data.coordinators.values()))
 
     _delete_issues_of_unfollowed_stops(hass, entry)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
