@@ -211,11 +211,12 @@ class StopSubentryFlow(ConfigSubentryFlow):
             data_schema=patterns_schema(
                 catalog,
                 stop_id,
-                # Lines that no longer exist (network changes) cannot stay selected.
+                # Directions that no longer stop here (network changes) cannot stay selected: the
+                # selector would reject them, and they are what the "lines removed" issue reports.
                 [
                     pattern_id
                     for pattern_id in subentry.data[CONF_PATTERNS]
-                    if catalog.pattern(pattern_id) is not None
+                    if pattern_id in {p.id for p in boardable_patterns(catalog, stop_id)}
                 ],
             ),
             description_placeholders={"stop": subentry.title},

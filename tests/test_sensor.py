@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+from freezegun.api import FrozenDateTimeFactory
 from homeassistant.config_entries import ConfigSubentry
 from homeassistant.const import STATE_UNKNOWN
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.common import MockConfigEntry, async_fire_time_changed
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 from syrupy.assertion import SnapshotAssertion
 
@@ -113,3 +114,25 @@ async def test_timetable_failure_leaves_the_sensors_working(
     assert minutes.state == "1"
     assert minutes.attributes["servicio"] is None
     assert "primera_salida" not in minutes.attributes
+
+
+async def test_yesterdays_timetable_is_not_shown_after_midnight(
+    hass: HomeAssistant,
+    loaded_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Past midnight today's timetable cannot be fetched: no service attributes beat stale ones."""
+    minutes = "sensor.ayuntamiento_101_2_manresa_minutos"
+    assert hass.states.get(minutes).attributes["servicio"] == "en_servicio"
+
+    aioclient_mock.clear_requests()
+    aioclient_mock.get(LINES_URL, json=load("lines.json"))
+    aioclient_mock.get(STOPS_URL, json=load("stops.json"))
+    aioclient_mock.get(arrivals_url("101"), json=load("arrivals-101.json"))
+    aioclient_mock.get(timetable_url("2"), status=503)
+    aioclient_mock.get(timetable_url("10"), status=503)
+    freezer.move_to("2026-10-03T22:30:00+00:00")  # 00:30 on Sunday in Logroño
+    async_fire_time_changed(hass)
+    await hass.async_block_till_done(wait_background_tasks=True)
+    assert hass.states.get(minutes).attributes["servicio"] is None
