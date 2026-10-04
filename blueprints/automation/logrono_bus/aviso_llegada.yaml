@@ -86,7 +86,9 @@ blueprint:
           name: Después de avisar, esperar como mucho
           description: >-
             Tiempo sin volver a avisar, para que un tiempo que sube y baja (5, 6, 5…) no repita el
-            aviso. Termina antes si ese autobús ya ha pasado, para avisar también del siguiente.
+            aviso. Termina antes si ese autobús ya ha pasado (el siguiente queda a más de 2 minutos
+            por encima de tu aviso), para avisar también del siguiente. Si el siguiente viene muy
+            pegado, puede quedarse sin aviso.
           default: 10
           selector:
             number:
