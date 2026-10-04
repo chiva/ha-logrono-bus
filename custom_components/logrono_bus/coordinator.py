@@ -42,6 +42,23 @@ from .models import LogronoBusConfigEntry
 _LOGGER = logging.getLogger(__name__)
 
 
+LEARN_MORE_URL = "https://chiva.github.io/logrono-bus/guia/07-home-assistant/#si-algo-falla"
+
+
+def create_repair_issue(hass: HomeAssistant, issue_id: str, kind: str, *, stop: str = "") -> None:
+    """An error in Repairs, until the condition clears."""
+    ir.async_create_issue(
+        hass,
+        DOMAIN,
+        issue_id,
+        is_fixable=False,
+        severity=ir.IssueSeverity.ERROR,
+        translation_key=kind,
+        translation_placeholders={"stop": stop},
+        learn_more_url=LEARN_MORE_URL,
+    )
+
+
 def line_selection(pattern_id: str) -> LineSelection:
     """`"2:desc"` → line 2, direction desc. An unknown direction means "either"."""
     line_id, _, direction = pattern_id.partition(":")
@@ -151,13 +168,4 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
         return kind if kind == ISSUE_UPSTREAM_CHANGED else f"{kind}_{self.selection.stop_id}"
 
     def _raise_issue(self, kind: str) -> None:
-        ir.async_create_issue(
-            self.hass,
-            DOMAIN,
-            self._issue_id(kind),
-            is_fixable=False,
-            severity=ir.IssueSeverity.ERROR,
-            translation_key=kind,
-            translation_placeholders={"stop": self.subentry.title},
-            learn_more_url="https://chiva.github.io/logrono-bus/guia/07-home-assistant/#si-algo-falla",
-        )
+        create_repair_issue(self.hass, self._issue_id(kind), kind, stop=self.subentry.title)

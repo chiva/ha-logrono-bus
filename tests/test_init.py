@@ -62,6 +62,20 @@ async def test_not_ready_when_catalogue_unavailable(
     assert config_entry.state is ConfigEntryState.SETUP_RETRY
 
 
+async def test_changed_catalogue_is_reported_in_repairs(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    issue_registry: ir.IssueRegistry,
+) -> None:
+    aioclient_mock.get(LINES_URL, json={"result": "otro formato"})
+    aioclient_mock.get(STOPS_URL, json=load("stops.json"))
+    config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    assert config_entry.state is ConfigEntryState.SETUP_RETRY
+    assert issue_registry.async_get_issue(DOMAIN, ISSUE_UPSTREAM_CHANGED) is not None
+
+
 async def test_outage_makes_sensors_unavailable_then_recovers(
     hass: HomeAssistant,
     loaded_entry: MockConfigEntry,
