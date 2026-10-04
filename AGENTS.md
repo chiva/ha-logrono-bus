@@ -9,5 +9,4 @@
 - `custom_components/logrono_bus/frontend/logrono-bus-card.js` is generated: build it in
   chiva/logrono-bus with `uv run just ha-card` (source in `web/packages/ha-card`), never edit it here.
 - The library pin appears in `manifest.json` and in `pyproject.toml` (group `runtime`): keep them equal.
-- Conventional Commits. Only push or open PRs when the maintainer asks; follow
-  `~/git/personal/AGENTS.md` identity checks.
+- Conventional Commits. Only push or open PRs when the maintainer asks.
