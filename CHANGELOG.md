@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/chiva/ha-logrono-bus/compare/v0.1.0...v0.1.1) (2026-10-04)
+
+
+### Bug Fixes
+
+* **card:** alinear el aviso con el borde de la tarjeta en Firefox ([#5](https://github.com/chiva/ha-logrono-bus/issues/5)) ([1fc1491](https://github.com/chiva/ha-logrono-bus/commit/1fc149189d3c447ab117ad4c4646032cccfac873))
+
 ## 0.1.0 (2026-10-04)
 
 
