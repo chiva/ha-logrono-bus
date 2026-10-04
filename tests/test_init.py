@@ -145,6 +145,56 @@ async def test_vanished_stop_raises_issue(
     # The other stop keeps working.
     assert hass.states.get(MINUTES).state == "1"
 
+    # Removing the stop, as the issue asks, clears the issue too.
+    vanished = next(
+        sid for sid, sub in config_entry.subentries.items() if sub.data["stop_id"] == "4242"
+    )
+    assert hass.config_entries.async_remove_subentry(config_entry, vanished)
+    await hass.async_block_till_done()
+    assert issue_registry.async_get_issue(DOMAIN, f"{ISSUE_STOP_REMOVED}_4242") is None
+
+
+async def test_removing_the_integration_clears_its_issues(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    upstream: AiohttpClientMocker,
+    issue_registry: ir.IssueRegistry,
+) -> None:
+    config_entry.add_to_hass(hass)
+    hass.config_entries.async_add_subentry(
+        config_entry, ConfigSubentry(**stop_subentry("4242", "Desaparecida (4242)", ["2:desc"]))
+    )
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+    assert issue_registry.async_get_issue(DOMAIN, f"{ISSUE_STOP_REMOVED}_4242") is not None
+
+    await hass.config_entries.async_remove(config_entry.entry_id)
+    await hass.async_block_till_done()
+    assert not [key for key in issue_registry.issues if key[0] == DOMAIN]
+
+
+async def test_rate_limit_waits_as_long_as_the_upstream_asks(
+    hass: HomeAssistant,
+    loaded_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """A 429 with Retry-After: 150 skips the next two 60 s refreshes instead of hammering."""
+    _serve(aioclient_mock)
+    aioclient_mock.get(arrivals_url("101"), status=429, headers={"Retry-After": "150"})
+    await _tick(hass, freezer)
+    assert hass.states.get(MINUTES).state == STATE_UNAVAILABLE
+
+    def arrivals_requests() -> int:
+        return sum(1 for call in aioclient_mock.mock_calls if "byStop/101" in str(call[1]))
+
+    asked = arrivals_requests()
+    await _tick(hass, freezer)
+    await _tick(hass, freezer)
+    assert arrivals_requests() == asked
+    await _tick(hass, freezer)
+    assert arrivals_requests() == asked + 1
+
 
 async def test_adding_a_stop_reloads_with_its_sensors(
     hass: HomeAssistant, loaded_entry: MockConfigEntry
