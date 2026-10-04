@@ -138,6 +138,22 @@ async def test_reconfigure_stop_lines(hass: HomeAssistant, loaded_entry: MockCon
     assert loaded_entry.subentries[subentry.subentry_id].data[CONF_PATTERNS] == ["5:asc"]
 
 
+async def test_reconfigure_drops_directions_that_no_longer_stop_here(
+    hass: HomeAssistant, loaded_entry: MockConfigEntry
+) -> None:
+    """After a network change, a followed direction may still exist but skip this stop."""
+    subentry = next(iter(loaded_entry.subentries.values()))
+    catalog = loaded_entry.runtime_data.catalog
+    elsewhere = next(p.id for p in catalog.patterns if "101" not in p.stop_ids)
+    hass.config_entries.async_update_subentry(
+        loaded_entry, subentry, data={**subentry.data, CONF_PATTERNS: ["2:desc", elsewhere]}
+    )
+    await hass.async_block_till_done()
+
+    result = await loaded_entry.start_subentry_reconfigure_flow(hass, subentry.subentry_id)
+    assert result["data_schema"]({})[CONF_PATTERNS] == ["2:desc"]
+
+
 async def test_options_flow(hass: HomeAssistant, loaded_entry: MockConfigEntry) -> None:
     result = await hass.config_entries.options.async_init(loaded_entry.entry_id)
     assert result["type"] is FlowResultType.FORM
