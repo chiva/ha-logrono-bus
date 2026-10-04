@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices", ":semanticCommits"],
+  "enabledManagers": ["pep621", "homeassistant-manifest", "github-actions", "pre-commit"],
+  "minimumReleaseAge": "3 days",
+  "lockFileMaintenance": { "enabled": true, "schedule": ["before 4am on monday"] },
+  "packageRules": [
+    {
+      "description": "The library pin lives in two places (manifest.json for users, pyproject for tests): update both in one PR, as a feature so it triggers a release.",
+      "matchPackageNames": ["logrono-bus"],
+      "groupName": "logrono-bus",
+      "semanticCommitType": "feat",
+      "minimumReleaseAge": "0 days"
+    },
+    {
+      "description": "Test toolchain: pytest-homeassistant-custom-component pins Home Assistant; skip its betas.",
+      "matchPackageNames": ["pytest-homeassistant-custom-component"],
+      "groupName": "home assistant test harness"
+    },
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": ["!logrono-bus", "!pytest-homeassistant-custom-component"],
+      "groupName": "non-major dependencies"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "entity": {
+    "sensor": {
+      "next_arrival": {
+        "default": "mdi:bus-clock"
+      },
+      "minutes": {
+        "default": "mdi:timer-sand"
+      }
+    }
+  }
+}

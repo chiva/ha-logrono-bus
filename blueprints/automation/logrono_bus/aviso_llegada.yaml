@@ -1,0 +1,155 @@
+blueprint:
+  name: Logroño Bus · Avisar cuando llega el autobús
+  description: >-
+    Envía una notificación al móvil cuando al autobús de una línea le faltan pocos minutos para
+    llegar a tu parada. Elige el sensor «… minutos» de la línea (de la integración Logroño Bus),
+    con cuánta antelación quieres el aviso y en qué horario.
+  domain: automation
+  author: chiva
+  source_url: https://github.com/chiva/ha-logrono-bus/blob/main/blueprints/automation/logrono_bus/aviso_llegada.yaml
+  homeassistant:
+    min_version: "2026.9.0"
+  input:
+    linea:
+      name: Línea y aviso
+      icon: mdi:bus-clock
+      input:
+        sensor:
+          name: Línea
+          description: El sensor «… minutos» de la línea y la parada (Logroño Bus).
+          selector:
+            entity:
+              filter:
+                integration: logrono_bus
+                domain: sensor
+                device_class: duration
+        minutos:
+          name: Avisar cuando falten menos de
+          description: >-
+            Con 6, el aviso llega cuando el autobús esté a 5 minutos o menos: tiempo para salir de
+            casa y llegar a la parada.
+          default: 6
+          selector:
+            number:
+              min: 1
+              max: 30
+              unit_of_measurement: min
+              mode: box
+        avisar:
+          name: Avisar en
+          description: >-
+            Dónde llega el aviso: tu móvil (con la aplicación oficial de Home Assistant) o
+            cualquier otra entidad de notificación.
+          selector:
+            target:
+              entity:
+                domain: notify
+    cuando:
+      name: Cuándo avisar
+      icon: mdi:calendar-clock
+      collapsed: true
+      input:
+        desde:
+          name: Desde
+          default: "07:00:00"
+          selector:
+            time: {}
+        hasta:
+          name: Hasta
+          default: "22:00:00"
+          selector:
+            time: {}
+        dias:
+          name: Días
+          default: [mon, tue, wed, thu, fri, sat, sun]
+          selector:
+            select:
+              multiple: true
+              mode: list
+              options:
+                - { value: mon, label: Lunes }
+                - { value: tue, label: Martes }
+                - { value: wed, label: Miércoles }
+                - { value: thu, label: Jueves }
+                - { value: fri, label: Viernes }
+                - { value: sat, label: Sábado }
+                - { value: sun, label: Domingo }
+        solo_tiempo_real:
+          name: Solo con el autobús localizado
+          description: >-
+            Avisa solo si la llegada es en tiempo real (el autobús está localizado), no si es el
+            horario programado.
+          default: true
+          selector:
+            boolean: {}
+        pausa:
+          name: Después de avisar, esperar
+          description: >-
+            Tiempo sin volver a avisar, para que un tiempo que sube y baja (5, 6, 5…) no repita el
+            aviso. Después avisa del siguiente autobús.
+          default: 10
+          selector:
+            number:
+              min: 1
+              max: 60
+              unit_of_measurement: min
+              mode: box
+    extra:
+      name: Además
+      icon: mdi:playlist-plus
+      collapsed: true
+      input:
+        acciones:
+          name: Otras acciones
+          description: >-
+            Opcional: lo que quieras hacer también (anunciarlo en un altavoz, encender una luz…).
+            Puedes usar {{ mensaje }} en los textos.
+          default: []
+          selector:
+            action: {}
+
+mode: single
+max_exceeded: silent
+
+triggers:
+  - trigger: numeric_state
+    entity_id: !input sensor
+    below: !input minutos
+
+conditions:
+  - condition: time
+    after: !input desde
+    before: !input hasta
+    weekday: !input dias
+  - condition: state
+    entity_id: !input sensor
+    attribute: tiempo_real
+    state: true
+    enabled: !input solo_tiempo_real
+
+variables:
+  pausa: !input pausa
+  sensor: !input sensor
+  linea: "{{ state_attr(sensor, 'linea') }}"
+  destino: "{{ state_attr(sensor, 'destino') }}"
+  parada: "{{ state_attr(sensor, 'parada') }}"
+  tiempo_real: "{{ state_attr(sensor, 'tiempo_real') }}"
+  siguientes: "{{ state_attr(sensor, 'siguientes') or [] }}"
+  titulo: "🚌 {{ linea }} → {{ destino }}"
+  mensaje: >-
+    Llega a {{ parada }} en {{ states(sensor) }} min{{ '' if tiempo_real else
+    ' (horario programado)' }}.{{ ' El siguiente, en ' ~ siguientes[0] ~ ' min.' if siguientes
+    else '' }}
+
+actions:
+  - alias: Avisar
+    action: notify.send_message
+    target: !input avisar
+    data:
+      title: "{{ titulo }}"
+      message: "{{ mensaje }}"
+  - alias: Otras acciones elegidas
+    sequence: !input acciones
+  - alias: No repetir el aviso por el mismo autobús
+    delay:
+      minutes: "{{ pausa }}"

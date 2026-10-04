@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Guía de Home Assistant
+    url: https://chiva.github.io/logrono-bus/guia/07-home-assistant/
+    about: Instalación, ejemplos y solución de problemas.
+  - name: Problemas con la web, el modo pantalla o el servidor
+    url: https://github.com/chiva/logrono-bus/issues
+    about: Van en el repositorio principal.

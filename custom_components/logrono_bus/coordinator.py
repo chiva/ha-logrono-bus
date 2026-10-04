@@ -1,0 +1,154 @@
+"""One coordinator per followed stop: a single upstream request returns every line at the stop."""
+
+from __future__ import annotations
+
+import logging
+from datetime import timedelta
+
+from homeassistant.config_entries import ConfigSubentry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers import issue_registry as ir
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+
+from logrono_bus import (
+    DIRECTIONS,
+    Card,
+    LineSelection,
+    LineTimetable,
+    LogronoBusError,
+    StopArrivals,
+    StopNotFound,
+    StopSelection,
+    UpstreamSchemaError,
+    UpstreamUnavailable,
+    build_cards,
+)
+
+from .const import (
+    CONF_FOLLOWING,
+    CONF_PATTERNS,
+    CONF_SCAN_INTERVAL,
+    CONF_STOP_ID,
+    DEFAULT_FOLLOWING,
+    DEFAULT_SCAN_INTERVAL_S,
+    DOMAIN,
+    ISSUE_STOP_REMOVED,
+    ISSUE_UPSTREAM_CHANGED,
+    SCHEMA_FAILURES_BEFORE_ISSUE,
+)
+from .models import LogronoBusConfigEntry
+
+_LOGGER = logging.getLogger(__name__)
+
+
+def line_selection(pattern_id: str) -> LineSelection:
+    """`"2:desc"` → line 2, direction desc. An unknown direction means "either"."""
+    line_id, _, direction = pattern_id.partition(":")
+    return LineSelection(
+        line_id=line_id,
+        direction=direction if direction in DIRECTIONS else None,
+    )
+
+
+def selection_for(subentry: ConfigSubentry) -> StopSelection:
+    """The stop and the line directions this subentry follows."""
+    return StopSelection(
+        stop_id=subentry.data[CONF_STOP_ID],
+        lines=tuple(line_selection(p) for p in subentry.data[CONF_PATTERNS]),
+    )
+
+
+class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
+    """Arrivals for one stop, grouped into one card per followed line and direction."""
+
+    config_entry: LogronoBusConfigEntry
+
+    def __init__(
+        self, hass: HomeAssistant, entry: LogronoBusConfigEntry, subentry: ConfigSubentry
+    ) -> None:
+        interval = entry.options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL_S)
+        super().__init__(
+            hass,
+            _LOGGER,
+            config_entry=entry,
+            name=f"{DOMAIN} {subentry.title}",
+            update_interval=timedelta(seconds=interval),
+            always_update=False,
+        )
+        self.subentry = subentry
+        self.selection = selection_for(subentry)
+        self.following = int(entry.options.get(CONF_FOLLOWING, DEFAULT_FOLLOWING))
+        self.last_arrivals: StopArrivals | None = None
+        self.timetables: dict[str, LineTimetable] = {}
+        """Today's timetable of each followed line, to tell "not started" from "finished"."""
+        self._schema_failures = 0
+
+    async def _async_update_data(self) -> list[Card]:
+        provider = self.config_entry.runtime_data.provider
+        try:
+            catalog = await provider.get_catalog()
+            arrivals = await provider.get_arrivals(self.selection.stop_id)
+        except StopNotFound as err:
+            self._raise_issue(ISSUE_STOP_REMOVED)
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="stop_removed",
+                translation_placeholders={"stop": self.subentry.title},
+            ) from err
+        except UpstreamSchemaError as err:
+            self._schema_failures += 1
+            if self.upstream_changed:
+                self._raise_issue(ISSUE_UPSTREAM_CHANGED)
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="upstream_changed",
+                translation_placeholders={"detail": str(err)},
+            ) from err
+        except UpstreamUnavailable as err:
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="upstream_unavailable",
+                translation_placeholders={"detail": str(err)},
+            ) from err
+        self._schema_failures = 0
+        # The "API changed" issue is shared by every stop: it stays while any of them still fails.
+        coordinators = self.config_entry.runtime_data.coordinators.values()
+        if not any(coordinator.upstream_changed for coordinator in coordinators):
+            ir.async_delete_issue(self.hass, DOMAIN, ISSUE_UPSTREAM_CHANGED)
+        ir.async_delete_issue(self.hass, DOMAIN, self._issue_id(ISSUE_STOP_REMOVED))
+        self.last_arrivals = arrivals
+        await self._refresh_timetables()
+        return build_cards(catalog, self.selection, arrivals, limit=self.following)
+
+    async def _refresh_timetables(self) -> None:
+        """The library fetches each line's timetable once per day and shares it between stops.
+
+        A failure only leaves the timetable attributes as they were: it never makes the sensors
+        unavailable.
+        """
+        provider = self.config_entry.runtime_data.provider
+        for line_id in dict.fromkeys(line.line_id for line in self.selection.lines):
+            try:
+                self.timetables[line_id] = await provider.get_timetable(line_id)
+            except LogronoBusError as err:  # unreachable, changed, or the line is gone
+                _LOGGER.debug("Horario de la línea %s no disponible: %s", line_id, err)
+
+    @property
+    def upstream_changed(self) -> bool:
+        """This stop's answers have failed to parse often enough to report an API change."""
+        return self._schema_failures >= SCHEMA_FAILURES_BEFORE_ISSUE
+
+    def _issue_id(self, kind: str) -> str:
+        return kind if kind == ISSUE_UPSTREAM_CHANGED else f"{kind}_{self.selection.stop_id}"
+
+    def _raise_issue(self, kind: str) -> None:
+        ir.async_create_issue(
+            self.hass,
+            DOMAIN,
+            self._issue_id(kind),
+            is_fixable=False,
+            severity=ir.IssueSeverity.ERROR,
+            translation_key=kind,
+            translation_placeholders={"stop": self.subentry.title},
+            learn_more_url="https://chiva.github.io/logrono-bus/guia/07-home-assistant/#si-algo-falla",
+        )

@@ -1,0 +1,183 @@
+# serializer version: 1
+# name: test_sensors_snapshot[sensor.ayuntamiento_101_10_manuel_de_falla_minutos]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'color': '#0FDCFC',
+      'color_texto': '#000000',
+      'destino': 'Manuel de Falla',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
+      'frecuencia_max_min': 30,
+      'frecuencia_min': 30,
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Ayuntamiento (101) 10 → Manuel de Falla minutos',
+      'linea': '10',
+      'linea_id': '10',
+      'llegadas': list([
+        dict({
+          'hora': '2026-10-03T18:04:07+02:00',
+          'tiempo_real': True,
+        }),
+        dict({
+          'hora': '2026-10-03T18:17:29+02:00',
+          'tiempo_real': True,
+        }),
+      ]),
+      'nombre_linea': 'El Arco – Hospital San Pedro',
+      'parada': 'Ayuntamiento',
+      'parada_id': '101',
+      'primera_salida': '08:00',
+      'proxima_salida': '18:00',
+      'retraso_s': 109,
+      'salidas_desde': 'Artesanos',
+      'sentido': 'desc',
+      'servicio': 'en_servicio',
+      'siguientes': list([
+        16,
+      ]),
+      'tiempo_real': True,
+      'ultima_salida': '23:00',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTime.MINUTES: 'min'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.ayuntamiento_101_10_manuel_de_falla_minutos',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '3',
+  })
+# ---
+# name: test_sensors_snapshot[sensor.ayuntamiento_101_10_manuel_de_falla_proxima_llegada]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'color': '#0FDCFC',
+      'color_texto': '#000000',
+      'destino': 'Manuel de Falla',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'timestamp',
+      'frecuencia_max_min': 30,
+      'frecuencia_min': 30,
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Ayuntamiento (101) 10 → Manuel de Falla próxima llegada',
+      'linea': '10',
+      'linea_id': '10',
+      'llegadas': list([
+        dict({
+          'hora': '2026-10-03T18:04:07+02:00',
+          'tiempo_real': True,
+        }),
+        dict({
+          'hora': '2026-10-03T18:17:29+02:00',
+          'tiempo_real': True,
+        }),
+      ]),
+      'nombre_linea': 'El Arco – Hospital San Pedro',
+      'parada': 'Ayuntamiento',
+      'parada_id': '101',
+      'primera_salida': '08:00',
+      'proxima_salida': '18:00',
+      'retraso_s': 109,
+      'salidas_desde': 'Artesanos',
+      'sentido': 'desc',
+      'servicio': 'en_servicio',
+      'siguientes': list([
+        16,
+      ]),
+      'tiempo_real': True,
+      'ultima_salida': '23:00',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.ayuntamiento_101_10_manuel_de_falla_proxima_llegada',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '2026-10-03T16:04:07+00:00',
+  })
+# ---
+# name: test_sensors_snapshot[sensor.ayuntamiento_101_2_manresa_minutos]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'color': '#FFFF00',
+      'color_texto': '#000000',
+      'destino': 'Manresa',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'duration',
+      'frecuencia_max_min': 30,
+      'frecuencia_min': 30,
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Ayuntamiento (101) 2 → Manresa minutos',
+      'linea': '2',
+      'linea_id': '2',
+      'llegadas': list([
+        dict({
+          'hora': '2026-10-03T18:02:28+02:00',
+          'tiempo_real': True,
+        }),
+        dict({
+          'hora': '2026-10-03T18:08:02+02:00',
+          'tiempo_real': True,
+        }),
+      ]),
+      'nombre_linea': 'Yagüe – Varea',
+      'parada': 'Ayuntamiento',
+      'parada_id': '101',
+      'primera_salida': '09:00',
+      'proxima_salida': '18:00',
+      'retraso_s': 832,
+      'salidas_desde': 'Artesanos',
+      'sentido': 'desc',
+      'servicio': 'en_servicio',
+      'siguientes': list([
+        7,
+      ]),
+      'tiempo_real': True,
+      'ultima_salida': '22:30',
+      <EntityStateAttribute.UNIT_OF_MEASUREMENT: 'unit_of_measurement'>: <UnitOfTime.MINUTES: 'min'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.ayuntamiento_101_2_manresa_minutos',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '1',
+  })
+# ---
+# name: test_sensors_snapshot[sensor.ayuntamiento_101_2_manresa_proxima_llegada]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'color': '#FFFF00',
+      'color_texto': '#000000',
+      'destino': 'Manresa',
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'timestamp',
+      'frecuencia_max_min': 30,
+      'frecuencia_min': 30,
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Ayuntamiento (101) 2 → Manresa próxima llegada',
+      'linea': '2',
+      'linea_id': '2',
+      'llegadas': list([
+        dict({
+          'hora': '2026-10-03T18:02:28+02:00',
+          'tiempo_real': True,
+        }),
+        dict({
+          'hora': '2026-10-03T18:08:02+02:00',
+          'tiempo_real': True,
+        }),
+      ]),
+      'nombre_linea': 'Yagüe – Varea',
+      'parada': 'Ayuntamiento',
+      'parada_id': '101',
+      'primera_salida': '09:00',
+      'proxima_salida': '18:00',
+      'retraso_s': 832,
+      'salidas_desde': 'Artesanos',
+      'sentido': 'desc',
+      'servicio': 'en_servicio',
+      'siguientes': list([
+        7,
+      ]),
+      'tiempo_real': True,
+      'ultima_salida': '22:30',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.ayuntamiento_101_2_manresa_proxima_llegada',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '2026-10-03T16:02:28+00:00',
+  })
+# ---

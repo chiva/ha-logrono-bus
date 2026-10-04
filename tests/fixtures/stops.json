@@ -1,0 +1,148 @@
+{
+ "result": {
+  "stops": [
+   {
+    "id": 127,
+    "name": "Alcalde Emilio Francés",
+    "lat": 42.464766,
+    "lng": -2.435681,
+    "status": 1,
+    "lines": [
+     2,
+     5,
+     7,
+     10
+    ]
+   },
+   {
+    "id": 5,
+    "name": "Artesanos",
+    "lat": 42.461717,
+    "lng": -2.406467,
+    "status": 1,
+    "lines": [
+     10,
+     31,
+     2
+    ]
+   },
+   {
+    "id": 100,
+    "name": "Ayuntamiento",
+    "lat": 42.465222,
+    "lng": -2.438669,
+    "status": 1,
+    "lines": [
+     10,
+     2,
+     7,
+     5
+    ]
+   },
+   {
+    "id": 803,
+    "name": "Glorieta Dr. Zubía",
+    "lat": 42.466299,
+    "lng": -2.442141,
+    "status": 1,
+    "lines": [
+     9
+    ]
+   },
+   {
+    "id": 69,
+    "name": "Portales",
+    "lat": 42.46626,
+    "lng": -2.442653,
+    "status": 1,
+    "lines": [
+     2,
+     10,
+     7,
+     33,
+     9,
+     5
+    ]
+   },
+   {
+    "id": 101,
+    "name": "Ayuntamiento",
+    "lat": 42.46563,
+    "lng": -2.439249,
+    "status": 1,
+    "lines": [
+     7,
+     5,
+     10,
+     2
+    ]
+   },
+   {
+    "id": 2,
+    "name": "Ayuntamiento",
+    "lat": 42.466966,
+    "lng": -2.438195,
+    "status": 1,
+    "lines": [
+     1
+    ]
+   },
+   {
+    "id": 59,
+    "name": "Luisa Marín Lacalle",
+    "lat": 42.462895,
+    "lng": -2.439833,
+    "status": 1,
+    "lines": [
+     1
+    ]
+   },
+   {
+    "id": 12,
+    "name": "Ciriaco Garrido",
+    "lat": 42.463229,
+    "lng": -2.439903,
+    "status": 1,
+    "lines": [
+     1
+    ]
+   },
+   {
+    "id": 98,
+    "name": "Ayuntamiento",
+    "lat": 42.467236,
+    "lng": -2.437934,
+    "status": 1,
+    "lines": [
+     1
+    ]
+   },
+   {
+    "id": 77,
+    "name": "Alcalde Emilio Francés",
+    "lat": 42.464422,
+    "lng": -2.435307,
+    "status": 1,
+    "lines": [
+     2,
+     7,
+     5,
+     10
+    ]
+   },
+   {
+    "id": 28,
+    "name": "Glorieta Dr. Zubía",
+    "lat": 42.46603,
+    "lng": -2.441873,
+    "status": 1,
+    "lines": [
+     5,
+     2,
+     7,
+     10
+    ]
+   }
+  ]
+ }
+}
