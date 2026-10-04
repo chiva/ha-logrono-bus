@@ -3,6 +3,7 @@
   "packages": {
     ".": {
       "release-type": "simple",
+      "initial-version": "0.1.0",
       "extra-files": [
         { "type": "json", "path": "custom_components/logrono_bus/manifest.json", "jsonpath": "$.version" }
       ]
