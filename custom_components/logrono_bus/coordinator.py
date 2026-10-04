@@ -16,6 +16,7 @@ from logrono_bus import (
     LineSelection,
     LineTimetable,
     LogronoBusError,
+    RateLimited,
     StopArrivals,
     StopNotFound,
     StopSelection,
@@ -103,6 +104,14 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
                 translation_domain=DOMAIN,
                 translation_key="upstream_changed",
                 translation_placeholders={"detail": str(err)},
+            ) from err
+        except RateLimited as err:
+            # Wait as long as the upstream asked, not just until the next scheduled refresh.
+            raise UpdateFailed(
+                translation_domain=DOMAIN,
+                translation_key="upstream_unavailable",
+                translation_placeholders={"detail": str(err)},
+                retry_after=err.retry_after,
             ) from err
         except UpstreamUnavailable as err:
             raise UpdateFailed(

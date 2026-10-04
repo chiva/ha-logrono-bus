@@ -17,12 +17,20 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
 from logrono_bus import LogronoBusProvider, UpstreamError
 
-from .const import CARD_FILENAME, CARD_URL, DOMAIN, SUBENTRY_STOP
+from .const import (
+    CARD_FILENAME,
+    CARD_URL,
+    CONF_STOP_ID,
+    DOMAIN,
+    ISSUE_STOP_REMOVED,
+    SUBENTRY_STOP,
+)
 from .coordinator import StopArrivalsCoordinator
 from .models import LogronoBusConfigEntry, LogronoBusData
 
@@ -74,6 +82,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: LogronoBusConfigEntry) -
         await coordinator.async_refresh()
         data.coordinators[subentry_id] = coordinator
 
+    _delete_issues_of_unfollowed_stops(hass, entry)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     # Stops added, reconfigured or removed, and option changes, all rebuild the entry.
     entry.async_on_unload(entry.add_update_listener(_async_reload))
@@ -84,5 +93,28 @@ async def async_unload_entry(hass: HomeAssistant, entry: LogronoBusConfigEntry) 
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
 
+async def async_remove_entry(hass: HomeAssistant, entry: LogronoBusConfigEntry) -> None:
+    for domain, issue_id in list(ir.async_get(hass).issues):
+        if domain == DOMAIN:
+            ir.async_delete_issue(hass, DOMAIN, issue_id)
+
+
 async def _async_reload(hass: HomeAssistant, entry: LogronoBusConfigEntry) -> None:
     await hass.config_entries.async_reload(entry.entry_id)
+
+
+def _delete_issues_of_unfollowed_stops(hass: HomeAssistant, entry: LogronoBusConfigEntry) -> None:
+    """Removing a vanished stop, as its repair issue asks, must also clear that issue."""
+    followed = {
+        subentry.data[CONF_STOP_ID]
+        for subentry in entry.subentries.values()
+        if subentry.subentry_type == SUBENTRY_STOP
+    }
+    prefix = f"{ISSUE_STOP_REMOVED}_"
+    for domain, issue_id in list(ir.async_get(hass).issues):
+        if (
+            domain == DOMAIN
+            and issue_id.startswith(prefix)
+            and issue_id.removeprefix(prefix) not in followed
+        ):
+            ir.async_delete_issue(hass, DOMAIN, issue_id)
