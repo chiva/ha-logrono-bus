@@ -17,7 +17,8 @@ if TYPE_CHECKING:
 class LogronoBusData:
     provider: LogronoBusProvider
     catalog: Catalog
-    """The catalogue as of setup: names entities even before their first successful refresh."""
+    """The latest catalogue: from setup (names entities before their first refresh), then from
+    each successful refresh, so the stop flows offer the lines that run today."""
     coordinators: dict[str, StopArrivalsCoordinator] = field(default_factory=dict)
     """Keyed by config subentry id."""
 

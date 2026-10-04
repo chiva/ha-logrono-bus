@@ -1069,16 +1069,16 @@ typing = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "logrono-bus", git = "https://github.com/chiva/logrono-bus?subdirectory=packages%2Flogrono-bus&rev=a07d2f4bf4c9e72d9f30221ff2e14a8efeaaa786" },
+    { name = "logrono-bus", specifier = "==0.1.0" },
     { name = "mypy", specifier = "==2.4.0" },
     { name = "pre-commit", specifier = "==4.6.2" },
     { name = "pytest-homeassistant-custom-component", specifier = "==0.13.367" },
     { name = "ruff", specifier = "==0.16.10" },
 ]
 lint = [{ name = "ruff", specifier = "==0.16.10" }]
-runtime = [{ name = "logrono-bus", git = "https://github.com/chiva/logrono-bus?subdirectory=packages%2Flogrono-bus&rev=a07d2f4bf4c9e72d9f30221ff2e14a8efeaaa786" }]
+runtime = [{ name = "logrono-bus", specifier = "==0.1.0" }]
 test = [
-    { name = "logrono-bus", git = "https://github.com/chiva/logrono-bus?subdirectory=packages%2Flogrono-bus&rev=a07d2f4bf4c9e72d9f30221ff2e14a8efeaaa786" },
+    { name = "logrono-bus", specifier = "==0.1.0" },
     { name = "pytest-homeassistant-custom-component", specifier = "==0.13.367" },
 ]
 typing = [{ name = "mypy", specifier = "==2.4.0" }]
@@ -1378,9 +1378,13 @@ wheels = [
 [[package]]
 name = "logrono-bus"
 version = "0.1.0"
-source = { git = "https://github.com/chiva/logrono-bus?subdirectory=packages%2Flogrono-bus&rev=a07d2f4bf4c9e72d9f30221ff2e14a8efeaaa786#a07d2f4bf4c9e72d9f30221ff2e14a8efeaaa786" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/25/a0/54de609a30bd9b427150c32cc7518cef490e8dcc0aad99396906dfec41c9/logrono_bus-0.1.0.tar.gz", hash = "sha256:ad221c5ea272ff5d98e8add0541adfb5ec228b410fa48abd519e47def167d5f4", size = 39676, upload-time = "2026-10-04T08:16:22.809Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/79/72/936caec7618711a6756afdc05db6fec723d82cec22777023a6765fa9e68d/logrono_bus-0.1.0-py3-none-any.whl", hash = "sha256:a2f242412e9b8b54d0a82fa6b5d189f17f0a124b403f68b5d118e047b46d4759", size = 34169, upload-time = "2026-10-04T08:16:21.383Z" },
 ]
 
 [[package]]

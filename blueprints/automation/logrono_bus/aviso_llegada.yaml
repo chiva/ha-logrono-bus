@@ -83,10 +83,12 @@ blueprint:
           selector:
             boolean: {}
         pausa:
-          name: Después de avisar, esperar
+          name: Después de avisar, esperar como mucho
           description: >-
             Tiempo sin volver a avisar, para que un tiempo que sube y baja (5, 6, 5…) no repita el
-            aviso. Después avisa del siguiente autobús.
+            aviso. Termina antes si ese autobús ya ha pasado (el siguiente queda a más de 2 minutos
+            por encima de tu aviso), para avisar también del siguiente. Si el siguiente viene muy
+            pegado, puede quedarse sin aviso.
           default: 10
           selector:
             number:
@@ -129,6 +131,7 @@ conditions:
 
 variables:
   pausa: !input pausa
+  minutos: !input minutos
   sensor: !input sensor
   linea: "{{ state_attr(sensor, 'linea') }}"
   destino: "{{ state_attr(sensor, 'destino') }}"
@@ -150,6 +153,9 @@ actions:
       message: "{{ mensaje }}"
   - alias: Otras acciones elegidas
     sequence: !input acciones
+  # Ends when that bus has gone (the sensor jumps well past the threshold to the next one), so
+  # a following bus that comes close soon after still gets its own message.
   - alias: No repetir el aviso por el mismo autobús
-    delay:
+    wait_template: "{{ states(sensor) | int(0) > minutos + 2 }}"
+    timeout:
       minutes: "{{ pausa }}"

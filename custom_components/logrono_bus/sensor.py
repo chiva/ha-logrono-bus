@@ -11,7 +11,15 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.util import dt as dt_util
 
-from logrono_bus import Arrival, Card, LineNotFound, LineSelection, minutes_until, service_status
+from logrono_bus import (
+    TIMEZONE,
+    Arrival,
+    Card,
+    LineNotFound,
+    LineSelection,
+    minutes_until,
+    service_status,
+)
 
 from .coordinator import StopArrivalsCoordinator
 from .entity import LogronoBusEntity, card_key
@@ -101,9 +109,13 @@ class ArrivalSensor(LogronoBusEntity, SensorEntity):
             if card.direction
             else next((a.pattern_id for a in card.arrivals if a.pattern_id), None)
         )
-        direction = timetable.for_pattern(pattern_id) if timetable and pattern_id else None
-        if timetable is None:
+        # Yesterday's timetable, kept because today's request failed, would describe the wrong day.
+        if (
+            timetable is None
+            or timetable.service_date != now.astimezone(TIMEZONE).date().isoformat()
+        ):
             return {"servicio": None}
+        direction = timetable.for_pattern(pattern_id) if pattern_id else None
         status = service_status(direction, now)
         return {
             "servicio": status.state,

@@ -18,6 +18,7 @@ from pytest_homeassistant_custom_component.typing import ClientSessionGenerator
 from custom_components.logrono_bus import async_setup
 from custom_components.logrono_bus.const import (
     DOMAIN,
+    ISSUE_LINES_REMOVED,
     ISSUE_STOP_REMOVED,
     ISSUE_UPSTREAM_CHANGED,
     SCHEMA_FAILURES_BEFORE_ISSUE,
@@ -31,7 +32,8 @@ MINUTES = "sensor.ayuntamiento_101_2_manresa_minutos"
 async def _tick(hass: HomeAssistant, freezer: FrozenDateTimeFactory) -> None:
     freezer.tick(timedelta(seconds=61))
     async_fire_time_changed(hass)
-    await hass.async_block_till_done()
+    # Scheduled refreshes run as background tasks.
+    await hass.async_block_till_done(wait_background_tasks=True)
 
 
 def _serve(aioclient_mock: AiohttpClientMocker, **arrivals: object) -> None:
@@ -60,6 +62,20 @@ async def test_not_ready_when_catalogue_unavailable(
     config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(config_entry.entry_id)
     assert config_entry.state is ConfigEntryState.SETUP_RETRY
+
+
+async def test_changed_catalogue_is_reported_in_repairs(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    issue_registry: ir.IssueRegistry,
+) -> None:
+    aioclient_mock.get(LINES_URL, json={"result": "otro formato"})
+    aioclient_mock.get(STOPS_URL, json=load("stops.json"))
+    config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(config_entry.entry_id)
+    assert config_entry.state is ConfigEntryState.SETUP_RETRY
+    assert issue_registry.async_get_issue(DOMAIN, ISSUE_UPSTREAM_CHANGED) is not None
 
 
 async def test_outage_makes_sensors_unavailable_then_recovers(
@@ -144,6 +160,86 @@ async def test_vanished_stop_raises_issue(
     assert issue.translation_placeholders == {"stop": "Desaparecida (4242)"}
     # The other stop keeps working.
     assert hass.states.get(MINUTES).state == "1"
+
+    # Removing the stop, as the issue asks, clears the issue too.
+    vanished = next(
+        sid for sid, sub in config_entry.subentries.items() if sub.data["stop_id"] == "4242"
+    )
+    assert hass.config_entries.async_remove_subentry(config_entry, vanished)
+    await hass.async_block_till_done()
+    assert issue_registry.async_get_issue(DOMAIN, f"{ISSUE_STOP_REMOVED}_4242") is None
+
+
+async def test_followed_line_gone_from_the_stop_raises_issue(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    upstream: AiohttpClientMocker,
+    issue_registry: ir.IssueRegistry,
+) -> None:
+    """A network change drops line 99 (and line 10 towards Manuel de Falla) from stop 100."""
+    config_entry.add_to_hass(hass)
+    hass.config_entries.async_add_subentry(
+        config_entry,
+        ConfigSubentry(
+            **stop_subentry("100", "Ayuntamiento (100)", ["10:asc", "10:desc", "99:asc"])
+        ),
+    )
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+    issue = issue_registry.async_get_issue(DOMAIN, f"{ISSUE_LINES_REMOVED}_100")
+    assert issue is not None
+    assert issue.translation_placeholders == {"stop": "Ayuntamiento (100)", "lines": "10, 99"}
+    assert issue_registry.async_get_issue(DOMAIN, f"{ISSUE_LINES_REMOVED}_101") is None
+
+    # Reconfigured to the lines that still pass: the issue goes away.
+    stop_100 = next(s for s in config_entry.subentries.values() if s.data["stop_id"] == "100")
+    hass.config_entries.async_update_subentry(
+        config_entry, stop_100, data={"stop_id": "100", "patterns": ["10:asc"]}
+    )
+    await hass.async_block_till_done()
+    assert issue_registry.async_get_issue(DOMAIN, f"{ISSUE_LINES_REMOVED}_100") is None
+
+
+async def test_removing_the_integration_clears_its_issues(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    upstream: AiohttpClientMocker,
+    issue_registry: ir.IssueRegistry,
+) -> None:
+    config_entry.add_to_hass(hass)
+    hass.config_entries.async_add_subentry(
+        config_entry, ConfigSubentry(**stop_subentry("4242", "Desaparecida (4242)", ["2:desc"]))
+    )
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+    assert issue_registry.async_get_issue(DOMAIN, f"{ISSUE_STOP_REMOVED}_4242") is not None
+
+    await hass.config_entries.async_remove(config_entry.entry_id)
+    await hass.async_block_till_done()
+    assert not [key for key in issue_registry.issues if key[0] == DOMAIN]
+
+
+async def test_rate_limit_waits_as_long_as_the_upstream_asks(
+    hass: HomeAssistant,
+    loaded_entry: MockConfigEntry,
+    aioclient_mock: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """A 429 with Retry-After: 150 skips the next two 60 s refreshes instead of hammering."""
+    _serve(aioclient_mock)
+    aioclient_mock.get(arrivals_url("101"), status=429, headers={"Retry-After": "150"})
+    await _tick(hass, freezer)
+    assert hass.states.get(MINUTES).state == STATE_UNAVAILABLE
+
+    def arrivals_requests() -> int:
+        return sum(1 for call in aioclient_mock.mock_calls if "byStop/101" in str(call[1]))
+
+    asked = arrivals_requests()
+    await _tick(hass, freezer)
+    await _tick(hass, freezer)
+    assert arrivals_requests() == asked
+    await _tick(hass, freezer)
+    assert arrivals_requests() == asked + 1
 
 
 async def test_adding_a_stop_reloads_with_its_sensors(

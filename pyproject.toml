@@ -29,13 +29,6 @@ dev = [
     "pre-commit==4.6.2",
 ]
 
-# Until logrono-bus 0.1.0 is published on PyPI, install it from the monorepo at a fixed commit (CI
-# can reach it; Home Assistant itself installs the PyPI release named in manifest.json). Remove
-# this table once it is published, then `uv lock`. To develop against a local checkout instead:
-# `uv pip install -e ../logrono-bus/packages/logrono-bus`.
-[tool.uv.sources]
-logrono-bus = { git = "https://github.com/chiva/logrono-bus", subdirectory = "packages/logrono-bus", rev = "a07d2f4bf4c9e72d9f30221ff2e14a8efeaaa786" }
-
 [tool.ruff]
 target-version = "py314"
 line-length = 100
