@@ -9,6 +9,8 @@
     'library_version': '0.1.0',
     'options': dict({
     }),
+    'reason': None,
+    'state': 'loaded',
     'stops': dict({
       'Ayuntamiento (101)': dict({
         'arrivals': dict({

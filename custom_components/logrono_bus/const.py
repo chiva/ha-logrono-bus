@@ -27,6 +27,9 @@ transient glitch; three in a row is a real change)."""
 
 ISSUE_UPSTREAM_CHANGED: Final = "upstream_changed"
 ISSUE_STOP_REMOVED: Final = "stop_removed"
+ISSUE_LINES_REMOVED: Final = "lines_removed"
+# Repair issues about one stop: their ids end in "_<stop id>".
+STOP_ISSUES: Final = (ISSUE_STOP_REMOVED, ISSUE_LINES_REMOVED)
 
 BOARD_URL: Final = "https://chiva.github.io/logrono-bus/"
 MANUFACTURER: Final = "Ayuntamiento de Logroño (datos públicos)"

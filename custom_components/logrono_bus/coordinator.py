@@ -14,6 +14,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from logrono_bus import (
     DIRECTIONS,
     Card,
+    Catalog,
     LineSelection,
     LineTimetable,
     LogronoBusError,
@@ -34,6 +35,7 @@ from .const import (
     DEFAULT_FOLLOWING,
     DEFAULT_SCAN_INTERVAL_S,
     DOMAIN,
+    ISSUE_LINES_REMOVED,
     ISSUE_STOP_REMOVED,
     ISSUE_UPSTREAM_CHANGED,
     SCHEMA_FAILURES_BEFORE_ISSUE,
@@ -46,7 +48,9 @@ _LOGGER = logging.getLogger(__name__)
 LEARN_MORE_URL = "https://chiva.github.io/logrono-bus/guia/07-home-assistant/#si-algo-falla"
 
 
-def create_repair_issue(hass: HomeAssistant, issue_id: str, kind: str, *, stop: str = "") -> None:
+def create_repair_issue(
+    hass: HomeAssistant, issue_id: str, kind: str, *, stop: str = "", lines: str = ""
+) -> None:
     """An error in Repairs, until the condition clears."""
     ir.async_create_issue(
         hass,
@@ -55,7 +59,7 @@ def create_repair_issue(hass: HomeAssistant, issue_id: str, kind: str, *, stop: 
         is_fixable=False,
         severity=ir.IssueSeverity.ERROR,
         translation_key=kind,
-        translation_placeholders={"stop": stop},
+        translation_placeholders={"stop": stop} | ({"lines": lines} if lines else {}),
         learn_more_url=LEARN_MORE_URL,
     )
 
@@ -143,6 +147,10 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
         if not any(coordinator.upstream_changed for coordinator in coordinators):
             ir.async_delete_issue(self.hass, DOMAIN, ISSUE_UPSTREAM_CHANGED)
         ir.async_delete_issue(self.hass, DOMAIN, self._issue_id(ISSUE_STOP_REMOVED))
+        if gone := self._lines_gone(catalog):
+            self._raise_issue(ISSUE_LINES_REMOVED, lines=", ".join(gone))
+        else:
+            ir.async_delete_issue(self.hass, DOMAIN, self._issue_id(ISSUE_LINES_REMOVED))
         self.last_arrivals = arrivals
         await self._refresh_timetables()
         return build_cards(catalog, self.selection, arrivals, limit=self.following)
@@ -175,5 +183,21 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
     def _issue_id(self, kind: str) -> str:
         return kind if kind == ISSUE_UPSTREAM_CHANGED else f"{kind}_{self.selection.stop_id}"
 
-    def _raise_issue(self, kind: str) -> None:
-        create_repair_issue(self.hass, self._issue_id(kind), kind, stop=self.subentry.title)
+    def _raise_issue(self, kind: str, *, lines: str = "") -> None:
+        create_repair_issue(
+            self.hass, self._issue_id(kind), kind, stop=self.subentry.title, lines=lines
+        )
+
+    def _lines_gone(self, catalog: Catalog) -> list[str]:
+        """Followed lines (or directions) that no longer serve this stop: their sensors would
+        stay empty without any error."""
+        served = catalog.patterns_at(self.selection.stop_id)
+        gone = [
+            line.line_id
+            for line in self.selection.lines
+            if not any(
+                pattern.line_id == line.line_id and line.direction in (None, pattern.direction)
+                for pattern in served
+            )
+        ]
+        return list(dict.fromkeys(gone))

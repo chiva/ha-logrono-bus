@@ -69,7 +69,8 @@ mismo autobús. Admite acciones extra con el texto del aviso en `{{ mensaje }}`.
 ## Calidad
 
 - Configuración por interfaz, una subentrada por parada, reconfigurable.
-- Avisos en *Reparaciones* si el servicio del Ayuntamiento cambia o una parada desaparece.
+- Avisos en *Reparaciones* si el servicio del Ayuntamiento cambia, una parada desaparece o una
+  línea deja de pasar por una parada que sigues.
 - Diagnósticos descargables. Errores y textos traducidos (español).
 - Librería asíncrona, tipada y con la sesión HTTP de Home Assistant.
 - [Autoevaluación de calidad](custom_components/logrono_bus/quality_scale.yaml): nivel oro.

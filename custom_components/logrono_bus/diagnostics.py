@@ -15,10 +15,22 @@ from .models import LogronoBusConfigEntry
 async def async_get_config_entry_diagnostics(
     hass: HomeAssistant, entry: LogronoBusConfigEntry
 ) -> dict[str, Any]:
-    data = entry.runtime_data
-    return {
+    base: dict[str, Any] = {
         "library_version": library_version,
+        "state": entry.state.value,
+        "reason": entry.reason,
         "options": dict(entry.options),
+    }
+    # Not set while setup is retrying (catalogue unreachable or changed): exactly when a
+    # maintainer needs the rest of the context.
+    data = getattr(entry, "runtime_data", None)
+    if data is None:
+        return {
+            **base,
+            "stops": {sub.title: dict(sub.data) for sub in entry.subentries.values()},
+        }
+    return {
+        **base,
         "catalog": {
             "fetched_at": data.catalog.fetched_at.isoformat(),
             "lines": len(data.catalog.lines),
