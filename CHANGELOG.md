@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/chiva/ha-logrono-bus/compare/v0.1.1...v0.1.2) (2026-10-04)
+
+
+### Bug Fixes
+
+* **card:** mostrar el refuerzo de color intenso en Home Assistant ([#7](https://github.com/chiva/ha-logrono-bus/issues/7)) ([8f50731](https://github.com/chiva/ha-logrono-bus/commit/8f5073152f98212f36e5ed6ddf26eed1bd0c07fc))
+
 ## [0.1.1](https://github.com/chiva/ha-logrono-bus/compare/v0.1.0...v0.1.1) (2026-10-04)
 
 
