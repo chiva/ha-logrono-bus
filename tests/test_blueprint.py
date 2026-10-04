@@ -28,7 +28,7 @@ SOURCE_URL = (
     "aviso_llegada.yaml"
 )
 SENSOR = "sensor.ayuntamiento_101_2_manresa_minutos"
-PHONE = "notify.movil_de_santi"
+PHONE = "notify.movil"
 # Event-loop turns for a state change to reach the notify call (trigger, conditions, actions).
 SETTLE_ROUNDS = 10
 ATTRIBUTES: dict[str, Any] = {
