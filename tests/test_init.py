@@ -31,7 +31,8 @@ MINUTES = "sensor.ayuntamiento_101_2_manresa_minutos"
 async def _tick(hass: HomeAssistant, freezer: FrozenDateTimeFactory) -> None:
     freezer.tick(timedelta(seconds=61))
     async_fire_time_changed(hass)
-    await hass.async_block_till_done()
+    # Scheduled refreshes run as background tasks.
+    await hass.async_block_till_done(wait_background_tasks=True)
 
 
 def _serve(aioclient_mock: AiohttpClientMocker, **arrivals: object) -> None:
