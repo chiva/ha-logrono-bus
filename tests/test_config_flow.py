@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
+import dataclasses
+from datetime import timedelta
+from typing import Any
+
+import pytest
+from freezegun.api import FrozenDateTimeFactory
 from homeassistant.config_entries import SOURCE_USER, ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers import entity_registry as er
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from homeassistant.helpers import issue_registry as ir
+from pytest_homeassistant_custom_component.common import MockConfigEntry, async_fire_time_changed
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 
 from custom_components.logrono_bus.const import (
@@ -150,6 +157,43 @@ async def test_reconfigure_drops_directions_that_no_longer_stop_here(
     )
     await hass.async_block_till_done()
 
+    result = await loaded_entry.start_subentry_reconfigure_flow(hass, subentry.subentry_id)
+    assert result["data_schema"]({})[CONF_PATTERNS] == ["2:desc"]
+
+
+async def test_route_change_found_by_a_refresh_reaches_reconfigure(
+    hass: HomeAssistant,
+    loaded_entry: MockConfigEntry,
+    freezer: FrozenDateTimeFactory,
+    issue_registry: ir.IssueRegistry,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Line 10 towards Manuel de Falla now ends at stop 101: nobody can board it there."""
+    provider = loaded_entry.runtime_data.provider
+    catalog = await provider.get_catalog()
+    line_10 = catalog.pattern("10:desc")
+    assert line_10 is not None
+    cut = line_10.stop_ids[: line_10.stop_ids.index("101") + 1]
+    changed = dataclasses.replace(
+        catalog,
+        patterns=tuple(
+            dataclasses.replace(p, stop_ids=cut) if p.id == "10:desc" else p
+            for p in catalog.patterns
+        ),
+    )
+
+    async def refreshed_catalog(**_: Any) -> Any:
+        return changed
+
+    monkeypatch.setattr(provider, "get_catalog", refreshed_catalog)
+    freezer.tick(timedelta(seconds=61))
+    async_fire_time_changed(hass)
+    await hass.async_block_till_done(wait_background_tasks=True)
+
+    issue = issue_registry.async_get_issue(DOMAIN, "lines_removed_101")
+    assert issue is not None
+    assert issue.translation_placeholders["lines"] == "10"
+    subentry = next(iter(loaded_entry.subentries.values()))
     result = await loaded_entry.start_subentry_reconfigure_flow(hass, subentry.subentry_id)
     assert result["data_schema"]({})[CONF_PATTERNS] == ["2:desc"]
 

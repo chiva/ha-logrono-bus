@@ -142,6 +142,7 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
                 translation_placeholders={"detail": str(err)},
             ) from err
         self._schema_failures = 0
+        self.config_entry.runtime_data.catalog = catalog
         # The "API changed" issue is shared by every stop: it stays while any of them still fails.
         coordinators = self.config_entry.runtime_data.coordinators.values()
         if not any(coordinator.upstream_changed for coordinator in coordinators):
@@ -191,7 +192,9 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
     def _lines_gone(self, catalog: Catalog) -> list[str]:
         """Followed lines (or directions) that no longer serve this stop: their sensors would
         stay empty without any error."""
-        served = catalog.patterns_at(self.selection.stop_id)
+        stop_id = self.selection.stop_id
+        # A direction that now ends here cannot be boarded either (nor chosen in reconfigure).
+        served = [p for p in catalog.patterns_at(stop_id) if not p.is_terminus(stop_id)]
         gone = [
             line.line_id
             for line in self.selection.lines
