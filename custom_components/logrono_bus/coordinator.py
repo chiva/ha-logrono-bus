@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import timedelta
 
@@ -153,11 +154,18 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
         unavailable.
         """
         provider = self.config_entry.runtime_data.provider
-        for line_id in dict.fromkeys(line.line_id for line in self.selection.lines):
-            try:
-                self.timetables[line_id] = await provider.get_timetable(line_id)
-            except LogronoBusError as err:  # unreachable, changed, or the line is gone
-                _LOGGER.debug("Horario de la línea %s no disponible: %s", line_id, err)
+        line_ids = list(dict.fromkeys(line.line_id for line in self.selection.lines))
+        # All lines at once, so a slow timetable endpoint delays the arrivals by one request.
+        results = await asyncio.gather(
+            *(provider.get_timetable(line_id) for line_id in line_ids), return_exceptions=True
+        )
+        for line_id, result in zip(line_ids, results, strict=True):
+            if isinstance(result, LineTimetable):
+                self.timetables[line_id] = result
+            elif isinstance(result, LogronoBusError):  # unreachable, changed, or the line is gone
+                _LOGGER.debug("Horario de la línea %s no disponible: %s", line_id, result)
+            else:
+                raise result
 
     @property
     def upstream_changed(self) -> bool:

@@ -126,6 +126,20 @@ async def test_quiet_for_a_while_after_notifying_then_announces_the_next_bus(
     ]
 
 
+async def test_the_next_bus_is_announced_even_during_the_pause(
+    hass: HomeAssistant, phone: list[ServiceCall]
+) -> None:
+    """Frequent line: the bus passes and the next one comes close before the pause would end."""
+    await _automation(hass, pausa=30)
+    await _minutes(hass, 5)
+    await _minutes(hass, 12, siguientes=[])  # the first bus has gone; the next one is 12 min away
+    await _minutes(hass, 5, siguientes=[])
+    assert _messages(phone) == [
+        "Llega a Ayuntamiento en 5 min. El siguiente, en 14 min.",
+        "Llega a Ayuntamiento en 5 min.",
+    ]
+
+
 async def test_respects_the_days(hass: HomeAssistant, phone: list[ServiceCall]) -> None:
     """2026-10-03 is a Saturday, 18:00 in Logroño."""
     await _automation(hass, dias=["mon", "tue", "wed", "thu", "fri"])
