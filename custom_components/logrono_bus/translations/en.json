@@ -96,6 +96,10 @@
     "stop_removed": {
       "title": "La parada {stop} ya no existe",
       "description": "La parada {stop} ha desaparecido del servicio del Ayuntamiento (por ejemplo, tras un cambio de líneas). Elimínala en la integración Logroño Bus y añade la nueva con «Añadir parada»."
+    },
+    "lines_removed": {
+      "title": "Algunas líneas ya no pasan por la parada {stop}",
+      "description": "Las líneas {lines} ya no pasan por la parada {stop} (o ya no en el sentido elegido), así que sus sensores se quedan sin datos. Revisa la parada en la integración Logroño Bus con «Reconfigurar» y elige las líneas actuales."
     }
   }
 }

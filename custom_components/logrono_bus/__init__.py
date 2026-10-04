@@ -29,8 +29,8 @@ from .const import (
     CARD_URL,
     CONF_STOP_ID,
     DOMAIN,
-    ISSUE_STOP_REMOVED,
     ISSUE_UPSTREAM_CHANGED,
+    STOP_ISSUES,
     SUBENTRY_STOP,
 )
 from .coordinator import StopArrivalsCoordinator, create_repair_issue
@@ -109,17 +109,19 @@ async def _async_reload(hass: HomeAssistant, entry: LogronoBusConfigEntry) -> No
 
 
 def _delete_issues_of_unfollowed_stops(hass: HomeAssistant, entry: LogronoBusConfigEntry) -> None:
-    """Removing a vanished stop, as its repair issue asks, must also clear that issue."""
+    """Removing a stop, as its repair issue may ask, must also clear that issue."""
     followed = {
         subentry.data[CONF_STOP_ID]
         for subentry in entry.subentries.values()
         if subentry.subentry_type == SUBENTRY_STOP
     }
-    prefix = f"{ISSUE_STOP_REMOVED}_"
-    for domain, issue_id in list(ir.async_get(hass).issues):
-        if (
-            domain == DOMAIN
-            and issue_id.startswith(prefix)
-            and issue_id.removeprefix(prefix) not in followed
-        ):
-            ir.async_delete_issue(hass, DOMAIN, issue_id)
+    stale = {
+        f"{kind}_{stop_id}"
+        for domain, issue_id in ir.async_get(hass).issues
+        if domain == DOMAIN
+        for kind in STOP_ISSUES
+        if issue_id.startswith(f"{kind}_")
+        and (stop_id := issue_id.removeprefix(f"{kind}_")) not in followed
+    }
+    for issue_id in stale:
+        ir.async_delete_issue(hass, DOMAIN, issue_id)

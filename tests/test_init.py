@@ -18,6 +18,7 @@ from pytest_homeassistant_custom_component.typing import ClientSessionGenerator
 from custom_components.logrono_bus import async_setup
 from custom_components.logrono_bus.const import (
     DOMAIN,
+    ISSUE_LINES_REMOVED,
     ISSUE_STOP_REMOVED,
     ISSUE_UPSTREAM_CHANGED,
     SCHEMA_FAILURES_BEFORE_ISSUE,
@@ -167,6 +168,36 @@ async def test_vanished_stop_raises_issue(
     assert hass.config_entries.async_remove_subentry(config_entry, vanished)
     await hass.async_block_till_done()
     assert issue_registry.async_get_issue(DOMAIN, f"{ISSUE_STOP_REMOVED}_4242") is None
+
+
+async def test_followed_line_gone_from_the_stop_raises_issue(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    upstream: AiohttpClientMocker,
+    issue_registry: ir.IssueRegistry,
+) -> None:
+    """A network change drops line 99 (and line 10 towards Manuel de Falla) from stop 100."""
+    config_entry.add_to_hass(hass)
+    hass.config_entries.async_add_subentry(
+        config_entry,
+        ConfigSubentry(
+            **stop_subentry("100", "Ayuntamiento (100)", ["10:asc", "10:desc", "99:asc"])
+        ),
+    )
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+    issue = issue_registry.async_get_issue(DOMAIN, f"{ISSUE_LINES_REMOVED}_100")
+    assert issue is not None
+    assert issue.translation_placeholders == {"stop": "Ayuntamiento (100)", "lines": "10, 99"}
+    assert issue_registry.async_get_issue(DOMAIN, f"{ISSUE_LINES_REMOVED}_101") is None
+
+    # Reconfigured to the lines that still pass: the issue goes away.
+    stop_100 = next(s for s in config_entry.subentries.values() if s.data["stop_id"] == "100")
+    hass.config_entries.async_update_subentry(
+        config_entry, stop_100, data={"stop_id": "100", "patterns": ["10:asc"]}
+    )
+    await hass.async_block_till_done()
+    assert issue_registry.async_get_issue(DOMAIN, f"{ISSUE_LINES_REMOVED}_100") is None
 
 
 async def test_removing_the_integration_clears_its_issues(
