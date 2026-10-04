@@ -97,7 +97,7 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
             ) from err
         except UpstreamSchemaError as err:
             self._schema_failures += 1
-            if self._schema_failures >= SCHEMA_FAILURES_BEFORE_ISSUE:
+            if self.upstream_changed:
                 self._raise_issue(ISSUE_UPSTREAM_CHANGED)
             raise UpdateFailed(
                 translation_domain=DOMAIN,
@@ -111,7 +111,10 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
                 translation_placeholders={"detail": str(err)},
             ) from err
         self._schema_failures = 0
-        ir.async_delete_issue(self.hass, DOMAIN, ISSUE_UPSTREAM_CHANGED)
+        # The "API changed" issue is shared by every stop: it stays while any of them still fails.
+        coordinators = self.config_entry.runtime_data.coordinators.values()
+        if not any(coordinator.upstream_changed for coordinator in coordinators):
+            ir.async_delete_issue(self.hass, DOMAIN, ISSUE_UPSTREAM_CHANGED)
         ir.async_delete_issue(self.hass, DOMAIN, self._issue_id(ISSUE_STOP_REMOVED))
         self.last_arrivals = arrivals
         await self._refresh_timetables()
@@ -129,6 +132,11 @@ class StopArrivalsCoordinator(DataUpdateCoordinator[list[Card]]):
                 self.timetables[line_id] = await provider.get_timetable(line_id)
             except LogronoBusError as err:  # unreachable, changed, or the line is gone
                 _LOGGER.debug("Horario de la línea %s no disponible: %s", line_id, err)
+
+    @property
+    def upstream_changed(self) -> bool:
+        """This stop's answers have failed to parse often enough to report an API change."""
+        return self._schema_failures >= SCHEMA_FAILURES_BEFORE_ISSUE
 
     def _issue_id(self, kind: str) -> str:
         return kind if kind == ISSUE_UPSTREAM_CHANGED else f"{kind}_{self.selection.stop_id}"

@@ -97,6 +97,36 @@ async def test_upstream_change_raises_and_clears_repair_issue(
     assert issue_registry.async_get_issue(DOMAIN, ISSUE_UPSTREAM_CHANGED) is None
 
 
+async def test_upstream_change_issue_stays_while_any_stop_still_fails(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    upstream: AiohttpClientMocker,
+    freezer: FrozenDateTimeFactory,
+    issue_registry: ir.IssueRegistry,
+) -> None:
+    """The repair issue is shared by every stop: one healthy stop must not hide another's failure."""
+    config_entry.add_to_hass(hass)
+    hass.config_entries.async_add_subentry(
+        config_entry, ConfigSubentry(**stop_subentry("100", "Ayuntamiento (100)", ["10:asc"]))
+    )
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    _serve(
+        aioclient_mock=upstream, s101={"result": {"llegadas": []}}, s100=load("arrivals-100.json")
+    )
+    for _ in range(SCHEMA_FAILURES_BEFORE_ISSUE):
+        await _tick(hass, freezer)
+    assert issue_registry.async_get_issue(DOMAIN, ISSUE_UPSTREAM_CHANGED) is not None
+    # Stop 100 keeps refreshing fine; the issue about stop 101 must survive it.
+    await _tick(hass, freezer)
+    assert issue_registry.async_get_issue(DOMAIN, ISSUE_UPSTREAM_CHANGED) is not None
+
+    _serve(aioclient_mock=upstream, s101=load("arrivals-101.json"), s100=load("arrivals-100.json"))
+    await _tick(hass, freezer)
+    assert issue_registry.async_get_issue(DOMAIN, ISSUE_UPSTREAM_CHANGED) is None
+
+
 async def test_vanished_stop_raises_issue(
     hass: HomeAssistant,
     config_entry: MockConfigEntry,
