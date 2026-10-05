@@ -2441,7 +2441,7 @@ var ga = /* @__PURE__ */ new WeakMap(), _a = /* @__PURE__ */ new WeakMap(), va =
 			this.room = ua(this.orientation === "horizontal" ? t : n * .7, this.orientation, i);
 		})), h(this, Ca, (e) => {
 			e.key === "Escape" && this.close();
-		}), h(this, wa, () => _(Z, this, Ea).call(this)), this.card = void 0, this.source = void 0, this.arrivals = null, this.previousStops = 4, this.route = null, this.vehicles = void 0, this.problem = void 0, this.now = Date.now(), this.orientation = "vertical", this.room = 12, this.screen = "recorrido", this.timetable = void 0;
+		}), h(this, wa, () => _(Z, this, Ea).call(this)), this.card = void 0, this.source = void 0, this.arrivals = null, this.previousStops = 4, this.route = null, this.vehicles = void 0, this.problem = void 0, this.timetableProblem = void 0, this.now = Date.now(), this.orientation = "vertical", this.room = 12, this.screen = "recorrido", this.timetable = void 0;
 	}
 	willUpdate() {
 		let e = this.patternId;
@@ -2504,7 +2504,7 @@ var ga = /* @__PURE__ */ new WeakMap(), _a = /* @__PURE__ */ new WeakMap(), va =
 		})}
         @click=${() => _(Z, this, Oa).call(this)}
       >
-        ${this.screen === "recorrido" && this.problem && a ? _(Z, this, ja).call(this, a) : this.problem ? G`<p class="note" role="alert">${this.problem}</p>` : this.screen === "horario" ? _(Z, this, Ma).call(this, e) : t ? _(Z, this, ja).call(this, t) : G`<p class="note" role="status">Buscando los autobuses…</p>`}
+        ${this.screen === "horario" ? this.timetableProblem ? G`<p class="note" role="alert">${this.timetableProblem}</p>` : _(Z, this, Ma).call(this, e) : this.problem && a ? _(Z, this, ja).call(this, a) : this.problem ? G`<p class="note" role="alert">${this.problem}</p>` : t ? _(Z, this, ja).call(this, t) : G`<p class="note" role="status">Buscando los autobuses…</p>`}
       </div>
       <footer ?hidden=${this.screen === "horario"}>
         <span>
@@ -2523,9 +2523,9 @@ function Ea() {
 async function Da() {
 	let e = this.card, t = this.source;
 	if (e && t) try {
-		this.timetable = await t.timetable(e.line_id);
+		this.timetable = await t.timetable(e.line_id), this.timetableProblem = void 0;
 	} catch {
-		this.problem = "No se puede obtener ahora el horario de la línea.";
+		this.timetableProblem = "No se puede obtener ahora el horario de la línea.";
 	}
 }
 function Oa() {
@@ -2617,7 +2617,8 @@ ia.properties = {
 		type: String,
 		reflect: !0
 	},
-	timetable: { state: !0 }
+	timetable: { state: !0 },
+	timetableProblem: { state: !0 }
 }, ia.styles = z`
     :host {
       position: fixed;
