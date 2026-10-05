@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/chiva/ha-logrono-bus/compare/v0.1.2...v0.1.3) (2026-10-05)
+
+
+### Bug Fixes
+
+* **card:** el recorrido no pierde el autobús parado ni se cierra solo ([#9](https://github.com/chiva/ha-logrono-bus/issues/9)) ([8c5ab10](https://github.com/chiva/ha-logrono-bus/commit/8c5ab10363197c948b699770b8b34ab15499bcd2))
+
 ## [0.1.2](https://github.com/chiva/ha-logrono-bus/compare/v0.1.1...v0.1.2) (2026-10-04)
 
 
