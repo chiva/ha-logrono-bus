@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/chiva/ha-logrono-bus/compare/v0.1.3...v0.2.0) (2026-10-05)
+
+
+### Features
+
+* **card:** el recorrido marca el principio y el final de la línea ([#11](https://github.com/chiva/ha-logrono-bus/issues/11)) ([9a7399c](https://github.com/chiva/ha-logrono-bus/commit/9a7399cac53fd73793e22960dfef3e848a0db6e2))
+
 ## [0.1.3](https://github.com/chiva/ha-logrono-bus/compare/v0.1.2...v0.1.3) (2026-10-05)
 
 
