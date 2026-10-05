@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/chiva/ha-logrono-bus/compare/v0.2.0...v0.3.0) (2026-10-05)
+
+
+### Features
+
+* **card:** efectos de aviso visibles en cualquier línea ([#13](https://github.com/chiva/ha-logrono-bus/issues/13)) ([a903095](https://github.com/chiva/ha-logrono-bus/commit/a903095e61f7c07072dbaae08f1571d560828b76))
+
 ## [0.2.0](https://github.com/chiva/ha-logrono-bus/compare/v0.1.3...v0.2.0) (2026-10-05)
 
 
