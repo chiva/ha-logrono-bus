@@ -306,7 +306,8 @@ function Ge(e, t, n, r, i, { previousStops: a = 4, now: o = r.generated_at } = {
 		return {
 			id: t,
 			name: ((r = e.findStop(t)) == null ? void 0 : r.name) ?? t,
-			position: l + n
+			position: l + n,
+			terminus: l + n === 1 || l + n === s.stop_ids.length
 		};
 	}), d = [];
 	for (let t of r.vehicles) {
@@ -433,11 +434,11 @@ var it, at, ot, st = t((() => {
 //#endregion
 //#region ../core/src/raw.ts
 function w(e, t) {
-	if (typeof e != "object" || !e || Array.isArray(e)) throw new s(`se esperaba un objeto, llegó ${k(e)}`, t);
+	if (typeof e != "object" || !e || Array.isArray(e)) throw new s(`se esperaba un objeto, llegó ${O(e)}`, t);
 	return e;
 }
 function ct(e, t) {
-	if (!Array.isArray(e)) throw new s(`se esperaba una lista, llegó ${k(e)}`, t);
+	if (!Array.isArray(e)) throw new s(`se esperaba una lista, llegó ${O(e)}`, t);
 	return e;
 }
 function T(e, t, n) {
@@ -445,19 +446,19 @@ function T(e, t, n) {
 	return e[t];
 }
 function E(e, t) {
-	if (typeof e != "string") throw new s(`se esperaba texto, llegó ${k(e)}`, t);
+	if (typeof e != "string") throw new s(`se esperaba texto, llegó ${O(e)}`, t);
 	return e.trim();
 }
 function lt(e, t) {
-	if (typeof e != "number" || !Number.isInteger(e)) throw new s(`se esperaba un entero, llegó ${k(e)}`, t);
+	if (typeof e != "number" || !Number.isInteger(e)) throw new s(`se esperaba un entero, llegó ${O(e)}`, t);
 	return e;
 }
 function ut(e, t) {
-	if (typeof e != "number") throw new s(`se esperaba un número, llegó ${k(e)}`, t);
+	if (typeof e != "number") throw new s(`se esperaba un número, llegó ${O(e)}`, t);
 	return e;
 }
 function dt(e, t) {
-	if (typeof e != "boolean") throw new s(`se esperaba un booleano, llegó ${k(e)}`, t);
+	if (typeof e != "boolean") throw new s(`se esperaba un booleano, llegó ${O(e)}`, t);
 	return e;
 }
 function D(e, t) {
@@ -470,8 +471,8 @@ function D(e, t) {
 function ft(e, t) {
 	return e == null || e === "" ? "" : D(e, t);
 }
-function O(e, t) {
-	let n = E(e, t), r = St.exec(n);
+function pt(e, t) {
+	let n = E(e, t), r = Ct.exec(n);
 	if (!r) {
 		let e = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?$/.test(n);
 		throw new s(e ? `fecha sin zona horaria '${n}'` : `fecha no válida '${n}'`, t);
@@ -480,10 +481,10 @@ function O(e, t) {
 	if (Number.isNaN(Date.parse(f))) throw new s(`fecha no válida '${n}'`, t);
 	return f;
 }
-function pt(e, t) {
+function mt(e, t) {
 	return ct(T(w(T(w(e, "$"), "result", "$"), "$.result"), t, "$.result"), `$.result.${t}`);
 }
-function mt(e, t) {
+function ht(e, t) {
 	return ct(e, t).map((e, n) => {
 		let r = `${t}[${n}]`, i = w(e, r);
 		return {
@@ -492,20 +493,20 @@ function mt(e, t) {
 		};
 	});
 }
-function ht(e) {
-	return pt(e, "lines").map((e, t) => {
+function gt(e) {
+	return mt(e, "lines").map((e, t) => {
 		let n = `$.result.lines[${t}]`, r = w(e, n), i = w(T(r, "stops", n), `${n}.stops`);
 		return {
 			id: D(T(r, "id", n), `${n}.id`),
 			name: E(T(r, "name", n), `${n}.name`),
 			colour: E(T(r, "color", n), `${n}.color`),
-			asc: mt(T(i, "asc", `${n}.stops`), `${n}.stops.asc`),
-			desc: mt(T(i, "desc", `${n}.stops`), `${n}.stops.desc`)
+			asc: ht(T(i, "asc", `${n}.stops`), `${n}.stops.asc`),
+			desc: ht(T(i, "desc", `${n}.stops`), `${n}.stops.desc`)
 		};
 	});
 }
-function gt(e) {
-	return pt(e, "stops").map((e, t) => {
+function _t(e) {
+	return mt(e, "stops").map((e, t) => {
 		let n = `$.result.stops[${t}]`, r = w(e, n), i = ct(r.lines ?? [], `${n}.lines`);
 		return {
 			id: D(T(r, "id", n), `${n}.id`),
@@ -516,8 +517,8 @@ function gt(e) {
 		};
 	});
 }
-function _t(e) {
-	return pt(e, "arrivals").map((e, t) => {
+function vt(e) {
+	return mt(e, "arrivals").map((e, t) => {
 		let n = `$.result.arrivals[${t}]`, r = w(e, n), i = r.order;
 		return {
 			lineId: D(T(r, "lineRef", n), `${n}.lineRef`),
@@ -525,8 +526,8 @@ function _t(e) {
 			directionRef: ft(r.directionRef, `${n}.directionRef`),
 			vehicleRef: ft(r.vehicleRef, `${n}.vehicleRef`),
 			order: i == null ? null : lt(i, `${n}.order`),
-			aimed: O(T(r, "aimedArrivalTime", n), `${n}.aimedArrivalTime`),
-			expected: O(T(r, "expectedArrivalTime", n), `${n}.expectedArrivalTime`),
+			aimed: pt(T(r, "aimedArrivalTime", n), `${n}.aimedArrivalTime`),
+			expected: pt(T(r, "expectedArrivalTime", n), `${n}.expectedArrivalTime`),
 			arrivalStatus: E(r.arrivalStatus ?? "", `${n}.arrivalStatus`),
 			cancelled: dt(r.cancellation ?? !1, `${n}.cancellation`),
 			inaccurate: dt(r.predictionInaccurate ?? !1, `${n}.predictionInaccurate`),
@@ -534,8 +535,8 @@ function _t(e) {
 		};
 	});
 }
-function vt(e) {
-	return pt(e, "activities").map((e, t) => {
+function yt(e) {
+	return mt(e, "activities").map((e, t) => {
 		let n = `$.result.activities[${t}]`, r = w(e, n);
 		return {
 			vehicleRef: D(T(r, "vehicleRef", n), `${n}.vehicleRef`),
@@ -544,38 +545,38 @@ function vt(e) {
 			lat: ut(T(r, "latitude", n), `${n}.latitude`),
 			lon: ut(T(r, "longitude", n), `${n}.longitude`),
 			nextStopId: ft(r.nextStopRef, `${n}.nextStopRef`),
-			recordedAt: O(T(r, "locationRecordedAtTime", n), `${n}.locationRecordedAtTime`),
+			recordedAt: pt(T(r, "locationRecordedAtTime", n), `${n}.locationRecordedAtTime`),
 			delayS: lt(r.delaySeconds ?? 0, `${n}.delaySeconds`)
 		};
 	});
 }
-function yt(e, t) {
-	let n = E(e, t), r = Ct.exec(n), i = r ? Number(r[1]) : NaN, a = r ? Number(r[2]) : NaN;
-	if (!r || i > wt || a >= Tt) throw new s(`hora no válida: '${n}'`, t);
+function bt(e, t) {
+	let n = E(e, t), r = wt.exec(n), i = r ? Number(r[1]) : NaN, a = r ? Number(r[2]) : NaN;
+	if (!r || i > Tt || a >= Et) throw new s(`hora no válida: '${n}'`, t);
 	return `${String(i).padStart(2, "0")}:${r[2]}`;
 }
-function bt(e, t) {
+function xt(e, t) {
 	let n = w(e, t), r = n.intervalMinutesMax;
 	return {
-		first: yt(T(n, "firstPass", t), `${t}.firstPass`),
-		last: yt(T(n, "lastPass", t), `${t}.lastPass`),
+		first: bt(T(n, "firstPass", t), `${t}.firstPass`),
+		last: bt(T(n, "lastPass", t), `${t}.lastPass`),
 		intervalMin: lt(T(n, "intervalMinutes", t), `${t}.intervalMinutes`),
 		intervalMaxMin: r == null ? null : lt(r, `${t}.intervalMinutesMax`)
 	};
 }
-function xt(e) {
+function St(e) {
 	let t = w(T(w(e, "$"), "result", "$"), "$.result"), n = w(T(t, "frequenciesByDirection", "$.result"), "$.result.frequenciesByDirection"), r = w(T(t, "passesByDirection", "$.result"), "$.result.passesByDirection");
 	return [.../* @__PURE__ */ new Set([...Object.keys(r), ...Object.keys(n)])].map((e) => {
 		let t = `$.result.passesByDirection.${e}`, i = `$.result.frequenciesByDirection.${e}`;
 		return {
 			name: e,
-			frequencies: ct(n[e] ?? [], i).map((e, t) => bt(e, `${i}[${t}]`)),
-			passes: ct(r[e] ?? [], t).map((e, n) => yt(e, `${t}[${n}]`))
+			frequencies: ct(n[e] ?? [], i).map((e, t) => xt(e, `${i}[${t}]`)),
+			passes: ct(r[e] ?? [], t).map((e, n) => bt(e, `${t}[${n}]`))
 		};
 	});
 }
-var k, St, Ct, wt, Tt, Et = t((() => {
-	d(), k = (e) => {
+var O, Ct, wt, Tt, Et, Dt = t((() => {
+	d(), O = (e) => {
 		if (e === null) return "NoneType";
 		if (Array.isArray(e)) return "list";
 		switch (typeof e) {
@@ -585,42 +586,42 @@ var k, St, Ct, wt, Tt, Et = t((() => {
 			case "object": return "dict";
 			default: return typeof e;
 		}
-	}, St = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}):(\d{2})(?::(\d{2})(?:[.,](\d{1,6}))?)?(Z|[+-]\d{2}(?::?\d{2})?)$/, Ct = /^(\d{1,2}):(\d{2})$/, wt = 29, Tt = 60;
+	}, Ct = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}):(\d{2})(?::(\d{2})(?:[.,](\d{1,6}))?)?(Z|[+-]\d{2}(?::?\d{2})?)$/, wt = /^(\d{1,2}):(\d{2})$/, Tt = 29, Et = 60;
 }));
 //#endregion
 //#region ../core/src/timetable.ts
-function Dt(e) {
-	let t = new Date(typeof e == "number" ? e : Date.parse(e));
-	return Object.fromEntries(Lt.formatToParts(t).map((e) => [e.type, e.value]));
-}
 function Ot(e) {
-	let t = Dt(e);
-	return `${t.year}-${t.month}-${t.day}`;
+	let t = new Date(typeof e == "number" ? e : Date.parse(e));
+	return Object.fromEntries(Rt.formatToParts(t).map((e) => [e.type, e.value]));
 }
 function kt(e) {
-	let t = Dt(e);
+	let t = Ot(e);
+	return `${t.year}-${t.month}-${t.day}`;
+}
+function At(e) {
+	let t = Ot(e);
 	return Number(t.hour) * 60 + Number(t.minute);
 }
-function At(e, t = null) {
+function jt(e, t = null) {
 	return t === null || t === e ? `cada ${e} min` : `cada ${e}–${t} min`;
 }
-function jt(e) {
+function Mt(e) {
 	let [t = "0", n = "0"] = e.split(":");
 	return Number(t) * 60 + Number(n);
 }
-function Mt(e) {
+function Nt(e) {
 	let t = [];
 	for (let n of e) {
-		let e = jt(n), r = t[t.length - 1];
-		for (; r !== void 0 && e < r;) e += It;
+		let e = Mt(n), r = t[t.length - 1];
+		for (; r !== void 0 && e < r;) e += Lt;
 		t.push(e);
 	}
 	return t;
 }
-function Nt(e, t) {
+function Pt(e, t) {
 	let n = (e == null ? void 0 : e.departures) ?? [], r = n[0], i = n[n.length - 1];
-	if (!e || r === void 0 || i === void 0) return Rt;
-	let a = kt(t), o = Mt(n), s = a < (o[0] ?? 0) ? "antes" : a > (o[o.length - 1] ?? 0) ? "terminado" : "en_servicio", c = o.findIndex((e) => e >= a), l = s === "en_servicio" ? e.periods.find((e) => a <= jt(e.last)) : void 0;
+	if (!e || r === void 0 || i === void 0) return zt;
+	let a = At(t), o = Nt(n), s = a < (o[0] ?? 0) ? "antes" : a > (o[o.length - 1] ?? 0) ? "terminado" : "en_servicio", c = o.findIndex((e) => e >= a), l = s === "en_servicio" ? e.periods.find((e) => a <= Mt(e.last)) : void 0;
 	return {
 		state: s,
 		first: r,
@@ -630,16 +631,16 @@ function Nt(e, t) {
 		interval_max_min: (l == null ? void 0 : l.interval_max_min) ?? null
 	};
 }
-function Pt(e, t) {
+function Ft(e, t) {
 	return t ? e == null ? void 0 : e.directions.find((e) => e.pattern_id === t) : void 0;
 }
-var Ft, It, Lt, Rt, zt = t((() => {
-	oe(), Ft = [
+var It, Lt, Rt, zt, Bt = t((() => {
+	oe(), It = [
 		"antes",
 		"en_servicio",
 		"terminado",
 		"sin_servicio"
-	], It = 1440, Lt = new Intl.DateTimeFormat("en-GB", {
+	], Lt = 1440, Rt = new Intl.DateTimeFormat("en-GB", {
 		timeZone: ae,
 		year: "numeric",
 		month: "2-digit",
@@ -647,7 +648,7 @@ var Ft, It, Lt, Rt, zt = t((() => {
 		hour: "2-digit",
 		minute: "2-digit",
 		hourCycle: "h23"
-	}), Rt = {
+	}), zt = {
 		state: "sin_servicio",
 		first: null,
 		last: null,
@@ -658,12 +659,12 @@ var Ft, It, Lt, Rt, zt = t((() => {
 }));
 //#endregion
 //#region ../core/src/normalize.ts
-function Bt(e) {
-	let t = e.indexOf(Zt), n = t === -1 ? e : e.slice(0, t), r = (t === -1 ? "" : e.slice(t + 1)).split(Zt).filter((e) => e.trim()).map(ce);
-	return [n.trim(), r.join(Qt)];
-}
 function Vt(e) {
-	let [t, n] = Bt(e.name), r;
+	let t = e.indexOf(Qt), n = t === -1 ? e : e.slice(0, t), r = (t === -1 ? "" : e.slice(t + 1)).split(Qt).filter((e) => e.trim()).map(ce);
+	return [n.trim(), r.join($t)];
+}
+function Ht(e) {
+	let [t, n] = Vt(e.name), r;
 	try {
 		r = Me(e.colour);
 	} catch (t) {
@@ -677,7 +678,7 @@ function Vt(e) {
 		text_colour: Fe(r)
 	};
 }
-function Ht(e) {
+function Ut(e) {
 	return ie.flatMap((t) => {
 		let n = t === "asc" ? e.asc : e.desc, r = n[0], i = n[n.length - 1];
 		return !r || !i ? [] : [{
@@ -690,7 +691,7 @@ function Ht(e) {
 		}];
 	});
 }
-function Ut(e, t) {
+function Wt(e, t) {
 	let n = [...new Set(e.lineIds)].filter((e) => t.has(e)).sort(te);
 	return {
 		id: e.id,
@@ -700,17 +701,17 @@ function Ut(e, t) {
 		line_ids: n
 	};
 }
-function Wt(e, t, n) {
-	let r = e.map(Vt).sort((e, t) => te(e.label, t.label)), i = new Map(r.map((e, t) => [e.id, t])), a = e.flatMap(Ht).sort((e, t) => (i.get(e.line_id) ?? 0) - (i.get(t.line_id) ?? 0) || ie.indexOf(e.direction) - ie.indexOf(t.direction)), o = new Set(i.keys());
+function Gt(e, t, n) {
+	let r = e.map(Ht).sort((e, t) => te(e.label, t.label)), i = new Map(r.map((e, t) => [e.id, t])), a = e.flatMap(Ut).sort((e, t) => (i.get(e.line_id) ?? 0) - (i.get(t.line_id) ?? 0) || ie.indexOf(e.direction) - ie.indexOf(t.direction)), o = new Set(i.keys());
 	return {
 		lines: r,
 		patterns: a,
-		stops: t.map((e) => Ut(e, o)).sort((e, t) => te(e.id, t.id)),
-		fetched_at: O(n, "fetched_at")
+		stops: t.map((e) => Wt(e, o)).sort((e, t) => te(e.id, t.id)),
+		fetched_at: pt(n, "fetched_at")
 	};
 }
-function Gt(e, t, n, r, i) {
-	let a = O(i, "now"), o = Date.parse(a), s = new Set(n.stop(t).line_ids), c = [];
+function Kt(e, t, n, r, i) {
+	let a = pt(i, "now"), o = Date.parse(a), s = new Set(n.stop(t).line_ids), c = [];
 	for (let n of e) {
 		if (n.stopId !== t || !s.has(n.lineId) || Date.parse(n.expected) < o - 6e4) continue;
 		let e = r.resolve(n.lineId, t, n.order, n.directionRef);
@@ -737,20 +738,20 @@ function Gt(e, t, n, r, i) {
 		arrivals: c
 	};
 }
-function Kt(e, t) {
+function qt(e, t) {
 	var n;
-	let r = Xt[e.directionRef.toLowerCase()];
+	let r = Zt[e.directionRef.toLowerCase()];
 	if (r !== void 0 || !e.nextStopId) return r ?? null;
 	let i = t.patternsAt(e.nextStopId).filter((t) => t.line_id === e.lineId);
 	return i.length === 1 ? ((n = i[0]) == null ? void 0 : n.direction) ?? null : null;
 }
-function qt(e, t, n, r) {
-	let i = O(r, "now"), a = Date.parse(i);
+function Jt(e, t, n, r) {
+	let i = pt(r, "now"), a = Date.parse(i);
 	return {
 		line_id: t,
 		generated_at: i,
 		vehicles: e.filter((e) => e.lineId === t && Date.parse(e.recordedAt) >= a - 18e4).map((e) => {
-			let r = Kt(e, n), i = r ? n.pattern(`${t}:${r}`) : void 0;
+			let r = qt(e, n), i = r ? n.pattern(`${t}:${r}`) : void 0;
 			return {
 				id: e.vehicleRef,
 				line_id: t,
@@ -765,10 +766,10 @@ function qt(e, t, n, r) {
 		}).sort((e, t) => te(e.id, t.id))
 	};
 }
-function Jt(e, t, n, r) {
-	let i = O(r, "now"), a = [];
+function Yt(e, t, n, r) {
+	let i = pt(r, "now"), a = [];
 	for (let r of e) {
-		let e = Xt[r.name.toLowerCase()], i = e ? n.pattern(`${t}:${e}`) : void 0;
+		let e = Zt[r.name.toLowerCase()], i = e ? n.pattern(`${t}:${e}`) : void 0;
 		i && a.push({
 			pattern_id: i.id,
 			direction: i.direction,
@@ -785,28 +786,28 @@ function Jt(e, t, n, r) {
 	}
 	return a.sort((e, t) => ie.indexOf(e.direction) - ie.indexOf(t.direction)), {
 		line_id: t,
-		service_date: Ot(i),
+		service_date: kt(i),
 		generated_at: i,
 		directions: a
 	};
 }
-var Yt, Xt, Zt, Qt, $t = t((() => {
-	be(), We(), d(), oe(), Et(), ue(), zt(), Yt = 18e4, Xt = {
+var Xt, Zt, Qt, $t, en = t((() => {
+	be(), We(), d(), oe(), Dt(), ue(), Bt(), Xt = 18e4, Zt = {
 		ida: "asc",
 		vuelta: "desc"
-	}, Zt = "-", Qt = " – ";
+	}, Qt = "-", $t = " – ";
 }));
 //#endregion
 //#region \0@oxc-project+runtime@0.152.0/helpers/esm/classPrivateMethodInitSpec.js
-function A(e, t) {
+function k(e, t) {
 	de(e, t), t.add(e);
 }
-var j = t((() => {
+var A = t((() => {
 	fe();
 }));
 //#endregion
 //#region ../core/src/sources.ts
-function en(e, t) {
+function tn(e, t) {
 	let n = new AbortController(), r = setTimeout(() => n.abort(), t), i = () => n.abort();
 	return e != null && e.aborted && n.abort(), e == null || e.addEventListener("abort", i, { once: !0 }), {
 		signal: n.signal,
@@ -815,8 +816,8 @@ function en(e, t) {
 		}
 	};
 }
-async function tn(e, t, { signal: n, timeoutMs: r = pn } = {}) {
-	let i = en(n, r), a, c;
+async function nn(e, t, { signal: n, timeoutMs: r = mn } = {}) {
+	let i = tn(n, r), a, c;
 	try {
 		a = await e(t, {
 			signal: i.signal,
@@ -838,9 +839,9 @@ async function tn(e, t, { signal: n, timeoutMs: r = pn } = {}) {
 		body: l
 	};
 }
-function nn(e) {
+function rn(e) {
 	var t;
-	let n = (t = x(bn, this)) == null ? void 0 : t.get(e);
+	let n = (t = x(xn, this)) == null ? void 0 : t.get(e);
 	if (!n) return null;
 	try {
 		return JSON.parse(n);
@@ -848,9 +849,9 @@ function nn(e) {
 		return null;
 	}
 }
-function rn() {
-	if (!x(Sn, this)) {
-		let e = _(P, this, an).call(this).then((e) => {
+function an() {
+	if (!x(N, this)) {
+		let e = _(P, this, on).call(this).then((e) => {
 			let t = new ye(e);
 			return {
 				index: t,
@@ -858,39 +859,39 @@ function rn() {
 			};
 		});
 		e.catch(() => {
-			x(Sn, this) === e && y(Sn, this, void 0);
-		}), y(Sn, this, e);
+			x(N, this) === e && y(N, this, void 0);
+		}), y(N, this, e);
 	}
-	return x(Sn, this);
+	return x(N, this);
 }
-async function an() {
-	let e = _(P, this, on).call(this);
-	if (e && x(N, this).call(this) - Date.parse(e.fetched_at) < 864e5) return e;
+async function on() {
+	let e = _(P, this, sn).call(this);
+	if (e && x(M, this).call(this) - Date.parse(e.fetched_at) < 864e5) return e;
 	try {
 		var t;
-		let [e, n] = await Promise.all([_(P, this, sn).call(this, `${x(M, this)}linesDiscovery/lines`), _(P, this, sn).call(this, `${x(M, this)}linesDiscovery/stops`)]), r = Wt(ht(e), gt(n), vn(x(N, this)));
-		return (t = x(bn, this)) == null || t.set("logrono-bus:catalogo:v1", JSON.stringify(r)), r;
+		let [e, n] = await Promise.all([_(P, this, cn).call(this, `${x(j, this)}linesDiscovery/lines`), _(P, this, cn).call(this, `${x(j, this)}linesDiscovery/stops`)]), r = Gt(gt(e), _t(n), yn(x(M, this)));
+		return (t = x(xn, this)) == null || t.set("logrono-bus:catalogo:v1", JSON.stringify(r)), r;
 	} catch (t) {
 		if (e && t instanceof o) return e;
 		throw t;
 	}
 }
-function on() {
-	let e = _(P, this, nn).call(this, hn);
+function sn() {
+	let e = _(P, this, rn).call(this, gn);
 	return e && Array.isArray(e.stops) && typeof e.fetched_at == "string" ? e : null;
 }
-async function sn(e, t) {
-	let { response: n, body: r } = await tn(x(yn, this), e, {
+async function cn(e, t) {
+	let { response: n, body: r } = await nn(x(bn, this), e, {
 		signal: t,
-		timeoutMs: x(xn, this)
+		timeoutMs: x(Sn, this)
 	});
 	if (n.status === 429 || n.status >= 500) throw new o(`${e}: HTTP ${n.status}`);
 	if (!n.ok) throw new s(`HTTP ${n.status} inesperado`, e);
 	return r;
 }
-async function cn(e, t) {
+async function ln(e, t) {
 	var n;
-	let { response: r, body: i } = await tn(x(Tn, this), `${x(wn, this)}${e}`, {
+	let { response: r, body: i } = await nn(x(Tn, this), `${x(wn, this)}${e}`, {
 		signal: t,
 		timeoutMs: x(En, this)
 	});
@@ -904,92 +905,92 @@ async function cn(e, t) {
 		default: throw new o(f);
 	}
 }
-async function ln(e, t) {
+async function un(e, t) {
 	try {
-		let { response: n, body: r } = await tn(t, `${e.replace(/\/+$/, "")}/health`, { timeoutMs: mn });
+		let { response: n, body: r } = await nn(t, `${e.replace(/\/+$/, "")}/health`, { timeoutMs: hn });
 		return n.ok && (r == null ? void 0 : r.api_version) === 1;
 	} catch {
 		return !1;
 	}
 }
-async function un(e, t = {}) {
+async function dn(e, t = {}) {
 	let n = t.fetch ?? ((e, t) => globalThis.fetch(e, t)), r = e.api ?? "./api/v1";
-	if (e.api && t.pageProtocol === "https:" && e.api.startsWith("http:")) throw new _n("Esta página es https y el servidor indicado es http: el navegador bloquea esa conexión. Abre la web desde tu propio servidor o publícalo con https.");
-	return e.source === "directa" ? new Cn(dn, t) : e.source === "servidor" || e.api || await ln(r, n) ? new kn(r, t) : new Cn(dn, t);
+	if (e.api && t.pageProtocol === "https:" && e.api.startsWith("http:")) throw new vn("Esta página es https y el servidor indicado es http: el navegador bloquea esa conexión. Abre la web desde tu propio servidor o publícalo con https.");
+	return e.source === "directa" ? new Cn(fn, t) : e.source === "servidor" || e.api || await un(r, n) ? new On(r, t) : new Cn(fn, t);
 }
-var dn, fn, pn, mn, hn, gn, _n, vn, M, yn, bn, N, xn, Sn, P, Cn, wn, Tn, En, Dn, On, kn, An = t((() => {
-	be(), st(), d(), $t(), Et(), zt(), j(), g(), b(), v(), S(), dn = "https://transporteurbano.logrono.es/api/", fn = "./api/v1", pn = 1e4, mn = 3e3, hn = "logrono-bus:catalogo:v1", gn = "logrono-bus:horario:v1:", _n = class extends i {
+var fn, pn, mn, hn, gn, _n, vn, yn, j, bn, xn, M, Sn, N, P, Cn, wn, Tn, En, F, Dn, On, kn = t((() => {
+	be(), st(), d(), en(), Dt(), Bt(), A(), g(), b(), v(), S(), fn = "https://transporteurbano.logrono.es/api/", pn = "./api/v1", mn = 1e4, hn = 3e3, gn = "logrono-bus:catalogo:v1", _n = "logrono-bus:horario:v1:", vn = class extends i {
 		constructor(...e) {
 			super(...e), this.name = "UnusableSource";
 		}
-	}, vn = (e) => new Date(e()).toISOString(), M = /* @__PURE__ */ new WeakMap(), yn = /* @__PURE__ */ new WeakMap(), bn = /* @__PURE__ */ new WeakMap(), N = /* @__PURE__ */ new WeakMap(), xn = /* @__PURE__ */ new WeakMap(), Sn = /* @__PURE__ */ new WeakMap(), P = /* @__PURE__ */ new WeakSet(), Cn = class {
-		constructor(e = dn, t = {}) {
-			A(this, P), h(this, M, void 0), h(this, yn, void 0), h(this, bn, void 0), h(this, N, void 0), h(this, xn, void 0), h(this, Sn, void 0), this.kind = "directa", y(M, this, e.endsWith("/") ? e : `${e}/`), y(yn, this, t.fetch ?? ((e, t) => globalThis.fetch(e, t))), y(bn, this, t.store), y(N, this, t.now ?? Date.now), y(xn, this, t.timeoutMs ?? 1e4);
+	}, yn = (e) => new Date(e()).toISOString(), j = /* @__PURE__ */ new WeakMap(), bn = /* @__PURE__ */ new WeakMap(), xn = /* @__PURE__ */ new WeakMap(), M = /* @__PURE__ */ new WeakMap(), Sn = /* @__PURE__ */ new WeakMap(), N = /* @__PURE__ */ new WeakMap(), P = /* @__PURE__ */ new WeakSet(), Cn = class {
+		constructor(e = fn, t = {}) {
+			k(this, P), h(this, j, void 0), h(this, bn, void 0), h(this, xn, void 0), h(this, M, void 0), h(this, Sn, void 0), h(this, N, void 0), this.kind = "directa", y(j, this, e.endsWith("/") ? e : `${e}/`), y(bn, this, t.fetch ?? ((e, t) => globalThis.fetch(e, t))), y(xn, this, t.store), y(M, this, t.now ?? Date.now), y(Sn, this, t.timeoutMs ?? 1e4);
 		}
 		async catalog() {
-			return (await _(P, this, rn).call(this)).index;
+			return (await _(P, this, an).call(this)).index;
 		}
 		async arrivals(e, t) {
-			let { index: n, resolver: r } = await _(P, this, rn).call(this), i = n.stop(e);
+			let { index: n, resolver: r } = await _(P, this, an).call(this), i = n.stop(e);
 			if (i.line_ids.length === 0) return {
 				stop_id: i.id,
-				generated_at: vn(x(N, this)),
+				generated_at: yn(x(M, this)),
 				arrivals: []
 			};
 			let a = new URLSearchParams({
 				lines: i.line_ids.join(","),
 				previewMinutes: "60"
-			}), o = `${x(M, this)}estimatedTimetable/byStop/${encodeURIComponent(i.id)}?${a}`;
-			return Gt(_t(await _(P, this, sn).call(this, o, t)), i.id, n, r, vn(x(N, this)));
+			}), o = `${x(j, this)}estimatedTimetable/byStop/${encodeURIComponent(i.id)}?${a}`;
+			return Kt(vt(await _(P, this, cn).call(this, o, t)), i.id, n, r, yn(x(M, this)));
 		}
 		async vehicles(e, t) {
-			let { index: n } = await _(P, this, rn).call(this), r = n.line(e), i = `${x(M, this)}vehicleMonitoring/byLine/${encodeURIComponent(r.id)}`;
-			return qt(vt(await _(P, this, sn).call(this, i, t)), r.id, n, vn(x(N, this)));
+			let { index: n } = await _(P, this, an).call(this), r = n.line(e), i = `${x(j, this)}vehicleMonitoring/byLine/${encodeURIComponent(r.id)}`;
+			return Jt(yt(await _(P, this, cn).call(this, i, t)), r.id, n, yn(x(M, this)));
 		}
 		async timetable(e, t) {
 			var n;
-			let { index: r } = await _(P, this, rn).call(this), i = r.line(e), a = Ot(x(N, this).call(this)), o = `${gn}${i.id}`, s = _(P, this, nn).call(this, o);
+			let { index: r } = await _(P, this, an).call(this), i = r.line(e), a = kt(x(M, this).call(this)), o = `${_n}${i.id}`, s = _(P, this, rn).call(this, o);
 			if ((s == null ? void 0 : s.service_date) === a && Array.isArray(s.directions)) return s;
-			let c = `${x(M, this)}productionTimetable/byLine/${encodeURIComponent(i.id)}`, l = Jt(xt(await _(P, this, sn).call(this, c, t)), i.id, r, vn(x(N, this)));
-			return (n = x(bn, this)) == null || n.set(o, JSON.stringify(l)), l;
+			let c = `${x(j, this)}productionTimetable/byLine/${encodeURIComponent(i.id)}`, l = Yt(St(await _(P, this, cn).call(this, c, t)), i.id, r, yn(x(M, this)));
+			return (n = x(xn, this)) == null || n.set(o, JSON.stringify(l)), l;
 		}
-	}, wn = /* @__PURE__ */ new WeakMap(), Tn = /* @__PURE__ */ new WeakMap(), En = /* @__PURE__ */ new WeakMap(), Dn = /* @__PURE__ */ new WeakMap(), On = /* @__PURE__ */ new WeakSet(), kn = class {
-		constructor(e = fn, t = {}) {
-			A(this, On), h(this, wn, void 0), h(this, Tn, void 0), h(this, En, void 0), h(this, Dn, void 0), this.kind = "servidor", y(wn, this, e.replace(/\/+$/, "")), y(Tn, this, t.fetch ?? ((e, t) => globalThis.fetch(e, t))), y(En, this, t.timeoutMs ?? 1e4);
+	}, wn = /* @__PURE__ */ new WeakMap(), Tn = /* @__PURE__ */ new WeakMap(), En = /* @__PURE__ */ new WeakMap(), F = /* @__PURE__ */ new WeakMap(), Dn = /* @__PURE__ */ new WeakSet(), On = class {
+		constructor(e = pn, t = {}) {
+			k(this, Dn), h(this, wn, void 0), h(this, Tn, void 0), h(this, En, void 0), h(this, F, void 0), this.kind = "servidor", y(wn, this, e.replace(/\/+$/, "")), y(Tn, this, t.fetch ?? ((e, t) => globalThis.fetch(e, t))), y(En, this, t.timeoutMs ?? 1e4);
 		}
 		catalog() {
-			if (!x(Dn, this)) {
-				let e = _(On, this, cn).call(this, "/catalog").then((e) => new ye(e));
+			if (!x(F, this)) {
+				let e = _(Dn, this, ln).call(this, "/catalog").then((e) => new ye(e));
 				e.catch(() => {
-					x(Dn, this) === e && y(Dn, this, void 0);
-				}), y(Dn, this, e);
+					x(F, this) === e && y(F, this, void 0);
+				}), y(F, this, e);
 			}
-			return x(Dn, this);
+			return x(F, this);
 		}
 		arrivals(e, t) {
-			return _(On, this, cn).call(this, `/stops/${encodeURIComponent(e)}/arrivals`, t);
+			return _(Dn, this, ln).call(this, `/stops/${encodeURIComponent(e)}/arrivals`, t);
 		}
 		vehicles(e, t) {
-			return _(On, this, cn).call(this, `/lines/${encodeURIComponent(e)}/vehicles`, t);
+			return _(Dn, this, ln).call(this, `/lines/${encodeURIComponent(e)}/vehicles`, t);
 		}
 		timetable(e, t) {
-			return _(On, this, cn).call(this, `/lines/${encodeURIComponent(e)}/timetable`, t);
+			return _(Dn, this, ln).call(this, `/lines/${encodeURIComponent(e)}/timetable`, t);
 		}
 	};
-})), F, jn, Mn = t((() => {
-	g(), S(), b(), F = /* @__PURE__ */ new WeakMap(), jn = class {
+})), I, An, jn = t((() => {
+	g(), S(), b(), I = /* @__PURE__ */ new WeakMap(), An = class {
 		constructor(e) {
-			h(this, F, void 0);
+			h(this, I, void 0);
 			try {
-				y(F, this, e());
+				y(I, this, e());
 			} catch {
-				y(F, this, void 0);
+				y(I, this, void 0);
 			}
 		}
 		get(e) {
 			try {
 				var t;
-				return ((t = x(F, this)) == null ? void 0 : t.getItem(e)) ?? null;
+				return ((t = x(I, this)) == null ? void 0 : t.getItem(e)) ?? null;
 			} catch {
 				return null;
 			}
@@ -997,88 +998,88 @@ var dn, fn, pn, mn, hn, gn, _n, vn, M, yn, bn, N, xn, Sn, P, Cn, wn, Tn, En, Dn,
 		set(e, t) {
 			try {
 				var n;
-				(n = x(F, this)) == null || n.setItem(e, t);
+				(n = x(I, this)) == null || n.setItem(e, t);
 			} catch {}
 		}
 		remove(e) {
 			try {
 				var t;
-				(t = x(F, this)) == null || t.removeItem(e);
+				(t = x(I, this)) == null || t.removeItem(e);
 			} catch {}
 		}
 	};
-})), I = t((() => {
-	je(), be(), We(), nt(), st(), d(), ee(), oe(), $t(), Et(), Ye(), we(), An(), Mn(), ue(), zt();
+})), L = t((() => {
+	je(), be(), We(), nt(), st(), d(), ee(), oe(), en(), Dt(), Ye(), we(), kn(), jn(), ue(), Bt();
 }));
 //#endregion
 //#region src/config.ts
-function Nn(e) {
-	if (typeof e != "object" || !e) throw new Fn("La configuración de la tarjeta no es válida.");
+function Mn(e) {
+	if (typeof e != "object" || !e) throw new Pn("La configuración de la tarjeta no es válida.");
 	let t = e, n = t.entities;
-	if (!Array.isArray(n) || n.length === 0) throw new Fn("Indica al menos un sensor en «entities» (los de Logroño Bus terminados en _minutos).");
+	if (!Array.isArray(n) || n.length === 0) throw new Pn("Indica al menos un sensor en «entities» (los de Logroño Bus terminados en _minutos).");
 	let r = Number(t.aviso ?? C.alertMinutes), i = Number(t.tam ?? C.textScale), a = Number(t.previas ?? C.previousStops), o = t.titulo;
 	return {
-		type: typeof t.type == "string" ? t.type : `custom:${L}`,
+		type: typeof t.type == "string" ? t.type : `custom:${R}`,
 		entities: n.filter((e) => typeof e == "string"),
 		...typeof o == "string" && o.trim() ? { titulo: o.trim() } : {},
-		orden: In(tt, t.orden, C.order),
+		orden: Fn(tt, t.orden, C.order),
 		aviso: Number.isFinite(r) ? Math.min(15, Math.max(0, Math.round(r))) : C.alertMinutes,
-		efecto: In(et, t.efecto, C.effect),
-		color: In(Qe, t.color, C.colour),
-		letra: In($e, t.letra, C.font),
+		efecto: Fn(et, t.efecto, C.effect),
+		color: Fn(Qe, t.color, C.colour),
+		letra: Fn($e, t.letra, C.font),
 		tam: Number.isFinite(i) ? Xe(i) : C.textScale,
-		modo: In(Pn, t.modo, "normal"),
+		modo: Fn(Nn, t.modo, "normal"),
 		recorrido: t.recorrido !== !1,
 		previas: Number.isFinite(a) ? Ze(a) : C.previousStops
 	};
 }
-var L, Pn, Fn, In, Ln = t((() => {
-	I(), L = "logrono-bus-card", Pn = ["normal", "pantalla"], Fn = class extends Error {
+var R, Nn, Pn, Fn, In = t((() => {
+	L(), R = "logrono-bus-card", Nn = ["normal", "pantalla"], Pn = class extends Error {
 		constructor(...e) {
 			super(...e), this.name = "CardConfigError";
 		}
-	}, In = (e, t, n) => typeof t == "string" && e.includes(t) ? t : n;
-})), Rn, zn, Bn, Vn, Hn, Un, R, Wn, Gn, Kn = t((() => {
-	Rn = globalThis, zn = Rn.ShadowRoot && (Rn.ShadyCSS === void 0 || Rn.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Bn = Symbol(), Vn = /* @__PURE__ */ new WeakMap(), Hn = class {
+	}, Fn = (e, t, n) => typeof t == "string" && e.includes(t) ? t : n;
+})), Ln, Rn, zn, Bn, Vn, Hn, z, Un, Wn, Gn = t((() => {
+	Ln = globalThis, Rn = Ln.ShadowRoot && (Ln.ShadyCSS === void 0 || Ln.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, zn = Symbol(), Bn = /* @__PURE__ */ new WeakMap(), Vn = class {
 		constructor(e, t, n) {
-			if (this._$cssResult$ = !0, n !== Bn) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+			if (this._$cssResult$ = !0, n !== zn) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
 			this.cssText = e, this.t = t;
 		}
 		get styleSheet() {
 			let e = this.o, t = this.t;
-			if (zn && e === void 0) {
+			if (Rn && e === void 0) {
 				let n = t !== void 0 && t.length === 1;
-				n && (e = Vn.get(t)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), n && Vn.set(t, e));
+				n && (e = Bn.get(t)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), n && Bn.set(t, e));
 			}
 			return e;
 		}
 		toString() {
 			return this.cssText;
 		}
-	}, Un = (e) => new Hn(typeof e == "string" ? e : e + "", void 0, Bn), R = (e, ...t) => {
+	}, Hn = (e) => new Vn(typeof e == "string" ? e : e + "", void 0, zn), z = (e, ...t) => {
 		let n = e.length === 1 ? e[0] : t.reduce((t, n, r) => t + ((e) => {
 			if (!0 === e._$cssResult$) return e.cssText;
 			if (typeof e == "number") return e;
 			throw Error("Value passed to 'css' function must be a 'css' function result: " + e + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
 		})(n) + e[r + 1], e[0]);
-		return new Hn(n, e, Bn);
-	}, Wn = (e, t) => {
-		if (zn) e.adoptedStyleSheets = t.map((e) => e instanceof CSSStyleSheet ? e : e.styleSheet);
+		return new Vn(n, e, zn);
+	}, Un = (e, t) => {
+		if (Rn) e.adoptedStyleSheets = t.map((e) => e instanceof CSSStyleSheet ? e : e.styleSheet);
 		else for (let n of t) {
-			let t = document.createElement("style"), r = Rn.litNonce;
+			let t = document.createElement("style"), r = Ln.litNonce;
 			r !== void 0 && t.setAttribute("nonce", r), t.textContent = n.cssText, e.appendChild(t);
 		}
-	}, Gn = zn ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((e) => {
+	}, Wn = Rn ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((e) => {
 		let t = "";
 		for (let n of e.cssRules) t += n.cssText;
-		return Un(t);
+		return Hn(t);
 	})(e) : e;
-})), qn, Jn, Yn, Xn, Zn, Qn, $n, z, er, tr, nr, rr, ir, ar, or, B, sr = t((() => {
-	Kn(), {is: Jn, defineProperty: Yn, getOwnPropertyDescriptor: Xn, getOwnPropertyNames: Zn, getOwnPropertySymbols: Qn, getPrototypeOf: $n} = Object, z = globalThis, er = z.trustedTypes, tr = er ? er.emptyScript : "", nr = z.reactiveElementPolyfillSupport, rr = (e, t) => e, ir = {
+})), Kn, qn, Jn, Yn, Xn, Zn, Qn, B, $n, er, tr, nr, rr, ir, ar, V, or = t((() => {
+	Gn(), {is: qn, defineProperty: Jn, getOwnPropertyDescriptor: Yn, getOwnPropertyNames: Xn, getOwnPropertySymbols: Zn, getPrototypeOf: Qn} = Object, B = globalThis, $n = B.trustedTypes, er = $n ? $n.emptyScript : "", tr = B.reactiveElementPolyfillSupport, nr = (e, t) => e, rr = {
 		toAttribute(e, t) {
 			switch (t) {
 				case Boolean:
-					e = e ? tr : null;
+					e = e ? er : null;
 					break;
 				case Object:
 				case Array: e = e == null ? e : JSON.stringify(e);
@@ -1103,28 +1104,28 @@ var L, Pn, Fn, In, Ln = t((() => {
 			}
 			return n;
 		}
-	}, ar = (e, t) => !Jn(e, t), or = {
+	}, ir = (e, t) => !qn(e, t), ar = {
 		attribute: !0,
 		type: String,
-		converter: ir,
+		converter: rr,
 		reflect: !1,
 		useDefault: !1,
-		hasChanged: ar
-	}, (qn = Symbol).metadata ?? (qn.metadata = Symbol("metadata")), z.litPropertyMetadata ?? (z.litPropertyMetadata = /* @__PURE__ */ new WeakMap()), B = class extends HTMLElement {
+		hasChanged: ir
+	}, (Kn = Symbol).metadata ?? (Kn.metadata = Symbol("metadata")), B.litPropertyMetadata ?? (B.litPropertyMetadata = /* @__PURE__ */ new WeakMap()), V = class extends HTMLElement {
 		static addInitializer(e) {
 			this._$Ei(), (this.l ?? (this.l = [])).push(e);
 		}
 		static get observedAttributes() {
 			return this.finalize(), this._$Eh && [...this._$Eh.keys()];
 		}
-		static createProperty(e, t = or) {
+		static createProperty(e, t = ar) {
 			if (t.state && (t.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(e) && ((t = Object.create(t)).wrapped = !0), this.elementProperties.set(e, t), !t.noAccessor) {
 				let n = Symbol(), r = this.getPropertyDescriptor(e, n, t);
-				r !== void 0 && Yn(this.prototype, e, r);
+				r !== void 0 && Jn(this.prototype, e, r);
 			}
 		}
 		static getPropertyDescriptor(e, t, n) {
-			let { get: r, set: i } = Xn(this.prototype, e) ?? {
+			let { get: r, set: i } = Yn(this.prototype, e) ?? {
 				get() {
 					return this[t];
 				},
@@ -1143,17 +1144,17 @@ var L, Pn, Fn, In, Ln = t((() => {
 			};
 		}
 		static getPropertyOptions(e) {
-			return this.elementProperties.get(e) ?? or;
+			return this.elementProperties.get(e) ?? ar;
 		}
 		static _$Ei() {
-			if (this.hasOwnProperty(rr("elementProperties"))) return;
-			let e = $n(this);
+			if (this.hasOwnProperty(nr("elementProperties"))) return;
+			let e = Qn(this);
 			e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
 		}
 		static finalize() {
-			if (this.hasOwnProperty(rr("finalized"))) return;
-			if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(rr("properties"))) {
-				let e = this.properties, t = [...Zn(e), ...Qn(e)];
+			if (this.hasOwnProperty(nr("finalized"))) return;
+			if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(nr("properties"))) {
+				let e = this.properties, t = [...Xn(e), ...Zn(e)];
 				for (let n of t) this.createProperty(n, e[n]);
 			}
 			let e = this[Symbol.metadata];
@@ -1172,8 +1173,8 @@ var L, Pn, Fn, In, Ln = t((() => {
 			let t = [];
 			if (Array.isArray(e)) {
 				let n = new Set(e.flat(1 / 0).reverse());
-				for (let e of n) t.unshift(Gn(e));
-			} else e !== void 0 && t.push(Gn(e));
+				for (let e of n) t.unshift(Wn(e));
+			} else e !== void 0 && t.push(Wn(e));
 			return t;
 		}
 		static _$Eu(e, t) {
@@ -1202,7 +1203,7 @@ var L, Pn, Fn, In, Ln = t((() => {
 		}
 		createRenderRoot() {
 			let e = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-			return Wn(e, this.constructor.elementStyles), e;
+			return Un(e, this.constructor.elementStyles), e;
 		}
 		connectedCallback() {
 			var e;
@@ -1226,7 +1227,7 @@ var L, Pn, Fn, In, Ln = t((() => {
 			let n = this.constructor.elementProperties.get(e), r = this.constructor._$Eu(e, n);
 			if (r !== void 0 && !0 === n.reflect) {
 				var i;
-				let a = (((i = n.converter) == null ? void 0 : i.toAttribute) === void 0 ? ir : n.converter).toAttribute(t, n.type);
+				let a = (((i = n.converter) == null ? void 0 : i.toAttribute) === void 0 ? rr : n.converter).toAttribute(t, n.type);
 				this._$Em = e, a == null ? this.removeAttribute(r) : this.setAttribute(r, a), this._$Em = null;
 			}
 		}
@@ -1234,7 +1235,7 @@ var L, Pn, Fn, In, Ln = t((() => {
 			let n = this.constructor, r = n._$Eh.get(e);
 			if (r !== void 0 && this._$Em !== r) {
 				var i, a;
-				let e = n.getPropertyOptions(r), o = typeof e.converter == "function" ? { fromAttribute: e.converter } : ((i = e.converter) == null ? void 0 : i.fromAttribute) === void 0 ? ir : e.converter;
+				let e = n.getPropertyOptions(r), o = typeof e.converter == "function" ? { fromAttribute: e.converter } : ((i = e.converter) == null ? void 0 : i.fromAttribute) === void 0 ? rr : e.converter;
 				this._$Em = r;
 				let s = o.fromAttribute(t, e.type);
 				this[r] = s ?? ((a = this._$Ej) == null ? void 0 : a.get(r)) ?? s, this._$Em = null;
@@ -1244,7 +1245,7 @@ var L, Pn, Fn, In, Ln = t((() => {
 			if (e !== void 0) {
 				var a;
 				let o = this.constructor;
-				if (!1 === r && (i = this[e]), n ?? (n = o.getPropertyOptions(e)), !((n.hasChanged ?? ar)(i, t) || n.useDefault && n.reflect && i === ((a = this._$Ej) == null ? void 0 : a.get(e)) && !this.hasAttribute(o._$Eu(e, n)))) return;
+				if (!1 === r && (i = this[e]), n ?? (n = o.getPropertyOptions(e)), !((n.hasChanged ?? ir)(i, t) || n.useDefault && n.reflect && i === ((a = this._$Ej) == null ? void 0 : a.get(e)) && !this.hasAttribute(o._$Eu(e, n)))) return;
 				this.C(e, t, n);
 			}
 			!1 === this.isUpdatePending && (this._$ES = this._$EP());
@@ -1315,19 +1316,19 @@ var L, Pn, Fn, In, Ln = t((() => {
 		}
 		updated(e) {}
 		firstUpdated(e) {}
-	}, B.elementStyles = [], B.shadowRootOptions = { mode: "open" }, B[rr("elementProperties")] = /* @__PURE__ */ new Map(), B[rr("finalized")] = /* @__PURE__ */ new Map(), nr == null || nr({ ReactiveElement: B }), (z.reactiveElementVersions ?? (z.reactiveElementVersions = [])).push("2.1.2");
+	}, V.elementStyles = [], V.shadowRootOptions = { mode: "open" }, V[nr("elementProperties")] = /* @__PURE__ */ new Map(), V[nr("finalized")] = /* @__PURE__ */ new Map(), tr == null || tr({ ReactiveElement: V }), (B.reactiveElementVersions ?? (B.reactiveElementVersions = [])).push("2.1.2");
 }));
 //#endregion
 //#region ../../node_modules/.pnpm/lit-html@3.3.3/node_modules/lit-html/lit-html.js
-function cr(e, t) {
+function sr(e, t) {
 	if (!vr(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
 	return fr === void 0 ? t : fr.createHTML(t);
 }
-function V(e, t, n = e, r) {
+function cr(e, t, n = e, r) {
 	var i, a;
 	if (t === K) return t;
 	let o = r === void 0 ? n._$Cl : (i = n._$Co) == null ? void 0 : i[r], s = _r(t) ? void 0 : t._$litDirective$;
-	return (o == null ? void 0 : o.constructor) !== s && (o == null || (a = o._$AO) == null || a.call(o, !1), s === void 0 ? o = void 0 : (o = new s(e), o._$AT(e, n, r)), r === void 0 ? n._$Cl = o : (n._$Co ?? (n._$Co = []))[r] = o), o !== void 0 && (t = V(e, o._$AS(e, t.values), o, r)), t;
+	return (o == null ? void 0 : o.constructor) !== s && (o == null || (a = o._$AO) == null || a.call(o, !1), s === void 0 ? o = void 0 : (o = new s(e), o._$AT(e, n, r)), r === void 0 ? n._$Cl = o : (n._$Co ?? (n._$Co = []))[r] = o), o !== void 0 && (t = cr(e, o._$AS(e, t.values), o, r)), t;
 }
 var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr, Er, Dr, G, K, q, Or, J, kr, Ar, jr, Mr, Nr, Pr, Fr, Ir, Lr, Rr, zr, Br, Vr = t((() => {
 	lr = globalThis, ur = (e) => e, dr = lr.trustedTypes, fr = dr ? dr.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, pr = "$lit$", H = `lit$${Math.random().toFixed(9).slice(2)}$`, mr = "?" + H, hr = `<${mr}>`, U = document, gr = () => U.createComment(""), _r = (e) => e === null || typeof e != "object" && typeof e != "function", vr = Array.isArray, yr = (e) => vr(e) || typeof (e == null ? void 0 : e[Symbol.iterator]) == "function", br = "[ 	\n\f\r]", xr = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Sr = /-->/g, Cr = />/g, W = RegExp(`>|${br}(?:([^\\s"'>=/]+)(${br}*=${br}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"), wr = /'/g, Tr = /"/g, Er = /^(?:script|style|textarea|title)$/i, Dr = (e) => (t, ...n) => ({
@@ -1342,7 +1343,7 @@ var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr,
 			let d = o === W && e[t + 1].startsWith("/>") ? " " : "";
 			a += o === xr ? n + hr : l >= 0 ? (r.push(s), n.slice(0, l) + pr + n.slice(l) + H + d) : n + H + (l === -2 ? t : d);
 		}
-		return [cr(e, a + (e[n] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), r];
+		return [sr(e, a + (e[n] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), r];
 	}, Ar = class e {
 		constructor({ strings: t, _$litType$: n }, r) {
 			let i;
@@ -1444,7 +1445,7 @@ var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr,
 			return this._$AB;
 		}
 		_$AI(e, t = this) {
-			e = V(this, e, t), _r(e) ? e === q || e == null || e === "" ? (this._$AH !== q && this._$AR(), this._$AH = q) : e !== this._$AH && e !== K && this._(e) : e._$litType$ === void 0 ? e.nodeType === void 0 ? yr(e) ? this.k(e) : this._(e) : this.T(e) : this.$(e);
+			e = cr(this, e, t), _r(e) ? e === q || e == null || e === "" ? (this._$AH !== q && this._$AR(), this._$AH = q) : e !== this._$AH && e !== K && this._(e) : e._$litType$ === void 0 ? e.nodeType === void 0 ? yr(e) ? this.k(e) : this._(e) : this.T(e) : this.$(e);
 		}
 		O(e) {
 			return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -1457,7 +1458,7 @@ var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr,
 		}
 		$(e) {
 			var t;
-			let { values: n, _$litType$: r } = e, i = typeof r == "number" ? this._$AC(e) : (r.el === void 0 && (r.el = Ar.createElement(cr(r.h, r.h[0]), this.options)), r);
+			let { values: n, _$litType$: r } = e, i = typeof r == "number" ? this._$AC(e) : (r.el === void 0 && (r.el = Ar.createElement(sr(r.h, r.h[0]), this.options)), r);
 			if (((t = this._$AH) == null ? void 0 : t._$AD) === i) this._$AH.p(n);
 			else {
 				let e = new jr(i, this), t = e.u(this.options);
@@ -1497,10 +1498,10 @@ var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr,
 		}
 		_$AI(e, t = this, n, r) {
 			let i = this.strings, a = !1;
-			if (i === void 0) e = V(this, e, t, 0), a = !_r(e) || e !== this._$AH && e !== K, a && (this._$AH = e);
+			if (i === void 0) e = cr(this, e, t, 0), a = !_r(e) || e !== this._$AH && e !== K, a && (this._$AH = e);
 			else {
 				let r = e, o, s;
-				for (e = i[0], o = 0; o < i.length - 1; o++) s = V(this, r[n + o], t, o), s === K && (s = this._$AH[o]), a || (a = !_r(s) || s !== this._$AH[o]), s === q ? e = q : e !== q && (e += (s ?? "") + i[o + 1]), this._$AH[o] = s;
+				for (e = i[0], o = 0; o < i.length - 1; o++) s = cr(this, r[n + o], t, o), s === K && (s = this._$AH[o]), a || (a = !_r(s) || s !== this._$AH[o]), s === q ? e = q : e !== q && (e += (s ?? "") + i[o + 1]), this._$AH[o] = s;
 			}
 			a && !r && this.j(e);
 		}
@@ -1526,7 +1527,7 @@ var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr,
 			super(e, t, n, r, i), this.type = 5;
 		}
 		_$AI(e, t = this) {
-			if ((e = V(this, e, t, 0) ?? q) === K) return;
+			if ((e = cr(this, e, t, 0) ?? q) === K) return;
 			let n = this._$AH, r = e === q && n !== q || e.capture !== n.capture || e.once !== n.once || e.passive !== n.passive, i = e !== q && (n === q || r);
 			r && this.element.removeEventListener(this.name, this, n), i && this.element.addEventListener(this.name, this, e), this._$AH = e;
 		}
@@ -1542,7 +1543,7 @@ var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr,
 			return this._$AM._$AU;
 		}
 		_$AI(e) {
-			V(this, e);
+			cr(this, e);
 		}
 	}, Rr = {
 		M: pr,
@@ -1552,7 +1553,7 @@ var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr,
 		L: kr,
 		R: jr,
 		D: yr,
-		V,
+		V: cr,
 		I: Mr,
 		H: Nr,
 		N: Fr,
@@ -1568,7 +1569,7 @@ var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr,
 		return i._$AI(e), i;
 	};
 })), Hr, Ur, Y, Wr, Gr = t((() => {
-	sr(), sr(), Vr(), Vr(), Ur = globalThis, Y = class extends B {
+	or(), or(), Vr(), Vr(), Ur = globalThis, Y = class extends V {
 		constructor() {
 			super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
 		}
@@ -1594,9 +1595,9 @@ var lr, ur, dr, fr, pr, H, mr, hr, U, gr, _r, vr, yr, br, xr, Sr, Cr, W, wr, Tr,
 		}
 	}, Y._$litElement$ = !0, Y.finalized = !0, (Hr = Ur.litElementHydrateSupport) == null || Hr.call(Ur, { LitElement: Y }), Wr = Ur.litElementPolyfillSupport, Wr == null || Wr({ LitElement: Y }), (Ur.litElementVersions ?? (Ur.litElementVersions = [])).push("4.2.2");
 })), Kr = t((() => {})), qr = t((() => {
-	sr(), Vr(), Gr(), Kr();
+	or(), Vr(), Gr(), Kr();
 }));
-Ln(), qr(), I();
+In(), qr(), L();
 var Jr = new Intl.DateTimeFormat("es-ES", {
 	hour: "2-digit",
 	minute: "2-digit",
@@ -1640,7 +1641,7 @@ function Qr(e) {
 		case "antes": return `Primera salida a las ${e.first}`;
 		case "terminado": return `Servicio terminado · última salida ${e.last}`;
 		case "sin_servicio": return "Hoy no hay servicio";
-		case "en_servicio": return e.interval_min === null ? "Sin llegadas próximas" : `Sin llegadas próximas · pasa ${At(e.interval_min, e.interval_max_min)}`;
+		case "en_servicio": return e.interval_min === null ? "Sin llegadas próximas" : `Sin llegadas próximas · pasa ${jt(e.interval_min, e.interval_max_min)}`;
 		default: return "Sin llegadas próximas";
 	}
 }
@@ -1780,10 +1781,10 @@ var pi = "important", mi = " !" + pi, hi = ei(class extends ti {
 		return K;
 	}
 });
-I(), j(), v();
+L(), A(), v();
 var gi, _i = "sentido desconocido", vi = /* @__PURE__ */ new WeakSet(), yi = class extends Y {
 	constructor() {
-		super(), A(this, vi), this.card = void 0, this.now = Date.now(), this.variant = "fill", this.fit = !1, this.intensity = "normal", this.effect = "pulso", this.alertMinutes = 0, this.openable = !1, this.service = null;
+		super(), k(this, vi), this.card = void 0, this.now = Date.now(), this.variant = "fill", this.fit = !1, this.intensity = "normal", this.effect = "pulso", this.alertMinutes = 0, this.openable = !1, this.service = null;
 	}
 	get alerting() {
 		var e;
@@ -1881,7 +1882,7 @@ gi.properties = {
 		reflect: !0
 	},
 	service: { attribute: !1 }
-}, gi.styles = R`
+}, gi.styles = z`
     :host {
       display: block;
       container-type: inline-size;
@@ -2109,7 +2110,7 @@ gi.properties = {
       font-weight: 500;
       opacity: 0.85;
     }
-  `, customElements.get("lb-card") || customElements.define("lb-card", yi), I(), qr(), j(), g(), S(), b(), v();
+  `, customElements.get("lb-card") || customElements.define("lb-card", yi), L(), qr(), A(), g(), S(), b(), v();
 var wi, Ti = 1.05, Ei = 1.7;
 function Di(e) {
 	var t;
@@ -2135,7 +2136,7 @@ function Ai(e) {
 }
 var ji = /* @__PURE__ */ new WeakMap(), Mi = /* @__PURE__ */ new WeakMap(), Ni = /* @__PURE__ */ new WeakMap(), Pi = /* @__PURE__ */ new WeakSet(), Fi = class extends Y {
 	constructor() {
-		super(), A(this, Pi), h(this, ji, /* @__PURE__ */ new Map()), h(this, Mi, ""), h(this, Ni, typeof ResizeObserver > "u" ? void 0 : new ResizeObserver(([e]) => {
+		super(), k(this, Pi), h(this, ji, /* @__PURE__ */ new Map()), h(this, Mi, ""), h(this, Ni, typeof ResizeObserver > "u" ? void 0 : new ResizeObserver(([e]) => {
 			e && (this.size = {
 				width: e.contentRect.width,
 				height: e.contentRect.height
@@ -2230,7 +2231,7 @@ wi.properties = {
 	openable: { type: Boolean },
 	services: { attribute: !1 },
 	size: { state: !0 }
-}, wi.styles = R`
+}, wi.styles = z`
     :host {
       display: block;
       min-height: 0;
@@ -2249,7 +2250,7 @@ wi.properties = {
       grid-template-columns: repeat(var(--lb-columns, 2), minmax(0, 1fr));
       grid-auto-rows: minmax(0, 1fr);
     }
-  `, customElements.get("lb-card-grid") || customElements.define("lb-card-grid", Fi), I(), qr(), g(), S(), b();
+  `, customElements.get("lb-card-grid") || customElements.define("lb-card-grid", Fi), L(), qr(), g(), S(), b();
 var Bi, Vi = /* @__PURE__ */ new WeakMap(), Hi = class extends Y {
 	constructor() {
 		super(), h(this, Vi, null), this.timetable = null, this.now = Date.now(), this.stopName = "";
@@ -2261,10 +2262,10 @@ var Bi, Vi = /* @__PURE__ */ new WeakMap(), Hi = class extends Y {
 	render() {
 		let e = this.timetable;
 		if (!e || e.departures.length === 0) return G`<p class="status">Hoy no hay servicio en este sentido.</p>`;
-		let t = Nt(e, this.now), n = t.next_departure, r = !1;
+		let t = Pt(e, this.now), n = t.next_departure, r = !1;
 		return G`
       <p class="status">
-        ${t.state === "en_servicio" && t.next_departure ? `Próxima salida ${t.next_departure}${t.interval_min === null ? "" : ` · ${At(t.interval_min, t.interval_max_min)}`}` : Qr(t)}
+        ${t.state === "en_servicio" && t.next_departure ? `Próxima salida ${t.next_departure}${t.interval_min === null ? "" : ` · ${jt(t.interval_min, t.interval_max_min)}`}` : Qr(t)}
       </p>
       <p class="note">
         Salidas de ${e.origin} hacia ${e.headsign}.
@@ -2273,7 +2274,7 @@ var Bi, Vi = /* @__PURE__ */ new WeakMap(), Hi = class extends Y {
       <ul class="periods" aria-label="Frecuencia por franjas">
         ${e.periods.map((e) => G`<li>
               ${e.first}–${e.last} ·
-              ${At(e.interval_min, e.interval_max_min)}
+              ${jt(e.interval_min, e.interval_max_min)}
             </li>`)}
       </ul>
       <ul class="departures" aria-label="Salidas de hoy">
@@ -2299,7 +2300,7 @@ Bi = Hi, Bi.properties = {
 		type: String,
 		attribute: "stop-name"
 	}
-}, Bi.styles = R`
+}, Bi.styles = z`
     :host {
       display: flex;
       flex-direction: column;
@@ -2352,10 +2353,10 @@ Bi = Hi, Bi.properties = {
       color: var(--line-text);
       border-color: var(--line-colour);
     }
-  `, customElements.get("lb-timetable") || customElements.define("lb-timetable", Hi), j(), g(), b(), S(), v();
+  `, customElements.get("lb-timetable") || customElements.define("lb-timetable", Hi), A(), g(), b(), S(), v();
 var Ui = .2, Wi = /* @__PURE__ */ new WeakMap(), Gi = /* @__PURE__ */ new WeakMap(), Ki = /* @__PURE__ */ new WeakMap(), qi = /* @__PURE__ */ new WeakMap(), Ji = /* @__PURE__ */ new WeakMap(), Yi = /* @__PURE__ */ new WeakMap(), Xi = /* @__PURE__ */ new WeakMap(), Zi = /* @__PURE__ */ new WeakMap(), Qi = /* @__PURE__ */ new WeakMap(), $i = /* @__PURE__ */ new WeakMap(), ea = /* @__PURE__ */ new WeakMap(), ta = /* @__PURE__ */ new WeakSet(), na = class {
 	constructor(e, t = {}) {
-		A(this, ta), h(this, Wi, void 0), h(this, Gi, void 0), h(this, Ki, void 0), h(this, qi, void 0), h(this, Ji, void 0), h(this, Yi, void 0), h(this, Xi, void 0), h(this, Zi, void 0), h(this, Qi, 0), h(this, $i, !1), h(this, ea, !1), y(Wi, this, e), y(Gi, this, t.intervalMs ?? 3e4), y(Ki, this, t.maxBackoffMs ?? 3e5), y(qi, this, t.random ?? Math.random), y(Ji, this, t.setTimer ?? ((e, t) => setTimeout(e, t))), y(Yi, this, t.clearTimer ?? ((e) => clearTimeout(e)));
+		k(this, ta), h(this, Wi, void 0), h(this, Gi, void 0), h(this, Ki, void 0), h(this, qi, void 0), h(this, Ji, void 0), h(this, Yi, void 0), h(this, Xi, void 0), h(this, Zi, void 0), h(this, Qi, 0), h(this, $i, !1), h(this, ea, !1), y(Wi, this, e), y(Gi, this, t.intervalMs ?? 3e4), y(Ki, this, t.maxBackoffMs ?? 3e5), y(qi, this, t.random ?? Math.random), y(Ji, this, t.setTimer ?? ((e, t) => setTimeout(e, t))), y(Yi, this, t.clearTimer ?? ((e) => clearTimeout(e)));
 	}
 	get failures() {
 		return x(Qi, this);
@@ -2392,7 +2393,7 @@ var Ui = .2, Wi = /* @__PURE__ */ new WeakMap(), Gi = /* @__PURE__ */ new WeakMa
 function ra() {
 	x(Xi, this) !== void 0 && x(Yi, this).call(this, x(Xi, this)), y(Xi, this, void 0);
 }
-I(), qr(), j(), g(), v(), S(), b();
+L(), qr(), A(), g(), v(), S(), b();
 var ia, aa = 15e3, oa = 9e5, sa = {
 	vertical: 2.4,
 	horizontal: 4.6
@@ -2412,52 +2413,55 @@ function da(e, t = la) {
 	}), n;
 }
 function fa(e) {
+	return `${e.hiddenStops === 1 ? "1 parada" : `${e.hiddenStops} paradas`} antes, desde ${e.origin}`;
+}
+function pa(e) {
 	return e.minutes === null ? "" : e.minutes === 0 ? "llegando" : `${e.minutes} min`;
 }
-function pa(e, t) {
+function ma(e, t) {
 	let n = e.arrivals.find((e) => !e.cancelled);
 	if (!n) return e.stop_name;
 	let r = n.is_realtime ? "" : " (horario programado)";
 	return `${e.stop_name} · próximo ${Xr(n, t).spoken}${r}`;
 }
-function ma(e, t) {
+function ha(e, t) {
 	let n = Date.parse(e.generated_at);
 	return {
 		...e,
-		vehicles: e.vehicles.filter((e) => Math.max(0, n - Date.parse(e.recorded_at)) + t <= Yt)
+		vehicles: e.vehicles.filter((e) => Math.max(0, n - Date.parse(e.recorded_at)) + t <= Xt)
 	};
 }
-var ha = /* @__PURE__ */ new WeakMap(), ga = /* @__PURE__ */ new WeakMap(), _a = /* @__PURE__ */ new WeakMap(), va = /* @__PURE__ */ new WeakMap(), ya = /* @__PURE__ */ new WeakMap(), ba = /* @__PURE__ */ new WeakMap(), xa = /* @__PURE__ */ new WeakMap(), Sa = /* @__PURE__ */ new WeakMap(), Ca = /* @__PURE__ */ new WeakMap(), Z = /* @__PURE__ */ new WeakSet(), wa = class extends Y {
+var ga = /* @__PURE__ */ new WeakMap(), _a = /* @__PURE__ */ new WeakMap(), va = /* @__PURE__ */ new WeakMap(), ya = /* @__PURE__ */ new WeakMap(), ba = /* @__PURE__ */ new WeakMap(), xa = /* @__PURE__ */ new WeakMap(), Sa = /* @__PURE__ */ new WeakMap(), Ca = /* @__PURE__ */ new WeakMap(), wa = /* @__PURE__ */ new WeakMap(), Z = /* @__PURE__ */ new WeakSet(), Ta = class extends Y {
 	constructor() {
-		super(), A(this, Z), h(this, ha, void 0), h(this, ga, 0), h(this, _a, !1), h(this, va, new na((e) => _(Z, this, Oa).call(this, e), { intervalMs: aa })), h(this, ya, void 0), h(this, ba, void 0), h(this, xa, typeof ResizeObserver > "u" ? void 0 : new ResizeObserver(([e]) => {
+		super(), k(this, Z), h(this, ga, void 0), h(this, _a, 0), h(this, va, !1), h(this, ya, new na((e) => _(Z, this, ka).call(this, e), { intervalMs: aa })), h(this, ba, void 0), h(this, xa, void 0), h(this, Sa, typeof ResizeObserver > "u" ? void 0 : new ResizeObserver(([e]) => {
 			if (!e) return;
 			let { width: t, height: n } = e.contentRect;
 			this.orientation = t > n * 1.1 ? "horizontal" : "vertical";
 			let r = this.renderRoot.querySelector(".body") ?? this, i = Number.parseFloat(getComputedStyle(r).fontSize);
 			this.room = ua(this.orientation === "horizontal" ? t : n * .7, this.orientation, i);
-		})), h(this, Sa, (e) => {
+		})), h(this, Ca, (e) => {
 			e.key === "Escape" && this.close();
-		}), h(this, Ca, () => _(Z, this, Ta).call(this)), this.card = void 0, this.source = void 0, this.arrivals = null, this.previousStops = 4, this.route = null, this.vehicles = void 0, this.problem = void 0, this.now = Date.now(), this.orientation = "vertical", this.room = 12, this.screen = "recorrido", this.timetable = void 0;
+		}), h(this, wa, () => _(Z, this, Ea).call(this)), this.card = void 0, this.source = void 0, this.arrivals = null, this.previousStops = 4, this.route = null, this.vehicles = void 0, this.problem = void 0, this.now = Date.now(), this.orientation = "vertical", this.room = 12, this.screen = "recorrido", this.timetable = void 0;
 	}
 	willUpdate() {
 		let e = this.patternId;
-		if (!x(ha, this) || !this.vehicles || !this.card || !e) return;
-		let t = ma(this.vehicles, this.now - x(ga, this)), n = (t) => t.vehicles.filter((t) => t.pattern_id === e).length;
-		y(_a, this, n(t) < n(this.vehicles)), this.route = Ge(x(ha, this), e, this.card.stop_id, t, this.arrivals, {
+		if (!x(ga, this) || !this.vehicles || !this.card || !e) return;
+		let t = ha(this.vehicles, this.now - x(_a, this)), n = (t) => t.vehicles.filter((t) => t.pattern_id === e).length;
+		y(va, this, n(t) < n(this.vehicles)), this.route = Ge(x(ga, this), e, this.card.stop_id, t, this.arrivals, {
 			previousStops: Math.min(this.previousStops, this.room),
 			now: new Date(this.now).toISOString()
 		});
 	}
 	connectedCallback() {
 		var e;
-		super.connectedCallback(), this.card && !this.card.arrivals.some((e) => !e.cancelled) && this.show("horario"), _(Z, this, Ta).call(this), x(va, this).start(), (e = x(xa, this)) == null || e.observe(this), y(ba, this, setInterval(() => this.now = Date.now(), 1e3)), document.addEventListener("keydown", x(Sa, this)), document.addEventListener("visibilitychange", x(Ca, this)), _(Z, this, Da).call(this);
+		super.connectedCallback(), this.card && !this.card.arrivals.some((e) => !e.cancelled) && this.show("horario"), _(Z, this, Ea).call(this), x(ya, this).start(), (e = x(Sa, this)) == null || e.observe(this), y(xa, this, setInterval(() => this.now = Date.now(), 1e3)), document.addEventListener("keydown", x(Ca, this)), document.addEventListener("visibilitychange", x(wa, this)), _(Z, this, Oa).call(this);
 	}
 	disconnectedCallback() {
 		var e;
-		super.disconnectedCallback(), x(va, this).stop(), (e = x(xa, this)) == null || e.disconnect(), clearInterval(x(ba, this)), clearTimeout(x(ya, this)), document.removeEventListener("keydown", x(Sa, this)), document.removeEventListener("visibilitychange", x(Ca, this));
+		super.disconnectedCallback(), x(ya, this).stop(), (e = x(Sa, this)) == null || e.disconnect(), clearInterval(x(xa, this)), clearTimeout(x(ba, this)), document.removeEventListener("keydown", x(Ca, this)), document.removeEventListener("visibilitychange", x(wa, this));
 	}
 	show(e) {
-		this.screen = e, _(Z, this, Ta).call(this), e === "horario" && !this.timetable && _(Z, this, Ea).call(this), _(Z, this, Da).call(this);
+		this.screen = e, _(Z, this, Ea).call(this), e === "horario" && !this.timetable && _(Z, this, Da).call(this), _(Z, this, Oa).call(this);
 	}
 	close() {
 		this.dispatchEvent(new CustomEvent("route-close", {
@@ -2471,19 +2475,19 @@ var ha = /* @__PURE__ */ new WeakMap(), ga = /* @__PURE__ */ new WeakMap(), _a =
 	render() {
 		let e = this.card;
 		if (!e) return q;
-		let t = this.route, n = this.vehicles ? this.now - x(ga, this) : 0, r = t && t.buses.length === 0 && t.earlierBuses.length === 0, i = r && !x(_a, this) && !this.problem && n <= 18e4, a = t && n <= 18e4 && !(r && x(_a, this)) ? t : null;
+		let t = this.route, n = this.vehicles ? this.now - x(_a, this) : 0, r = t && t.buses.length === 0 && t.earlierBuses.length === 0, i = r && !x(va, this) && !this.problem && n <= 18e4, a = t && n <= 18e4 && !(r && x(va, this)) ? t : null;
 		return G`
       <header
         style=${hi({
 			"--line-colour": e.colour,
 			"--line-text": e.text_colour
 		})}
-        @click=${() => _(Z, this, Da).call(this)}
+        @click=${() => _(Z, this, Oa).call(this)}
       >
         <span class="badge">${e.line_label}</span>
         <div class="title">
           <strong>→ ${(t == null ? void 0 : t.headsign) ?? e.headsign ?? e.line_name}</strong>
-          <span>${pa(e, this.now)}</span>
+          <span>${ma(e, this.now)}</span>
         </div>
         <div class="actions">
           <button @click=${() => this.show(this.screen === "horario" ? "recorrido" : "horario")}>
@@ -2498,14 +2502,13 @@ var ha = /* @__PURE__ */ new WeakMap(), ga = /* @__PURE__ */ new WeakMap(), _a =
 			"--line-colour": e.colour,
 			"--line-text": e.text_colour
 		})}
-        @click=${() => _(Z, this, Da).call(this)}
+        @click=${() => _(Z, this, Oa).call(this)}
       >
-        ${this.screen === "recorrido" && this.problem && a ? _(Z, this, Aa).call(this, a) : this.problem ? G`<p class="note" role="alert">${this.problem}</p>` : this.screen === "horario" ? _(Z, this, ja).call(this, e) : t ? _(Z, this, Aa).call(this, t) : G`<p class="note" role="status">Buscando los autobuses…</p>`}
+        ${this.screen === "recorrido" && this.problem && a ? _(Z, this, ja).call(this, a) : this.problem ? G`<p class="note" role="alert">${this.problem}</p>` : this.screen === "horario" ? _(Z, this, Ma).call(this, e) : t ? _(Z, this, ja).call(this, t) : G`<p class="note" role="status">Buscando los autobuses…</p>`}
       </div>
       <footer ?hidden=${this.screen === "horario"}>
         <span>
-          ${t && t.hiddenStops > 0 ? `${this.orientation === "horizontal" ? "←" : "↓"} ${t.hiddenStops} paradas antes, desde ${t.origin}` : q}
-          ${i ? "Ningún autobús en camino ahora mismo." : q}
+          ${[t && t.hiddenStops > 0 ? `${this.orientation === "horizontal" ? "←" : "↓"} ${fa(t)}` : "", i ? "Ningún autobús en camino ahora mismo." : ""].filter(Boolean).join(" · ")}
         </span>
         <span>${this.vehicles ? `Posiciones ${Zr(n)}` : ""}</span>
         ${this.problem && a ? G`<span class="problem" role="alert">${this.problem}</span>` : q}
@@ -2513,11 +2516,11 @@ var ha = /* @__PURE__ */ new WeakMap(), ga = /* @__PURE__ */ new WeakMap(), _a =
     `;
 	}
 };
-ia = wa;
-function Ta() {
-	x(va, this).setPaused(this.screen === "horario" || document.hidden);
+ia = Ta;
+function Ea() {
+	x(ya, this).setPaused(this.screen === "horario" || document.hidden);
 }
-async function Ea() {
+async function Da() {
 	let e = this.card, t = this.source;
 	if (e && t) try {
 		this.timetable = await t.timetable(e.line_id);
@@ -2525,25 +2528,25 @@ async function Ea() {
 		this.problem = "No se puede obtener ahora el horario de la línea.";
 	}
 }
-function Da() {
-	clearTimeout(x(ya, this)), y(ya, this, setTimeout(() => this.close(), oa));
+function Oa() {
+	clearTimeout(x(ba, this)), y(ba, this, setTimeout(() => this.close(), oa));
 }
-async function Oa(e) {
+async function ka(e) {
 	let t = this.card, n = this.source, r = this.patternId;
 	if (t && n && r) try {
 		let [r, i] = await Promise.all([n.catalog(), n.vehicles(t.line_id, e)]);
-		y(ha, this, r), y(ga, this, Date.now()), this.vehicles = i, this.problem = void 0;
+		y(ga, this, r), y(_a, this, Date.now()), this.vehicles = i, this.problem = void 0;
 	} catch (t) {
 		throw e.aborted || (this.problem = "No se pueden obtener ahora las posiciones de los autobuses."), t;
 	}
 }
-function ka(e, t) {
+function Aa(e, t) {
 	let n = t > 0 ? e / t : 1;
 	return this.orientation === "horizontal" ? { left: `${n * 100}%` } : { top: `${(1 - n) * 100}%` };
 }
-function Aa(e) {
+function ja(e) {
 	let t = e.stops.length - 1, n = da(e), [r, ...i] = e.earlierBuses, a = t % 2 == 1;
-	return G`<div class="track" role="img" aria-label=${_(Z, this, Ma).call(this, e)}>
+	return G`<div class="track" role="img" aria-label=${_(Z, this, Na).call(this, e)}>
       <div class="line"></div>
       ${e.hiddenStops > 0 ? G`<div class="more before"></div>` : q}
       ${e.stopsAfter > 0 ? G`<div class="more after"></div>` : q}
@@ -2551,18 +2554,19 @@ function Aa(e) {
             class=${[
 		"stop",
 		r === t ? "target" : "",
+		e.terminus ? "terminus" : "",
 		(t - r) % 2 == 1 ? "above" : "",
 		n.has(r) ? "covered" : ""
 	].join(" ")}
-            style=${hi(_(Z, this, ka).call(this, r, t))}
+            style=${hi(_(Z, this, Aa).call(this, r, t))}
           >
             <span class="dot"></span><span class="name">${e.name}</span>
           </div>`)}
       ${e.buses.map((e, n) => G`<div
             class=${n === 0 ? "bus first" : "bus"}
-            style=${hi(_(Z, this, ka).call(this, e.at, t))}
+            style=${hi(_(Z, this, Aa).call(this, e.at, t))}
           >
-            <span class="pill">🚌 ${fa(e)}</span>
+            <span class="pill">🚌 ${pa(e)}</span>
           </div>`)}
       ${r ? G`<div
               class=${[
@@ -2573,24 +2577,24 @@ function Aa(e) {
             >
               <span class="pill"
                 >🚌
-                ${fa(r)}${i.length > 0 ? ` +${i.length}` : ""}</span
+                ${pa(r)}${i.length > 0 ? ` +${i.length}` : ""}</span
               >
             </div>` : q}
     </div>`;
 }
-function ja(e) {
+function Ma(e) {
 	return this.timetable ? G`<lb-timetable
-      .timetable=${Pt(this.timetable, this.patternId) ?? null}
+      .timetable=${Ft(this.timetable, this.patternId) ?? null}
       .now=${this.now}
       stop-name=${e.stop_name}
     ></lb-timetable>` : G`<p class="note" role="status">Buscando el horario…</p>`;
 }
-function Ma(e) {
-	let t = [...e.buses, ...e.earlierBuses];
-	return t.length === 0 ? "Ningún autobús de esta línea en camino ahora mismo." : t.map((e) => {
+function Na(e) {
+	let t = e.stops.length - 1, n = e.stops.flatMap((e, n) => e.terminus ? e.position === 1 ? [`La línea empieza en ${e.name}`] : [n === t ? "La línea acaba en tu parada" : `La línea acaba en ${e.name}`] : []), r = [...e.buses, ...e.earlierBuses];
+	return r.length === 0 ? [...n, "Ningún autobús de esta línea en camino ahora mismo."].join(". ") : [...n, ...r.map((e) => {
 		let t = e.stopsAway === 0 ? "llegando a tu parada" : `a ${e.stopsAway + 1} paradas`;
 		return e.minutes === null ? `Un autobús ${t}` : `Un autobús ${t}, ${e.minutes} minutos`;
-	}).join(". ");
+	})].join(". ");
 }
 ia.properties = {
 	card: { attribute: !1 },
@@ -2614,7 +2618,7 @@ ia.properties = {
 		reflect: !0
 	},
 	timetable: { state: !0 }
-}, ia.styles = R`
+}, ia.styles = z`
     :host {
       position: fixed;
       inset: 0;
@@ -2733,10 +2737,24 @@ ia.properties = {
       height: var(--target);
       border-width: 0.36em;
     }
+    /*
+     * Where the line starts or ends, as on a metro map: as big as your stop, but filled. Your stop
+     * as the last of the line takes it too: its place and big name already say it is yours.
+     */
+    .stop.terminus .dot {
+      width: var(--target);
+      height: var(--target);
+      border-width: 0.36em;
+      background: var(--line-colour);
+      box-shadow: inset 0 0 0 0.16em var(--lb-surface, #fff);
+    }
     .stop .name {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    .stop.terminus .name {
+      font-weight: 700;
     }
     .stop.target .name {
       font-size: 1.2em;
@@ -2814,7 +2832,8 @@ ia.properties = {
       right: 0;
       transform: translateY(-50%);
     }
-    :host([orientation='vertical']) .stop.target {
+    :host([orientation='vertical']) .stop.target,
+    :host([orientation='vertical']) .stop.terminus {
       left: calc(var(--x) - var(--target) / 2);
     }
     :host([orientation='vertical']) .bus {
@@ -2904,37 +2923,37 @@ ia.properties = {
         transition: none;
       }
     }
-  `, customElements.get("lb-route") || customElements.define("lb-route", wa), I(), qr(), j(), g(), S(), b(), v();
-var Na, Pa = 5e3, Fa = /* @__PURE__ */ new WeakMap(), Ia = /* @__PURE__ */ new WeakMap(), La = /* @__PURE__ */ new WeakMap(), Ra = /* @__PURE__ */ new WeakMap(), za = /* @__PURE__ */ new WeakMap(), Ba = /* @__PURE__ */ new WeakMap(), Va = /* @__PURE__ */ new WeakSet(), Ha = class extends Y {
+  `, customElements.get("lb-route") || customElements.define("lb-route", Ta), L(), qr(), A(), g(), S(), b(), v();
+var Pa, Fa = 5e3, Ia = /* @__PURE__ */ new WeakMap(), La = /* @__PURE__ */ new WeakMap(), Ra = /* @__PURE__ */ new WeakMap(), za = /* @__PURE__ */ new WeakMap(), Ba = /* @__PURE__ */ new WeakMap(), Va = /* @__PURE__ */ new WeakMap(), Ha = /* @__PURE__ */ new WeakSet(), Ua = class extends Y {
 	constructor() {
-		super(), A(this, Va), h(this, Fa, new na((e) => this.refresh(e))), h(this, Ia, /* @__PURE__ */ new Map()), h(this, La, void 0), h(this, Ra, void 0), h(this, za, () => x(Fa, this).setPaused(document.hidden)), h(this, Ba, /* @__PURE__ */ new Map()), this.config = void 0, this.source = void 0, this.status = "loading", this.layout = "auto", this.cards = [], this.now = Date.now(), this.updatedAt = void 0, this.error = void 0, this.opened = void 0, this.timetables = /* @__PURE__ */ new Map();
+		super(), k(this, Ha), h(this, Ia, new na((e) => this.refresh(e))), h(this, La, /* @__PURE__ */ new Map()), h(this, Ra, void 0), h(this, za, void 0), h(this, Ba, () => x(Ia, this).setPaused(document.hidden)), h(this, Va, /* @__PURE__ */ new Map()), this.config = void 0, this.source = void 0, this.status = "loading", this.layout = "auto", this.cards = [], this.now = Date.now(), this.updatedAt = void 0, this.error = void 0, this.opened = void 0, this.timetables = /* @__PURE__ */ new Map();
 	}
 	connectedCallback() {
-		super.connectedCallback(), document.addEventListener("visibilitychange", x(za, this)), y(La, this, setInterval(() => {
+		super.connectedCallback(), document.addEventListener("visibilitychange", x(Ba, this)), y(Ra, this, setInterval(() => {
 			this.now = Date.now();
-		}, Pa)), this.config && x(Fa, this).start();
+		}, Fa)), this.config && x(Ia, this).start();
 	}
 	disconnectedCallback() {
-		super.disconnectedCallback(), document.removeEventListener("visibilitychange", x(za, this)), clearInterval(x(La, this)), x(Fa, this).stop();
+		super.disconnectedCallback(), document.removeEventListener("visibilitychange", x(Ba, this)), clearInterval(x(Ra, this)), x(Ia, this).stop();
 	}
 	willUpdate(e) {
-		this.config && (this.style.setProperty("--lb-text-scale", String(this.config.textScale / 100)), this.style.setProperty("font-family", Ka[this.config.font]));
-		let t = e.get("config"), n = e.has("config") && qa(t) !== qa(this.config) || e.has("source");
-		e.has("source") && (x(Ia, this).clear(), this.timetables = /* @__PURE__ */ new Map()), n && this.hasUpdated && this.isConnected && this.config && (y(Ra, this, void 0), x(Fa, this).stop(), x(Fa, this).start());
+		this.config && (this.style.setProperty("--lb-text-scale", String(this.config.textScale / 100)), this.style.setProperty("font-family", qa[this.config.font]));
+		let t = e.get("config"), n = e.has("config") && Ja(t) !== Ja(this.config) || e.has("source");
+		e.has("source") && (x(La, this).clear(), this.timetables = /* @__PURE__ */ new Map()), n && this.hasUpdated && this.isConnected && this.config && (y(za, this, void 0), x(Ia, this).stop(), x(Ia, this).start());
 	}
 	async refresh(e) {
 		let t = this.config;
 		if (t) try {
-			this.source ?? (this.source = await un(t, { pageProtocol: location.protocol }));
+			this.source ?? (this.source = await dn(t, { pageProtocol: location.protocol }));
 			let n = this.source;
-			x(Ra, this) ?? y(Ra, this, await n.catalog());
-			let r = x(Ra, this), i = [...new Set(t.stops.map((e) => e.stop_id))], a = await Promise.all(i.map((t) => n.arrivals(t, e))), o = new Map(a.map((e) => [e.stop_id, e]));
-			y(Ba, this, o), this.cards = t.stops.flatMap((e) => {
+			x(za, this) ?? y(za, this, await n.catalog());
+			let r = x(za, this), i = [...new Set(t.stops.map((e) => e.stop_id))], a = await Promise.all(i.map((t) => n.arrivals(t, e))), o = new Map(a.map((e) => [e.stop_id, e]));
+			y(Va, this, o), this.cards = t.stops.flatMap((e) => {
 				let n = o.get(e.stop_id);
 				return n ? Ee(r, e, n, t.perCard) : [];
-			}), this.updatedAt = Math.min(...a.map((e) => Date.parse(e.generated_at))), this.now = Date.now(), this.error = void 0, this.status = "ready", _(Va, this, Ua).call(this, n, this.cards);
+			}), this.updatedAt = Math.min(...a.map((e) => Date.parse(e.generated_at))), this.now = Date.now(), this.error = void 0, this.status = "ready", _(Ha, this, Wa).call(this, n, this.cards);
 		} catch (t) {
-			throw e != null && e.aborted ? t : (this.error = Ja(t), this.cards.length === 0 && (this.status = "error"), t);
+			throw e != null && e.aborted ? t : (this.error = Ya(t), this.cards.length === 0 && (this.status = "error"), t);
 		} finally {
 			this.dispatchEvent(new CustomEvent("board-refresh", {
 				bubbles: !0,
@@ -2949,7 +2968,7 @@ var Na, Pa = 5e3, Fa = /* @__PURE__ */ new WeakMap(), Ia = /* @__PURE__ */ new W
 		if (this.status === "error") return G`<p class="message" role="alert">${this.error}</p>`;
 		let t = this.updatedAt === void 0 ? 0 : this.now - this.updatedAt;
 		return G`
-      ${_(Va, this, Ga).call(this)}
+      ${_(Ha, this, Ka).call(this)}
       <lb-card-grid
         .cards=${this.cards}
         .now=${this.now}
@@ -2958,7 +2977,7 @@ var Na, Pa = 5e3, Fa = /* @__PURE__ */ new WeakMap(), Ia = /* @__PURE__ */ new W
         effect=${e.effect}
         alert-minutes=${e.alertMinutes}
         layout=${this.layout}
-        .services=${_(Va, this, Wa).call(this)}
+        .services=${_(Ha, this, Ga).call(this)}
         @card-open=${(e) => this.opened = X(e.detail)}
       ></lb-card-grid>
       <div class="status" part="status" role="status">
@@ -2969,37 +2988,37 @@ var Na, Pa = 5e3, Fa = /* @__PURE__ */ new WeakMap(), Ia = /* @__PURE__ */ new W
     `;
 	}
 };
-Na = Ha;
-async function Ua(e, t) {
-	let n = Ot(Date.now()), r = new Set(t.filter((e) => !e.arrivals.some((e) => !e.cancelled)).map((e) => e.line_id).filter((e) => x(Ia, this).get(e) !== n));
+Pa = Ua;
+async function Wa(e, t) {
+	let n = kt(Date.now()), r = new Set(t.filter((e) => !e.arrivals.some((e) => !e.cancelled)).map((e) => e.line_id).filter((e) => x(La, this).get(e) !== n));
 	if (r.size === 0) return;
-	for (let e of r) x(Ia, this).set(e, n);
+	for (let e of r) x(La, this).set(e, n);
 	let i = await Promise.allSettled([...r].map(async (t) => e.timetable(t)));
 	if (e !== this.source) return;
 	let a = new Map(this.timetables);
 	for (let e of i) e.status === "fulfilled" && a.set(e.value.line_id, e.value);
 	this.timetables = a;
 }
-function Wa() {
-	let e = /* @__PURE__ */ new Map(), t = Ot(this.now);
+function Ga() {
+	let e = /* @__PURE__ */ new Map(), t = kt(this.now);
 	for (let n of this.cards) {
 		let r = this.timetables.get(n.line_id);
-		(r == null ? void 0 : r.service_date) === t && e.set(X(n), Nt(Pt(r, Di(n)), this.now));
+		(r == null ? void 0 : r.service_date) === t && e.set(X(n), Pt(Ft(r, Di(n)), this.now));
 	}
 	return e;
 }
-function Ga() {
+function Ka() {
 	var e;
 	let t = this.cards.find((e) => X(e) === this.opened);
 	return !t || !this.source ? q : G`<lb-route
       .card=${t}
       .source=${this.source}
-      .arrivals=${x(Ba, this).get(t.stop_id) ?? null}
+      .arrivals=${x(Va, this).get(t.stop_id) ?? null}
       .previousStops=${((e = this.config) == null ? void 0 : e.previousStops) ?? 4}
       @route-close=${() => this.opened = void 0}
     ></lb-route>`;
 }
-Na.properties = {
+Pa.properties = {
 	config: { attribute: !1 },
 	source: { attribute: !1 },
 	status: {
@@ -3016,7 +3035,7 @@ Na.properties = {
 	error: { state: !0 },
 	opened: { state: !0 },
 	timetables: { state: !0 }
-}, Na.styles = R`
+}, Pa.styles = z`
     :host {
       display: block;
       color: var(--lb-fg, inherit);
@@ -3054,34 +3073,34 @@ Na.properties = {
       border: 1px solid var(--lb-border, currentColor);
     }
   `;
-var Ka = {
+var qa = {
 	sistema: "var(--lb-font, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif)",
 	legible: "'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, sans-serif",
 	redondeada: "ui-rounded, 'SF Pro Rounded', 'Nunito', 'Varela Round', system-ui, sans-serif",
 	mono: "ui-monospace, 'SF Mono', 'DejaVu Sans Mono', Menlo, Consolas, monospace"
 };
-function qa(e) {
+function Ja(e) {
 	return e ? `${Ce(e.stops)}|${e.perCard}` : "";
 }
-function Ja(e) {
+function Ya(e) {
 	return e instanceof s ? "El servicio de autobuses del Ayuntamiento ha cambiado. Hace falta actualizar esta aplicación." : e instanceof o ? "No se puede contactar con el servicio de autobuses. Se reintentará automáticamente." : e instanceof i ? e.message : "Error inesperado al cargar las llegadas.";
 }
 //#endregion
 //#region src/entities.ts
-customElements.get("logrono-bus-board") || customElements.define("logrono-bus-board", Ha), I();
-var Q = (e) => typeof e == "string" ? e : null, Ya = (e) => typeof e == "number" ? e : null;
-function Xa(e) {
+customElements.get("logrono-bus-board") || customElements.define("logrono-bus-board", Ua), L();
+var Q = (e) => typeof e == "string" ? e : null, Xa = (e) => typeof e == "number" ? e : null;
+function Za(e) {
 	return e === "asc" || e === "desc" ? e : null;
 }
-function Za(e) {
+function Qa(e) {
 	return Array.isArray(e) ? e.filter((e) => typeof e == "object" && !!e && typeof e.hora == "string" && typeof e.tiempo_real == "boolean") : [];
 }
-function Qa(e) {
+function $a(e) {
 	return e !== void 0 && Q(e.attributes.linea_id) !== null;
 }
-function $a(e) {
-	if (!Qa(e)) return null;
-	let t = e.attributes, n = Q(t.parada_id) ?? "", r = Q(t.linea_id) ?? "", i = Xa(t.sentido), a = Q(t.destino), o = i ? `${r}:${i}` : null, s = Za(t.llegadas).map((e) => ({
+function eo(e) {
+	if (!$a(e)) return null;
+	let t = e.attributes, n = Q(t.parada_id) ?? "", r = Q(t.linea_id) ?? "", i = Za(t.sentido), a = Q(t.destino), o = i ? `${r}:${i}` : null, s = Qa(t.llegadas).map((e) => ({
 		stop_id: n,
 		line_id: r,
 		pattern_id: o,
@@ -3110,69 +3129,69 @@ function $a(e) {
 		arrivals: s
 	};
 }
-function eo(e, t) {
+function to(e, t) {
 	let n = /* @__PURE__ */ new Set(), r = [];
 	for (let i of t) {
-		let t = $a(e.states[i]);
+		let t = eo(e.states[i]);
 		if (!t) continue;
 		let a = X(t);
 		n.has(a) || (n.add(a), r.push(t));
 	}
 	return r;
 }
-function to(e) {
-	return Object.values(e.states).filter((e) => Qa(e)).filter((e) => e.attributes.unit_of_measurement === "min").map((e) => e.entity_id).sort();
-}
 function no(e) {
-	if (!Qa(e)) return null;
+	return Object.values(e.states).filter((e) => $a(e)).filter((e) => e.attributes.unit_of_measurement === "min").map((e) => e.entity_id).sort();
+}
+function ro(e) {
+	if (!$a(e)) return null;
 	let t = e.attributes, n = t.servicio;
-	return Ft.includes(n) ? {
+	return It.includes(n) ? {
 		state: n,
 		first: Q(t.primera_salida),
 		last: Q(t.ultima_salida),
 		next_departure: Q(t.proxima_salida),
-		interval_min: Ya(t.frecuencia_min),
-		interval_max_min: Ya(t.frecuencia_max_min)
+		interval_min: Xa(t.frecuencia_min),
+		interval_max_min: Xa(t.frecuencia_max_min)
 	} : null;
 }
-function ro(e, t) {
+function io(e, t) {
 	let n = /* @__PURE__ */ new Map();
 	for (let r of t) {
-		let t = e.states[r], i = $a(t), a = no(t);
+		let t = e.states[r], i = eo(t), a = ro(t);
 		i && a && n.set(X(i), a);
 	}
 	return n;
 }
 //#endregion
 //#region src/ha.ts
-function io(e, t) {
+function ao(e, t) {
 	e.dispatchEvent(new CustomEvent("config-changed", {
 		detail: { config: t },
 		bubbles: !0,
 		composed: !0
 	}));
 }
-var ao = t((() => {})), oo = /* @__PURE__ */ n({
-	EDITOR_LABELS: () => uo,
-	EDITOR_SCHEMA: () => lo,
-	LogronoBusCardEditor: () => po
+var oo = t((() => {})), so = /* @__PURE__ */ n({
+	EDITOR_LABELS: () => fo,
+	EDITOR_SCHEMA: () => uo,
+	LogronoBusCardEditor: () => mo
 });
-function so(e) {
+function co(e) {
 	e.stopPropagation();
 	let t = {
 		...e.detail.value,
-		type: `custom:${L}`
+		type: `custom:${R}`
 	};
 	try {
-		Nn(t);
+		Mn(t);
 	} catch {}
-	this.config = t, io(this, t);
+	this.config = t, ao(this, t);
 }
-var co, $, lo, uo, fo, po, mo, ho = t((() => {
-	I(), qr(), ao(), j(), v(), $ = (e, t) => ({
+var lo, $, uo, fo, po, mo, ho, go = t((() => {
+	L(), qr(), oo(), A(), v(), $ = (e, t) => ({
 		value: e,
 		label: t
-	}), lo = [
+	}), uo = [
 		{
 			name: "entities",
 			required: !0,
@@ -3278,7 +3297,7 @@ var co, $, lo, uo, fo, po, mo, ho = t((() => {
 				}
 			]
 		}
-	], uo = {
+	], fo = {
 		entities: "Líneas (sensores «… minutos» de Logroño Bus)",
 		titulo: "Título",
 		orden: "Orden de las tarjetas",
@@ -3290,9 +3309,9 @@ var co, $, lo, uo, fo, po, mo, ho = t((() => {
 		tam: "Tamaño del texto",
 		recorrido: "Al tocar, ver el recorrido y dónde está el autobús",
 		previas: "Paradas previas en el recorrido"
-	}, fo = /* @__PURE__ */ new WeakSet(), po = class extends Y {
+	}, po = /* @__PURE__ */ new WeakSet(), mo = class extends Y {
 		constructor() {
-			super(), A(this, fo), this.hass = void 0, this.config = void 0;
+			super(), k(this, po), this.hass = void 0, this.config = void 0;
 		}
 		setConfig(e) {
 			this.config = e;
@@ -3315,27 +3334,27 @@ var co, $, lo, uo, fo, po, mo, ho = t((() => {
 			return !this.hass || !this.config ? q : G`<ha-form
       .hass=${this.hass}
       .data=${this.formData}
-      .schema=${lo}
-      .computeLabel=${(e) => uo[e.name] ?? e.name}
-      @value-changed=${_(fo, this, so)}
+      .schema=${uo}
+      .computeLabel=${(e) => fo[e.name] ?? e.name}
+      @value-changed=${_(po, this, co)}
     ></ha-form>`;
 		}
-	}, co = po, co.properties = {
+	}, lo = mo, lo.properties = {
 		hass: { attribute: !1 },
 		config: { state: !0 }
-	}, mo = `${L}-editor`, customElements.get(mo) || customElements.define(mo, po);
+	}, ho = `${R}-editor`, customElements.get(ho) || customElements.define(ho, mo);
 }));
-I(), qr(), Ln(), j(), g(), b(), S(), v();
-var go, _o = 5e3, vo = 3, yo = /* @__PURE__ */ new WeakMap(), bo = /* @__PURE__ */ new WeakMap(), xo = /* @__PURE__ */ new WeakMap(), So = /* @__PURE__ */ new WeakMap(), Co = /* @__PURE__ */ new WeakSet(), wo = class extends Y {
+L(), qr(), In(), A(), g(), b(), S(), v();
+var _o, vo = 5e3, yo = 3, bo = /* @__PURE__ */ new WeakMap(), xo = /* @__PURE__ */ new WeakMap(), So = /* @__PURE__ */ new WeakMap(), Co = /* @__PURE__ */ new WeakMap(), wo = /* @__PURE__ */ new WeakSet(), To = class extends Y {
 	constructor() {
-		super(), A(this, Co), h(this, yo, void 0), h(this, bo, void 0), h(this, xo, []), h(this, So, /* @__PURE__ */ new Map()), this.hass = void 0, this.config = void 0, this.now = Date.now(), this.opened = void 0;
+		super(), k(this, wo), h(this, bo, void 0), h(this, xo, void 0), h(this, So, []), h(this, Co, /* @__PURE__ */ new Map()), this.hass = void 0, this.config = void 0, this.now = Date.now(), this.opened = void 0;
 	}
 	setConfig(e) {
-		this.config = Nn(e);
+		this.config = Mn(e);
 	}
 	getCardSize() {
 		var e;
-		return Math.max(2, (((e = this.config) == null ? void 0 : e.entities.length) ?? 1) * vo);
+		return Math.max(2, (((e = this.config) == null ? void 0 : e.entities.length) ?? 1) * yo);
 	}
 	getGridOptions() {
 		return {
@@ -3344,19 +3363,19 @@ var go, _o = 5e3, vo = 3, yo = /* @__PURE__ */ new WeakMap(), bo = /* @__PURE__ 
 		};
 	}
 	static async getConfigElement() {
-		return await Promise.resolve().then(() => (ho(), oo)), document.createElement(`${L}-editor`);
+		return await Promise.resolve().then(() => (go(), so)), document.createElement(`${R}-editor`);
 	}
 	static getStubConfig(e) {
 		return {
-			entities: to(e).slice(0, 4),
+			entities: no(e).slice(0, 4),
 			orden: "llegada"
 		};
 	}
 	connectedCallback() {
-		super.connectedCallback(), y(yo, this, setInterval(() => this.now = Date.now(), _o));
+		super.connectedCallback(), y(bo, this, setInterval(() => this.now = Date.now(), vo));
 	}
 	disconnectedCallback() {
-		super.disconnectedCallback(), clearInterval(x(yo, this));
+		super.disconnectedCallback(), clearInterval(x(bo, this));
 	}
 	shouldUpdate(e) {
 		if (!e.has("hass") || e.size > 1) return !0;
@@ -3368,7 +3387,7 @@ var go, _o = 5e3, vo = 3, yo = /* @__PURE__ */ new WeakMap(), bo = /* @__PURE__ 
 	}
 	willUpdate() {
 		let e = this.config;
-		e && (this.setAttribute("modo", e.modo), this.style.setProperty("--lb-text-scale", String(e.tam / 100)), this.style.fontFamily = e.letra === "sistema" ? "" : Ka[e.letra], this.hass && (y(xo, this, eo(this.hass, e.entities)), y(So, this, ro(this.hass, e.entities))));
+		e && (this.setAttribute("modo", e.modo), this.style.setProperty("--lb-text-scale", String(e.tam / 100)), this.style.fontFamily = e.letra === "sistema" ? "" : qa[e.letra], this.hass && (y(So, this, to(this.hass, e.entities)), y(Co, this, io(this.hass, e.entities))));
 	}
 	render() {
 		let e = this.config;
@@ -3376,12 +3395,12 @@ var go, _o = 5e3, vo = 3, yo = /* @__PURE__ */ new WeakMap(), bo = /* @__PURE__ 
 		let t = e.modo === "pantalla" ? "kiosk" : "auto";
 		return G`<ha-card>
       ${e.titulo ? G`<h1>${e.titulo}</h1>` : q}
-      ${x(xo, this).length === 0 ? G`<p class="empty">
+      ${x(So, this).length === 0 ? G`<p class="empty">
               No hay datos de los sensores elegidos. Comprueba que pertenecen a la integración
               Logroño Bus.
             </p>` : G`<lb-card-grid
-              .cards=${x(xo, this)}
-              .services=${x(So, this)}
+              .cards=${x(So, this)}
+              .services=${x(Co, this)}
               .now=${this.now}
               order=${e.orden}
               colour=${e.color}
@@ -3391,19 +3410,19 @@ var go, _o = 5e3, vo = 3, yo = /* @__PURE__ */ new WeakMap(), bo = /* @__PURE__ 
               .openable=${e.recorrido}
               @card-open=${(e) => this.opened = e.detail}
             ></lb-card-grid>`}
-      ${_(Co, this, Eo).call(this)}
+      ${_(wo, this, Do).call(this)}
     </ha-card>`;
 	}
 };
-go = wo;
-function To() {
-	return x(bo, this) ?? y(bo, this, new Cn("https://transporteurbano.logrono.es/api/", { store: new jn(() => globalThis.localStorage) })), x(bo, this);
-}
+_o = To;
 function Eo() {
+	return x(xo, this) ?? y(xo, this, new Cn("https://transporteurbano.logrono.es/api/", { store: new An(() => globalThis.localStorage) })), x(xo, this);
+}
+function Do() {
 	let e = this.opened, t = this.config;
 	return !e || !t ? q : G`<lb-route
       .card=${e}
-      .source=${To.call(_(Co, this))}
+      .source=${Eo.call(_(wo, this))}
       .previousStops=${t.previas}
       .arrivals=${{
 		stop_id: e.stop_id,
@@ -3415,12 +3434,12 @@ function Eo() {
 }
 //#endregion
 //#region src/index.ts
-go.properties = {
+_o.properties = {
 	hass: { attribute: !1 },
 	config: { state: !0 },
 	now: { state: !0 },
 	opened: { state: !0 }
-}, go.styles = R`
+}, _o.styles = z`
     :host {
       display: block;
       /* Home Assistant theme → card tokens. */
@@ -3458,13 +3477,13 @@ go.properties = {
       margin: 8px 4px;
       color: var(--lb-muted);
     }
-  `, customElements.get("logrono-bus-card") || customElements.define(L, wo), Ln();
-var Do;
-(Do = window).customCards ?? (Do.customCards = []), window.customCards.some((e) => e.type === "logrono-bus-card") || window.customCards.push({
-	type: L,
+  `, customElements.get("logrono-bus-card") || customElements.define(R, To), In();
+var Oo;
+(Oo = window).customCards ?? (Oo.customCards = []), window.customCards.some((e) => e.type === "logrono-bus-card") || window.customCards.push({
+	type: R,
 	name: "Logroño Bus",
 	description: "Próximos autobuses de tus paradas, con el aspecto de la web de Logroño Bus.",
 	preview: !0
 }), console.info(`%c LOGROÑO-BUS-CARD %c ${r} `, "color:#fff;background:#8c1c2c", "");
 //#endregion
-export { wo as LogronoBusCard, $a as cardFromEntity, eo as cardsFromHass, Nn as normalizeConfig };
+export { To as LogronoBusCard, eo as cardFromEntity, to as cardsFromHass, Mn as normalizeConfig };
