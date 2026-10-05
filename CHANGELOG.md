@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/chiva/ha-logrono-bus/compare/v0.3.0...v0.3.1) (2026-10-05)
+
+
+### Bug Fixes
+
+* **card:** el recorrido no corta «llegando», los autobuses no retroceden y la línea sigue en gris ([#15](https://github.com/chiva/ha-logrono-bus/issues/15)) ([869e6da](https://github.com/chiva/ha-logrono-bus/commit/869e6da15b9497a99655502ba70748fe048db83d))
+
 ## [0.3.0](https://github.com/chiva/ha-logrono-bus/compare/v0.2.0...v0.3.0) (2026-10-05)
 
 
