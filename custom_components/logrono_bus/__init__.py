@@ -26,6 +26,8 @@ from logrono_bus import LogronoBusProvider, UpstreamError, UpstreamSchemaError
 
 from .const import (
     CARD_FILENAME,
+    CARD_LOADER_FILENAME,
+    CARD_LOADER_URL,
     CARD_URL,
     CONF_STOP_ID,
     DOMAIN,
@@ -41,25 +43,36 @@ PLATFORMS: list[Platform] = [Platform.SENSOR]
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 _LOGGER = logging.getLogger(__name__)
-CARD_PATH = Path(__file__).parent / "frontend" / CARD_FILENAME
+FRONTEND_DIR = Path(__file__).parent / "frontend"
+CARD_PATH = FRONTEND_DIR / CARD_FILENAME
+CARD_LOADER_PATH = FRONTEND_DIR / CARD_LOADER_FILENAME
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Serve the dashboard card and load it in every dashboard: no manual resource to add."""
     await hass.http.async_register_static_paths(
-        [StaticPathConfig(CARD_URL, str(CARD_PATH), cache_headers=True)]
+        [
+            StaticPathConfig(CARD_URL, str(CARD_PATH), cache_headers=True),
+            StaticPathConfig(CARD_LOADER_URL, str(CARD_LOADER_PATH), cache_headers=True),
+        ]
     )
     if "frontend" in hass.config.components:
         digest = await hass.async_add_executor_job(_card_digest)
-        # The content hash in the query makes browsers fetch a new card after each update.
-        add_extra_js_url(hass, f"{CARD_URL}?v={digest}")
+        # The loader, not the card: an extra module can run before the frontend swaps in its
+        # custom element registry, which then no longer sees the card (see the loader). The
+        # content hash in the query makes browsers fetch both files again after each update.
+        add_extra_js_url(hass, f"{CARD_LOADER_URL}?v={digest}")
     else:
         _LOGGER.debug("Frontend not loaded; the dashboard card is served but not auto-loaded")
     return True
 
 
 def _card_digest() -> str:
-    return hashlib.sha256(CARD_PATH.read_bytes()).hexdigest()[:12]
+    """Hash of the card and its loader: both are cached for a long time under one query."""
+    sha = hashlib.sha256()
+    for path in (CARD_LOADER_PATH, CARD_PATH):
+        sha.update(path.read_bytes())
+    return sha.hexdigest()[:12]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: LogronoBusConfigEntry) -> bool:
