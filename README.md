@@ -32,7 +32,9 @@ Del horario de hoy (salidas desde la cabecera): `servicio` (`antes`, `en_servici
 `frecuencia_min`, `frecuencia_max_min` y `salidas_desde`.
 
 Un dispositivo por parada, con enlace al panel web de esa parada. Opciones: intervalo de
-actualización (30–300 s, 60 por defecto) y cuántas llegadas considerar.
+actualización (30–300 s, 60 por defecto) y cuántas llegadas considerar. Entre una consulta y la
+siguiente, los minutos se recalculan cada 15 s con la hora prevista, sin pedir nada más al
+Ayuntamiento.
 
 ### Tarjeta para los paneles
 

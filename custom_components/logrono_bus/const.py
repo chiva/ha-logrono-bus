@@ -18,6 +18,9 @@ CONF_FOLLOWING: Final = "following"
 DEFAULT_SCAN_INTERVAL_S: Final = 60
 MIN_SCAN_INTERVAL_S: Final = 30
 MAX_SCAN_INTERVAL_S: Final = 300
+CLOCK_REFRESH_INTERVAL_S: Final = 15
+"""Seconds between recomputing the minutes left from the last fetched arrivals, so the countdown
+(and the arrival blueprint) does not lag a whole scan interval; no upstream request is made."""
 DEFAULT_FOLLOWING: Final = 3
 MAX_FOLLOWING: Final = 6
 

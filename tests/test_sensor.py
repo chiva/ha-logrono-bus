@@ -2,17 +2,19 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
+
 from freezegun.api import FrozenDateTimeFactory
 from homeassistant.config_entries import ConfigSubentry
 from homeassistant.const import STATE_UNKNOWN
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, State
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import MockConfigEntry, async_fire_time_changed
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 from syrupy.assertion import SnapshotAssertion
 
-from custom_components.logrono_bus.const import DOMAIN
+from custom_components.logrono_bus.const import CLOCK_REFRESH_INTERVAL_S, DOMAIN
 
 from .conftest import LINES_URL, STOPS_URL, arrivals_url, load, stop_subentry, timetable_url
 
@@ -58,6 +60,36 @@ async def test_minutes_and_next_arrival(hass: HomeAssistant, loaded_entry: MockC
     ]
     next_arrival = hass.states.get("sensor.ayuntamiento_101_2_manresa_proxima_llegada")
     assert next_arrival.state == "2026-10-03T16:02:28+00:00"
+
+
+async def test_minutes_count_down_between_fetches(
+    hass: HomeAssistant,
+    loaded_entry: MockConfigEntry,
+    freezer: FrozenDateTimeFactory,
+    aioclient_mock: AiohttpClientMocker,
+) -> None:
+    """Recorded at 16:00:45Z: buses at 16:02:28Z and 16:08:02Z, next fetch at 16:01:45Z."""
+    entity_id = "sensor.ayuntamiento_101_2_manresa_minutos"
+    requests = aioclient_mock.call_count
+    tick = timedelta(seconds=CLOCK_REFRESH_INTERVAL_S)
+
+    async def advance(by: timedelta) -> State:
+        freezer.tick(by)
+        async_fire_time_changed(hass)
+        await hass.async_block_till_done()
+        state = hass.states.get(entity_id)
+        assert state is not None
+        return state
+
+    state = await advance(tick)  # 16:01:00Z: 88 s and 422 s left
+    assert (state.state, state.attributes["siguientes"]) == ("1", [7])
+
+    state = await advance(2 * tick)  # 16:01:30Z: 58 s and 392 s left
+    assert (state.state, state.attributes["siguientes"]) == ("0", [6]), (
+        f"no recompute between fetches: {state.state} min, siguientes "
+        f"{state.attributes['siguientes']}"
+    )
+    assert aioclient_mock.call_count == requests, "the countdown must not query the upstream"
 
 
 async def test_device_per_stop_links_to_the_web_board(
