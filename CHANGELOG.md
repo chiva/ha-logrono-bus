@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.2](https://github.com/chiva/ha-logrono-bus/compare/v0.3.1...v0.3.2) (2026-10-14)
+
+
+### Bug Fixes
+
+* **card:** el «prog.» del tiempo principal escala y en modo pantalla el tiempo se aparta del borde ([#19](https://github.com/chiva/ha-logrono-bus/issues/19)) ([cda44be](https://github.com/chiva/ha-logrono-bus/commit/cda44bed28b11187897933bb77cbae5f437ad6a6))
+* **sensor:** los minutos bajan cada 15 s sin esperar a la siguiente consulta ([#17](https://github.com/chiva/ha-logrono-bus/issues/17)) ([877a985](https://github.com/chiva/ha-logrono-bus/commit/877a9852fa4dca4f6360be96503d02147d308bf5))
+
 ## [0.3.1](https://github.com/chiva/ha-logrono-bus/compare/v0.3.0...v0.3.1) (2026-10-05)
 
 
