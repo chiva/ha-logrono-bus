@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.const import UnitOfTime
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.util import dt as dt_util
 
 from logrono_bus import (
@@ -21,6 +22,7 @@ from logrono_bus import (
     service_status,
 )
 
+from .const import CLOCK_REFRESH_INTERVAL_S
 from .coordinator import StopArrivalsCoordinator
 from .entity import LogronoBusEntity, card_key
 from .models import LogronoBusConfigEntry
@@ -147,6 +149,22 @@ class MinutesSensor(ArrivalSensor):
 
     def __init__(self, coordinator: StopArrivalsCoordinator, line: LineSelection) -> None:
         super().__init__(coordinator, line, "minutes")
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        self.async_on_remove(
+            async_track_time_interval(
+                self.hass,
+                self._async_clock_tick,
+                timedelta(seconds=CLOCK_REFRESH_INTERVAL_S),
+                cancel_on_shutdown=True,
+            )
+        )
+
+    @callback
+    def _async_clock_tick(self, _now: datetime) -> None:
+        """Count down between fetches; Home Assistant drops the write when nothing changed."""
+        self.async_write_ha_state()
 
     @property
     def native_value(self) -> int | None:
