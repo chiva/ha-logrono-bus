@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from datetime import timedelta
+from pathlib import Path
 
+import pytest
 from freezegun.api import FrozenDateTimeFactory
 from homeassistant.components.frontend import DATA_EXTRA_MODULE_URL
 from homeassistant.config_entries import ConfigEntryState, ConfigSubentry
@@ -15,7 +17,8 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry, async_
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMocker
 from pytest_homeassistant_custom_component.typing import ClientSessionGenerator
 
-from custom_components.logrono_bus import async_setup
+from custom_components import logrono_bus
+from custom_components.logrono_bus import _card_digest, async_setup
 from custom_components.logrono_bus.const import (
     DOMAIN,
     ISSUE_LINES_REMOVED,
@@ -261,10 +264,41 @@ async def test_dashboard_card_is_served(
     assert "logrono-bus-card" in await response.text()
 
 
-async def test_dashboard_card_is_auto_loaded_when_frontend_runs(hass: HomeAssistant) -> None:
+async def test_card_loader_is_served_and_imports_the_card_after_the_app(
+    hass: HomeAssistant, loaded_entry: MockConfigEntry, hass_client: ClientSessionGenerator
+) -> None:
+    client = await hass_client()
+    response = await client.get("/logrono_bus/logrono-bus-loader.js")
+    assert response.status == 200
+    loader = await response.text()
+    # The card must not be defined before the frontend swaps in its custom element registry.
+    assert loader.index('whenDefined("home-assistant")') < loader.index("import(")
+    assert "./logrono-bus-card.js${search}" in loader
+
+
+async def test_card_loader_is_auto_loaded_when_frontend_runs(hass: HomeAssistant) -> None:
     hass.config.components.add("frontend")
     hass.data[DATA_EXTRA_MODULE_URL] = set()
     assert await async_setup_component(hass, "http", {})
     assert await async_setup(hass, {})
     (url,) = hass.data[DATA_EXTRA_MODULE_URL]
-    assert url.startswith("/logrono_bus/logrono-bus-card.js?v=")
+    assert url == f"/logrono_bus/logrono-bus-loader.js?v={_card_digest()}"
+
+
+def test_card_version_changes_with_the_card_or_its_loader(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    card = tmp_path / "card.js"
+    loader = tmp_path / "loader.js"
+    card.write_text("card v1")
+    loader.write_text("loader v1")
+    monkeypatch.setattr(logrono_bus, "CARD_PATH", card)
+    monkeypatch.setattr(logrono_bus, "CARD_LOADER_PATH", loader)
+
+    first = _card_digest()
+    card.write_text("card v2")
+    after_card_update = _card_digest()
+    loader.write_text("loader v2")
+    after_loader_update = _card_digest()
+
+    assert len({first, after_card_update, after_loader_update}) == 3
