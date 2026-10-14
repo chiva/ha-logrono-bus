@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/chiva/ha-logrono-bus/compare/v0.3.2...v0.3.3) (2026-10-14)
+
+
+### Bug Fixes
+
+* **card:** la tarjeta ya no sale como «Error de configuración» al cargar el panel ([#20](https://github.com/chiva/ha-logrono-bus/issues/20)) ([61041d2](https://github.com/chiva/ha-logrono-bus/commit/61041d21a72839feb36a7b68a7ed5857c438e81a))
+
 ## [0.3.2](https://github.com/chiva/ha-logrono-bus/compare/v0.3.1...v0.3.2) (2026-10-14)
 
 
