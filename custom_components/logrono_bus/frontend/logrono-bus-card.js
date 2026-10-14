@@ -55,29 +55,29 @@ var p, m, ee = t((() => {
 }));
 //#endregion
 //#region ../core/src/models.ts
-function h(e, t) {
-	let n = /^\d+$/.test(e), r = /^\d+$/.test(t);
-	return n && r ? Number(e) - Number(t) : n === r ? te(e, t) : n ? -1 : 1;
-}
 function te(e, t) {
-	return e === t ? 0 : e < t ? -1 : 1;
+	let n = /^\d+$/.test(e), r = /^\d+$/.test(t);
+	return n && r ? Number(e) - Number(t) : n === r ? ne(e, t) : n ? -1 : 1;
 }
 function ne(e, t) {
+	return e === t ? 0 : e < t ? -1 : 1;
+}
+function re(e, t) {
 	return Math.max(0, Math.floor(((typeof e == "number" ? e : Date.parse(e)) - (typeof t == "number" ? t : Date.parse(t))) / 6e4));
 }
-var re, ie, ae = t((() => {
-	re = ["asc", "desc"], ie = "Europe/Madrid";
+var ie, ae, oe = t((() => {
+	ie = ["asc", "desc"], ae = "Europe/Madrid";
 }));
 //#endregion
 //#region ../core/src/text.ts
-function oe(e) {
+function se(e) {
 	return e.normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase().trim().split(/\s+/).filter(Boolean).join(" ");
 }
-function se(e) {
-	return e.trim().toLowerCase().split(/\s+/).filter(Boolean).map((e, t) => t > 0 && ce.has(e) ? e : e.slice(0, 1).toUpperCase() + e.slice(1)).join(" ");
+function ce(e) {
+	return e.trim().toLowerCase().split(/\s+/).filter(Boolean).map((e, t) => t > 0 && le.has(e) ? e : e.slice(0, 1).toUpperCase() + e.slice(1)).join(" ");
 }
-var ce, le = t((() => {
-	ce = /* @__PURE__ */ new Set([
+var le, ue = t((() => {
+	le = /* @__PURE__ */ new Set([
 		"a",
 		"de",
 		"del",
@@ -91,60 +91,60 @@ var ce, le = t((() => {
 }));
 //#endregion
 //#region \0@oxc-project+runtime@0.152.0/helpers/esm/checkPrivateRedeclaration.js
-function ue(e, t) {
+function de(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-var de = t((() => {}));
+var fe = t((() => {}));
 //#endregion
 //#region \0@oxc-project+runtime@0.152.0/helpers/esm/classPrivateFieldInitSpec.js
-function g(e, t, n) {
-	ue(e, t), t.set(e, n);
+function h(e, t, n) {
+	de(e, t), t.set(e, n);
 }
-var _ = t((() => {
-	de();
+var g = t((() => {
+	fe();
 }));
 //#endregion
 //#region \0@oxc-project+runtime@0.152.0/helpers/esm/assertClassBrand.js
-function v(e, t, n) {
+function _(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-var y = t((() => {}));
+var v = t((() => {}));
 //#endregion
 //#region \0@oxc-project+runtime@0.152.0/helpers/esm/classPrivateFieldSet2.js
-function b(e, t, n) {
-	return e.set(v(e, t), n), n;
+function y(e, t, n) {
+	return e.set(_(e, t), n), n;
 }
-var x = t((() => {
-	y();
+var b = t((() => {
+	v();
 }));
 //#endregion
 //#region \0@oxc-project+runtime@0.152.0/helpers/esm/classPrivateFieldGet2.js
-function S(e, t) {
-	return e.get(v(e, t));
+function x(e, t) {
+	return e.get(_(e, t));
 }
-var C = t((() => {
-	y();
+var S = t((() => {
+	v();
 }));
 //#endregion
 //#region ../core/src/catalog.ts
-function fe(e, t) {
+function pe(e, t) {
 	let n = e.stop_ids.indexOf(t);
 	return n === -1 ? null : n + 1;
 }
-function pe(e, t) {
+function me(e, t) {
 	return e.stop_ids.length > 0 && e.stop_ids[e.stop_ids.length - 1] === t;
 }
-var me, he, ge, _e, ve, ye = t((() => {
-	d(), ee(), ae(), le(), _(), x(), C(), me = /* @__PURE__ */ new WeakMap(), he = /* @__PURE__ */ new WeakMap(), ge = /* @__PURE__ */ new WeakMap(), _e = /* @__PURE__ */ new WeakMap(), ve = class {
+var he, ge, _e, ve, ye, be = t((() => {
+	d(), ee(), oe(), ue(), g(), b(), S(), he = /* @__PURE__ */ new WeakMap(), ge = /* @__PURE__ */ new WeakMap(), _e = /* @__PURE__ */ new WeakMap(), ve = /* @__PURE__ */ new WeakMap(), ye = class {
 		constructor(e) {
-			g(this, me, void 0), g(this, he, void 0), g(this, ge, void 0), g(this, _e, void 0), this.catalog = e, b(me, this, new Map(e.lines.map((e) => [e.id, e]))), b(he, this, new Map(e.stops.map((e) => [e.id, e]))), b(ge, this, new Map(e.patterns.map((e) => [e.id, e])));
+			h(this, he, void 0), h(this, ge, void 0), h(this, _e, void 0), h(this, ve, void 0), this.catalog = e, y(he, this, new Map(e.lines.map((e) => [e.id, e]))), y(ge, this, new Map(e.stops.map((e) => [e.id, e]))), y(_e, this, new Map(e.patterns.map((e) => [e.id, e])));
 			let t = /* @__PURE__ */ new Map();
 			for (let n of e.patterns) for (let e of new Set(n.stop_ids)) {
 				let r = t.get(e) ?? [];
 				r.push(n), t.set(e, r);
 			}
-			b(_e, this, t);
+			y(ve, this, t);
 		}
 		get lines() {
 			return this.catalog.lines;
@@ -153,81 +153,81 @@ var me, he, ge, _e, ve, ye = t((() => {
 			return this.catalog.stops;
 		}
 		hasLine(e) {
-			return S(me, this).has(e);
+			return x(he, this).has(e);
 		}
 		line(e) {
-			let t = S(me, this).get(e);
+			let t = x(he, this).get(e);
 			if (!t) throw new l(e);
 			return t;
 		}
 		stop(e) {
-			let t = S(he, this).get(e);
+			let t = x(ge, this).get(e);
 			if (!t) throw new c(e);
 			return t;
 		}
 		findStop(e) {
-			return S(he, this).get(e);
+			return x(ge, this).get(e);
 		}
 		pattern(e) {
-			return S(ge, this).get(e);
+			return x(_e, this).get(e);
 		}
 		patternsForLine(e) {
 			return this.catalog.patterns.filter((t) => t.line_id === e);
 		}
 		patternsAt(e) {
-			return S(_e, this).get(e) ?? [];
+			return x(ve, this).get(e) ?? [];
 		}
 		nearby(e, t, { radiusM: n = 500, limit: r = 10 } = {}) {
 			return this.catalog.stops.map((n) => ({
 				stop: n,
 				distance_m: f(e, t, n.lat, n.lon)
-			})).filter((e) => e.distance_m <= n).sort((e, t) => e.distance_m - t.distance_m || te(e.stop.id, t.stop.id)).slice(0, r);
+			})).filter((e) => e.distance_m <= n).sort((e, t) => e.distance_m - t.distance_m || ne(e.stop.id, t.stop.id)).slice(0, r);
 		}
 		search(e, { limit: t = 20 } = {}) {
-			let n = oe(e);
+			let n = se(e);
 			if (!n) return [];
-			let r = S(he, this).get(n), i = this.catalog.stops.filter((e) => e !== r && oe(e.name).includes(n)).map((e) => ({
+			let r = x(ge, this).get(n), i = this.catalog.stops.filter((e) => e !== r && se(e.name).includes(n)).map((e) => ({
 				stop: e,
-				startsWith: oe(e.name).startsWith(n)
-			})).sort((e, t) => Number(t.startsWith) - Number(e.startsWith) || te(e.stop.name, t.stop.name) || te(e.stop.id, t.stop.id)).map(({ stop: e }) => e);
+				startsWith: se(e.name).startsWith(n)
+			})).sort((e, t) => Number(t.startsWith) - Number(e.startsWith) || ne(e.stop.name, t.stop.name) || ne(e.stop.id, t.stop.id)).map(({ stop: e }) => e);
 			return [...r ? [r] : [], ...i].slice(0, t);
 		}
 	};
 }));
 //#endregion
 //#region ../core/src/selection.ts
-function be(e) {
+function xe(e) {
 	return e === "asc" ? "a" : e === "desc" ? "d" : "x";
 }
-function xe(e, t) {
+function Se(e, t) {
 	return t.line_id === e.line_id && (e.direction === null || t.direction === e.direction);
 }
-function Se(e) {
+function Ce(e) {
 	return e.map((e) => {
-		let t = e.lines.map((e) => `${e.line_id}${be(e.direction)}`).join(".");
+		let t = e.lines.map((e) => `${e.line_id}${xe(e.direction)}`).join(".");
 		return t ? `${e.stop_id}-${t}` : e.stop_id;
 	}).join("~");
 }
-var Ce = t((() => {}));
+var we = t((() => {}));
 //#endregion
 //#region ../core/src/cards.ts
-function we(e, t) {
-	return t.lines.length > 0 ? [...t.lines] : e.patternsAt(t.stop_id).filter((e) => !pe(e, t.stop_id)).map((e) => ({
+function Te(e, t) {
+	return t.lines.length > 0 ? [...t.lines] : e.patternsAt(t.stop_id).filter((e) => !me(e, t.stop_id)).map((e) => ({
 		line_id: e.line_id,
 		direction: e.direction
 	}));
 }
-function Te(e, t, n, r = 3) {
+function Ee(e, t, n, r = 3) {
 	let i = e.stop(t.stop_id), a = [], o = /* @__PURE__ */ new Map();
-	for (let n of we(e, t)) e.hasLine(n.line_id) && !o.has(Oe(n)) && (a.push(n), o.set(Oe(n), []));
+	for (let n of Te(e, t)) e.hasLine(n.line_id) && !o.has(ke(n)) && (a.push(n), o.set(ke(n), []));
 	for (let r of n.arrivals) {
 		var s;
 		if (r.stop_id !== i.id) continue;
-		let n = a.find((e) => xe(e, r));
+		let n = a.find((e) => Se(e, r));
 		!n && r.direction === null && t.lines.length === 0 && e.hasLine(r.line_id) && (n = {
 			line_id: r.line_id,
 			direction: null
-		}, a.push(n), o.set(Oe(n), [])), n && ((s = o.get(Oe(n))) == null || s.push(r));
+		}, a.push(n), o.set(ke(n), [])), n && ((s = o.get(ke(n))) == null || s.push(r));
 	}
 	return a.map((t) => {
 		let n = e.line(t.line_id), a = t.direction ? e.pattern(`${t.line_id}:${t.direction}`) : void 0;
@@ -241,65 +241,65 @@ function Te(e, t, n, r = 3) {
 			text_colour: n.text_colour,
 			direction: t.direction,
 			headsign: (a == null ? void 0 : a.headsign) ?? null,
-			arrivals: (o.get(Oe(t)) ?? []).slice(0, r)
+			arrivals: (o.get(ke(t)) ?? []).slice(0, r)
 		};
 	});
 }
-function Ee(e) {
+function De(e) {
 	let t = e.arrivals.find((e) => !e.cancelled);
 	return t ? Date.parse(t.expected) : null;
 }
-function De(e, t) {
-	return t === "seleccion" ? [...e] : t === "linea" ? [...e].sort(ke) : [...e].sort((e, t) => {
-		let n = Ee(e), r = Ee(t);
-		return n === null || r === null ? n === r ? 0 : n === null ? 1 : -1 : n - r || h(e.line_label, t.line_label);
+function Oe(e, t) {
+	return t === "seleccion" ? [...e] : t === "linea" ? [...e].sort(Ae) : [...e].sort((e, t) => {
+		let n = De(e), r = De(t);
+		return n === null || r === null ? n === r ? 0 : n === null ? 1 : -1 : n - r || te(e.line_label, t.line_label);
 	});
 }
-var Oe, ke, Ae = t((() => {
-	ye(), ae(), Ce(), Oe = (e) => `${e.line_id}${be(e.direction)}`, ke = (e, t) => h(e.line_label, t.line_label) || te(e.headsign ?? "", t.headsign ?? "") || te(e.stop_name, t.stop_name) || te(e.stop_id, t.stop_id);
+var ke, Ae, je = t((() => {
+	be(), oe(), we(), ke = (e) => `${e.line_id}${xe(e.direction)}`, Ae = (e, t) => te(e.line_label, t.line_label) || ne(e.headsign ?? "", t.headsign ?? "") || ne(e.stop_name, t.stop_name) || ne(e.stop_id, t.stop_id);
 }));
 //#endregion
 //#region ../core/src/colour.ts
-function je(e) {
-	let t = e.trim(), n = Re.exec(t);
+function Me(e) {
+	let t = e.trim(), n = ze.exec(t);
 	if (n != null && n[1]) return `#${n[1].toUpperCase()}`;
-	let r = Le.exec(t);
+	let r = Re.exec(t);
 	if (r) {
 		let t = r.slice(1, 4).map(Number);
-		if (t.some((e) => e > He)) throw RangeError(`Canal de color fuera de rango: '${e}'`);
+		if (t.some((e) => e > Ue)) throw RangeError(`Canal de color fuera de rango: '${e}'`);
 		return `#${t.map((e) => e.toString(16).padStart(2, "0").toUpperCase()).join("")}`;
 	}
 	throw RangeError(`Color no reconocido: '${e}'`);
 }
-function Me(e) {
-	let t = je(e), n = [
+function Ne(e) {
+	let t = Me(e), n = [
 		1,
 		3,
 		5
 	].map((e) => {
-		let n = parseInt(t.slice(e, e + 2), 16) / He;
-		return n <= ze ? n / 12.92 : ((n + .055) / 1.055) ** 2.4;
+		let n = parseInt(t.slice(e, e + 2), 16) / Ue;
+		return n <= Be ? n / 12.92 : ((n + .055) / 1.055) ** 2.4;
 	});
-	return Be.reduce((e, t, r) => e + t * (n[r] ?? 0), 0);
+	return Ve.reduce((e, t, r) => e + t * (n[r] ?? 0), 0);
 }
-function Ne(e, t) {
-	let [n, r] = [Me(e), Me(t)].sort((e, t) => t - e);
-	return (n + Ve) / (r + Ve);
+function Pe(e, t) {
+	let [n, r] = [Ne(e), Ne(t)].sort((e, t) => t - e);
+	return (n + He) / (r + He);
 }
-function Pe(e) {
-	return Ne(e, "#000000") >= Ne(e, "#FFFFFF") ? Fe : Ie;
+function Fe(e) {
+	return Pe(e, "#000000") >= Pe(e, "#FFFFFF") ? Ie : Le;
 }
-var Fe, Ie, Le, Re, ze, Be, Ve, He, Ue = t((() => {
-	Fe = "#000000", Ie = "#FFFFFF", Le = /^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*[\d.]+\s*)?\)$/i, Re = /^#?([0-9a-f]{6})$/i, ze = .04045, Be = [
+var Ie, Le, Re, ze, Be, Ve, He, Ue, We = t((() => {
+	Ie = "#000000", Le = "#FFFFFF", Re = /^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*(?:,\s*[\d.]+\s*)?\)$/i, ze = /^#?([0-9a-f]{6})$/i, Be = .04045, Ve = [
 		.2126,
 		.7152,
 		.0722
-	], Ve = .05, He = 255;
+	], He = .05, Ue = 255;
 }));
 //#endregion
 //#region ../core/src/route.ts
-function We(e, t, n, r, i, { previousStops: a = 4, now: o = r.generated_at, previous: s = null } = {}) {
-	let c = e.pattern(t), l = c ? fe(c, n) : null;
+function Ge(e, t, n, r, i, { previousStops: a = 4, now: o = r.generated_at, previous: s = null } = {}) {
+	let c = e.pattern(t), l = c ? pe(c, n) : null;
 	if (!c || l === null) return null;
 	let u = Math.max(1, l - Math.max(0, a)), d = c.stop_ids.slice(u - 1, l).map((t, n) => {
 		var r;
@@ -313,7 +313,7 @@ function We(e, t, n, r, i, { previousStops: a = 4, now: o = r.generated_at, prev
 	for (let t of r.vehicles) {
 		if (t.pattern_id !== c.id) continue;
 		if (t.next_stop_id === null) {
-			let n = Ke(e, c, t);
+			let n = qe(e, c, t);
 			if (n === null || n > l) continue;
 			f.push({
 				vehicleId: t.id,
@@ -322,16 +322,16 @@ function We(e, t, n, r, i, { previousStops: a = 4, now: o = r.generated_at, prev
 			});
 			continue;
 		}
-		let n = fe(c, t.next_stop_id);
+		let n = pe(c, t.next_stop_id);
 		n === null || n > l || f.push({
 			vehicleId: t.id,
-			at: n === 1 ? 1 - u : n - 1 - u + qe(e, c, n, t),
+			at: n === 1 ? 1 - u : n - 1 - u + Je(e, c, n, t),
 			stopsAway: l - n
 		});
 	}
-	let p = Ge(f, u, (s == null ? void 0 : s.patternId) === c.id && s.stopId === n ? s : null);
+	let p = Ke(f, u, (s == null ? void 0 : s.patternId) === c.id && s.stopId === n ? s : null);
 	p.sort((e, t) => t.at - e.at);
-	let m = ((i == null ? void 0 : i.arrivals) ?? []).filter((e) => e.pattern_id === c.id && e.is_realtime && !e.cancelled).map((e) => ne(e.expected, o)), ee = p.map((e, t) => ({
+	let m = ((i == null ? void 0 : i.arrivals) ?? []).filter((e) => e.pattern_id === c.id && e.is_realtime && !e.cancelled).map((e) => re(e.expected, o)), ee = p.map((e, t) => ({
 		...e,
 		minutes: m[t] ?? null
 	}));
@@ -349,7 +349,7 @@ function We(e, t, n, r, i, { previousStops: a = 4, now: o = r.generated_at, prev
 		generatedAt: r.generated_at
 	};
 }
-function Ge(e, t, n) {
+function Ke(e, t, n) {
 	if (!n) return [...e];
 	let r = n.hiddenStops + 1, i = new Map([...n.buses, ...n.earlierBuses].map((e) => [e.vehicleId, e]));
 	return e.map((e) => {
@@ -363,7 +363,7 @@ function Ge(e, t, n) {
 		};
 	});
 }
-function Ke(e, t, n) {
+function qe(e, t, n) {
 	let r = null, i = Infinity;
 	for (let [a, o] of t.stop_ids.entries()) {
 		let t = e.findStop(o);
@@ -373,46 +373,46 @@ function Ke(e, t, n) {
 	}
 	return r;
 }
-function qe(e, t, n, r) {
+function Je(e, t, n, r) {
 	let i = e.findStop(t.stop_ids[n - 2] ?? ""), a = e.findStop(t.stop_ids[n - 1] ?? "");
 	if (!i || !a) return .5;
 	let o = f(i.lat, i.lon, r.lat, r.lon), s = f(r.lat, r.lon, a.lat, a.lon);
-	return o + s > 0 ? Je(o / (o + s), 0, 1) : 0;
+	return o + s > 0 ? Ye(o / (o + s), 0, 1) : 0;
 }
-var Je, Ye = t((() => {
-	ye(), ee(), ae(), Je = (e, t, n) => Math.min(n, Math.max(t, e));
+var Ye, Xe = t((() => {
+	be(), ee(), oe(), Ye = (e, t, n) => Math.min(n, Math.max(t, e));
 }));
 //#endregion
 //#region ../core/src/config.ts
-function Xe(e) {
+function Ze(e) {
 	let t = Math.round(e / 10) * 10;
 	return Math.min(150, Math.max(80, t));
 }
-function Ze(e) {
+function Qe(e) {
 	return Math.min(12, Math.max(1, Math.round(e)));
 }
-var Qe, $e, et, tt, w, nt = t((() => {
-	Ae(), Ye(), Qe = [
+var $e, et, tt, nt, C, rt = t((() => {
+	je(), Xe(), $e = [
 		"suave",
 		"normal",
 		"intensa"
-	], $e = [
+	], et = [
 		"sistema",
 		"legible",
 		"redondeada",
 		"mono"
-	], et = [
+	], tt = [
 		"pulso",
 		"borde",
 		"destello",
 		"etiqueta",
 		"rayas",
 		"ninguno"
-	], tt = [
+	], nt = [
 		"seleccion",
 		"linea",
 		"llegada"
-	], w = {
+	], C = {
 		theme: "auto",
 		mode: "panel",
 		perCard: 3,
@@ -430,67 +430,67 @@ var Qe, $e, et, tt, w, nt = t((() => {
 }));
 //#endregion
 //#region ../core/src/directions.ts
-function rt(e, t, n) {
+function it(e, t, n) {
 	if (e.length === 1) return e[0] ?? null;
 	if (n === null) return null;
-	let r = e.filter((e) => fe(e, t) === n);
+	let r = e.filter((e) => pe(e, t) === n);
 	return r.length === 1 ? r[0] ?? null : null;
 }
-var it, at, ot, st = t((() => {
-	ye(), _(), x(), C(), it = /* @__PURE__ */ new WeakMap(), at = /* @__PURE__ */ new WeakMap(), ot = class e {
+var at, ot, st, ct = t((() => {
+	be(), g(), b(), S(), at = /* @__PURE__ */ new WeakMap(), ot = /* @__PURE__ */ new WeakMap(), st = class e {
 		constructor(e) {
-			g(this, it, void 0), g(this, at, /* @__PURE__ */ new Map()), b(it, this, e);
+			h(this, at, void 0), h(this, ot, /* @__PURE__ */ new Map()), y(at, this, e);
 		}
 		resolve(t, n, r, i) {
-			let a = S(it, this).patternsAt(n).filter((e) => e.line_id === t), o = rt.call(e, a, n, r), s = `${t}\u0000${i}`;
-			if (o) return i && S(at, this).set(s, o.id), o;
-			let c = i ? S(at, this).get(s) : void 0;
+			let a = x(at, this).patternsAt(n).filter((e) => e.line_id === t), o = it.call(e, a, n, r), s = `${t}\u0000${i}`;
+			if (o) return i && x(ot, this).set(s, o.id), o;
+			let c = i ? x(ot, this).get(s) : void 0;
 			return c ? a.find((e) => e.id === c) ?? null : null;
 		}
 	};
 }));
 //#endregion
 //#region ../core/src/raw.ts
-function T(e, t) {
-	if (typeof e != "object" || !e || Array.isArray(e)) throw new s(`se esperaba un objeto, llegó ${Ct(e)}`, t);
+function w(e, t) {
+	if (typeof e != "object" || !e || Array.isArray(e)) throw new s(`se esperaba un objeto, llegó ${Tt(e)}`, t);
 	return e;
 }
-function ct(e, t) {
-	if (!Array.isArray(e)) throw new s(`se esperaba una lista, llegó ${Ct(e)}`, t);
+function lt(e, t) {
+	if (!Array.isArray(e)) throw new s(`se esperaba una lista, llegó ${Tt(e)}`, t);
 	return e;
 }
-function E(e, t, n) {
+function T(e, t, n) {
 	if (!(t in e)) throw new s("falta el campo", `${n}.${t}`);
 	return e[t];
 }
-function D(e, t) {
-	if (typeof e != "string") throw new s(`se esperaba texto, llegó ${Ct(e)}`, t);
+function E(e, t) {
+	if (typeof e != "string") throw new s(`se esperaba texto, llegó ${Tt(e)}`, t);
 	return e.trim();
 }
-function lt(e, t) {
-	if (typeof e != "number" || !Number.isInteger(e)) throw new s(`se esperaba un entero, llegó ${Ct(e)}`, t);
-	return e;
-}
 function ut(e, t) {
-	if (typeof e != "number") throw new s(`se esperaba un número, llegó ${Ct(e)}`, t);
+	if (typeof e != "number" || !Number.isInteger(e)) throw new s(`se esperaba un entero, llegó ${Tt(e)}`, t);
 	return e;
 }
 function dt(e, t) {
-	if (typeof e != "boolean") throw new s(`se esperaba un booleano, llegó ${Ct(e)}`, t);
+	if (typeof e != "number") throw new s(`se esperaba un número, llegó ${Tt(e)}`, t);
 	return e;
 }
-function O(e, t) {
+function ft(e, t) {
+	if (typeof e != "boolean") throw new s(`se esperaba un booleano, llegó ${Tt(e)}`, t);
+	return e;
+}
+function D(e, t) {
 	if (typeof e == "boolean") throw new s("se esperaba un identificador, llegó un booleano", t);
 	if (typeof e == "number" && Number.isInteger(e)) return String(e);
-	let n = D(e, t);
+	let n = E(e, t);
 	if (!n) throw new s("identificador vacío", t);
 	return /^\d+$/.test(n) ? String(Number.parseInt(n, 10)) : n;
 }
-function ft(e, t) {
-	return e == null || e === "" ? "" : O(e, t);
-}
 function pt(e, t) {
-	let n = D(e, t), r = wt.exec(n);
+	return e == null || e === "" ? "" : D(e, t);
+}
+function mt(e, t) {
+	let n = E(e, t), r = Et.exec(n);
 	if (!r) {
 		let e = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?$/.test(n);
 		throw new s(e ? `fecha sin zona horaria '${n}'` : `fecha no válida '${n}'`, t);
@@ -499,102 +499,108 @@ function pt(e, t) {
 	if (Number.isNaN(Date.parse(f))) throw new s(`fecha no válida '${n}'`, t);
 	return f;
 }
-function mt(e, t) {
-	return ct(E(T(E(T(e, "$"), "result", "$"), "$.result"), t, "$.result"), `$.result.${t}`);
-}
 function ht(e, t) {
-	return ct(e, t).map((e, n) => {
-		let r = `${t}[${n}]`, i = T(e, r);
-		return {
-			id: O(E(i, "id", r), `${r}.id`),
-			name: D(E(i, "name", r), `${r}.name`)
-		};
-	});
+	return lt(T(w(T(w(e, "$"), "result", "$"), "$.result"), t, "$.result"), `$.result.${t}`);
 }
-function gt(e) {
-	return mt(e, "lines").map((e, t) => {
-		let n = `$.result.lines[${t}]`, r = T(e, n), i = T(E(r, "stops", n), `${n}.stops`);
+function gt(e, t) {
+	return lt(e, t).map((e, n) => {
+		let r = `${t}[${n}]`, i = w(e, r);
 		return {
-			id: O(E(r, "id", n), `${n}.id`),
-			name: D(E(r, "name", n), `${n}.name`),
-			colour: D(E(r, "color", n), `${n}.color`),
-			asc: ht(E(i, "asc", `${n}.stops`), `${n}.stops.asc`),
-			desc: ht(E(i, "desc", `${n}.stops`), `${n}.stops.desc`)
+			id: D(T(i, "id", r), `${r}.id`),
+			name: E(T(i, "name", r), `${r}.name`)
 		};
 	});
 }
 function _t(e) {
-	return mt(e, "stops").map((e, t) => {
-		let n = `$.result.stops[${t}]`, r = T(e, n), i = ct(r.lines ?? [], `${n}.lines`);
+	return ht(e, "lines").map((e, t) => {
+		let n = `$.result.lines[${t}]`, r = w(e, n), i = w(T(r, "stops", n), `${n}.stops`);
 		return {
-			id: O(E(r, "id", n), `${n}.id`),
-			name: D(E(r, "name", n), `${n}.name`),
-			lat: ut(E(r, "lat", n), `${n}.lat`),
-			lon: ut(E(r, "lng", n), `${n}.lng`),
-			lineIds: i.map((e, t) => O(e, `${n}.lines[${t}]`))
+			id: D(T(r, "id", n), `${n}.id`),
+			name: E(T(r, "name", n), `${n}.name`),
+			colour: E(T(r, "color", n), `${n}.color`),
+			asc: gt(T(i, "asc", `${n}.stops`), `${n}.stops.asc`),
+			desc: gt(T(i, "desc", `${n}.stops`), `${n}.stops.desc`)
 		};
 	});
 }
 function vt(e) {
-	return mt(e, "arrivals").map((e, t) => {
-		let n = `$.result.arrivals[${t}]`, r = T(e, n), i = r.order;
+	return ht(e, "stops").map((e, t) => {
+		let n = `$.result.stops[${t}]`, r = w(e, n), i = lt(r.lines ?? [], `${n}.lines`);
 		return {
-			lineId: O(E(r, "lineRef", n), `${n}.lineRef`),
-			stopId: O(E(r, "stopPointRef", n), `${n}.stopPointRef`),
-			directionRef: ft(r.directionRef, `${n}.directionRef`),
-			vehicleRef: ft(r.vehicleRef, `${n}.vehicleRef`),
-			order: i == null ? null : lt(i, `${n}.order`),
-			aimed: pt(E(r, "aimedArrivalTime", n), `${n}.aimedArrivalTime`),
-			expected: pt(E(r, "expectedArrivalTime", n), `${n}.expectedArrivalTime`),
-			arrivalStatus: D(r.arrivalStatus ?? "", `${n}.arrivalStatus`),
-			cancelled: dt(r.cancellation ?? !1, `${n}.cancellation`),
-			inaccurate: dt(r.predictionInaccurate ?? !1, `${n}.predictionInaccurate`),
-			delayS: lt(r.delaySeconds ?? 0, `${n}.delaySeconds`)
+			id: D(T(r, "id", n), `${n}.id`),
+			name: E(T(r, "name", n), `${n}.name`),
+			lat: dt(T(r, "lat", n), `${n}.lat`),
+			lon: dt(T(r, "lng", n), `${n}.lng`),
+			lineIds: i.map((e, t) => D(e, `${n}.lines[${t}]`))
 		};
 	});
 }
-function yt(e) {
-	return mt(e, "activities").map((e, t) => {
-		let n = `$.result.activities[${t}]`, r = T(e, n);
-		return {
-			vehicleRef: O(E(r, "vehicleRef", n), `${n}.vehicleRef`),
-			lineId: O(E(r, "lineRef", n), `${n}.lineRef`),
-			directionRef: D(r.directionRef ?? "", `${n}.directionRef`),
-			lat: ut(E(r, "latitude", n), `${n}.latitude`),
-			lon: ut(E(r, "longitude", n), `${n}.longitude`),
-			nextStopId: ft(r.nextStopRef, `${n}.nextStopRef`),
-			recordedAt: pt(E(r, "locationRecordedAtTime", n), `${n}.locationRecordedAtTime`),
-			delayS: lt(r.delaySeconds ?? 0, `${n}.delaySeconds`)
+function yt(e, t, n) {
+	let r = `${n}.${t}ArrivalTime`, i = E(T(e, `${t}ArrivalTime`, n), r);
+	if (i) return mt(i, r);
+	let a = `${n}.${t}DepartureTime`, o = E(e[`${t}DepartureTime`] ?? "", a);
+	return o ? mt(o, a) : null;
+}
+function bt(e) {
+	return ht(e, "arrivals").flatMap((e, t) => {
+		let n = `$.result.arrivals[${t}]`, r = w(e, n), i = r.order, a = yt(r, "aimed", n), o = yt(r, "expected", n);
+		return a === null || o === null ? [] : {
+			lineId: D(T(r, "lineRef", n), `${n}.lineRef`),
+			stopId: D(T(r, "stopPointRef", n), `${n}.stopPointRef`),
+			directionRef: pt(r.directionRef, `${n}.directionRef`),
+			vehicleRef: pt(r.vehicleRef, `${n}.vehicleRef`),
+			order: i == null ? null : ut(i, `${n}.order`),
+			aimed: a,
+			expected: o,
+			arrivalStatus: E(r.arrivalStatus ?? "", `${n}.arrivalStatus`),
+			cancelled: ft(r.cancellation ?? !1, `${n}.cancellation`),
+			inaccurate: ft(r.predictionInaccurate ?? !1, `${n}.predictionInaccurate`),
+			delayS: ut(r.delaySeconds ?? 0, `${n}.delaySeconds`)
 		};
 	});
 }
-function bt(e, t) {
-	let n = D(e, t), r = Tt.exec(n), i = r ? Number(r[1]) : NaN, a = r ? Number(r[2]) : NaN;
-	if (!r || i > Et || a >= Dt) throw new s(`hora no válida: '${n}'`, t);
+function xt(e) {
+	return ht(e, "activities").map((e, t) => {
+		let n = `$.result.activities[${t}]`, r = w(e, n);
+		return {
+			vehicleRef: D(T(r, "vehicleRef", n), `${n}.vehicleRef`),
+			lineId: D(T(r, "lineRef", n), `${n}.lineRef`),
+			directionRef: E(r.directionRef ?? "", `${n}.directionRef`),
+			lat: dt(T(r, "latitude", n), `${n}.latitude`),
+			lon: dt(T(r, "longitude", n), `${n}.longitude`),
+			nextStopId: pt(r.nextStopRef, `${n}.nextStopRef`),
+			recordedAt: mt(T(r, "locationRecordedAtTime", n), `${n}.locationRecordedAtTime`),
+			delayS: ut(r.delaySeconds ?? 0, `${n}.delaySeconds`)
+		};
+	});
+}
+function St(e, t) {
+	let n = E(e, t), r = Dt.exec(n), i = r ? Number(r[1]) : NaN, a = r ? Number(r[2]) : NaN;
+	if (!r || i > Ot || a >= kt) throw new s(`hora no válida: '${n}'`, t);
 	return `${String(i).padStart(2, "0")}:${r[2]}`;
 }
-function xt(e, t) {
-	let n = T(e, t), r = n.intervalMinutesMax;
+function Ct(e, t) {
+	let n = w(e, t), r = n.intervalMinutesMax;
 	return {
-		first: bt(E(n, "firstPass", t), `${t}.firstPass`),
-		last: bt(E(n, "lastPass", t), `${t}.lastPass`),
-		intervalMin: lt(E(n, "intervalMinutes", t), `${t}.intervalMinutes`),
-		intervalMaxMin: r == null ? null : lt(r, `${t}.intervalMinutesMax`)
+		first: St(T(n, "firstPass", t), `${t}.firstPass`),
+		last: St(T(n, "lastPass", t), `${t}.lastPass`),
+		intervalMin: ut(T(n, "intervalMinutes", t), `${t}.intervalMinutes`),
+		intervalMaxMin: r == null ? null : ut(r, `${t}.intervalMinutesMax`)
 	};
 }
-function St(e) {
-	let t = T(E(T(e, "$"), "result", "$"), "$.result"), n = T(E(t, "frequenciesByDirection", "$.result"), "$.result.frequenciesByDirection"), r = T(E(t, "passesByDirection", "$.result"), "$.result.passesByDirection");
+function wt(e) {
+	let t = w(T(w(e, "$"), "result", "$"), "$.result"), n = w(T(t, "frequenciesByDirection", "$.result"), "$.result.frequenciesByDirection"), r = w(T(t, "passesByDirection", "$.result"), "$.result.passesByDirection");
 	return [.../* @__PURE__ */ new Set([...Object.keys(r), ...Object.keys(n)])].map((e) => {
 		let t = `$.result.passesByDirection.${e}`, i = `$.result.frequenciesByDirection.${e}`;
 		return {
 			name: e,
-			frequencies: ct(n[e] ?? [], i).map((e, t) => xt(e, `${i}[${t}]`)),
-			passes: ct(r[e] ?? [], t).map((e, n) => bt(e, `${t}[${n}]`))
+			frequencies: lt(n[e] ?? [], i).map((e, t) => Ct(e, `${i}[${t}]`)),
+			passes: lt(r[e] ?? [], t).map((e, n) => St(e, `${t}[${n}]`))
 		};
 	});
 }
-var Ct, wt, Tt, Et, Dt, Ot = t((() => {
-	d(), Ct = (e) => {
+var Tt, Et, Dt, Ot, kt, At = t((() => {
+	d(), Tt = (e) => {
 		if (e === null) return "NoneType";
 		if (Array.isArray(e)) return "list";
 		switch (typeof e) {
@@ -604,42 +610,42 @@ var Ct, wt, Tt, Et, Dt, Ot = t((() => {
 			case "object": return "dict";
 			default: return typeof e;
 		}
-	}, wt = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}):(\d{2})(?::(\d{2})(?:[.,](\d{1,6}))?)?(Z|[+-]\d{2}(?::?\d{2})?)$/, Tt = /^(\d{1,2}):(\d{2})$/, Et = 29, Dt = 60;
+	}, Et = /^(\d{4}-\d{2}-\d{2})[T ](\d{2}):(\d{2})(?::(\d{2})(?:[.,](\d{1,6}))?)?(Z|[+-]\d{2}(?::?\d{2})?)$/, Dt = /^(\d{1,2}):(\d{2})$/, Ot = 29, kt = 60;
 }));
 //#endregion
 //#region ../core/src/timetable.ts
-function kt(e) {
+function jt(e) {
 	let t = new Date(typeof e == "number" ? e : Date.parse(e));
-	return Object.fromEntries(zt.formatToParts(t).map((e) => [e.type, e.value]));
+	return Object.fromEntries(Vt.formatToParts(t).map((e) => [e.type, e.value]));
 }
-function At(e) {
-	let t = kt(e);
+function Mt(e) {
+	let t = jt(e);
 	return `${t.year}-${t.month}-${t.day}`;
 }
-function jt(e) {
-	let t = kt(e);
+function Nt(e) {
+	let t = jt(e);
 	return Number(t.hour) * 60 + Number(t.minute);
 }
-function Mt(e, t = null) {
+function Pt(e, t = null) {
 	return t === null || t === e ? `cada ${e} min` : `cada ${e}–${t} min`;
 }
-function Nt(e) {
+function Ft(e) {
 	let [t = "0", n = "0"] = e.split(":");
 	return Number(t) * 60 + Number(n);
 }
-function Pt(e) {
+function It(e) {
 	let t = [];
 	for (let n of e) {
-		let e = Nt(n), r = t[t.length - 1];
-		for (; r !== void 0 && e < r;) e += Rt;
+		let e = Ft(n), r = t[t.length - 1];
+		for (; r !== void 0 && e < r;) e += Bt;
 		t.push(e);
 	}
 	return t;
 }
-function Ft(e, t) {
+function Lt(e, t) {
 	let n = (e == null ? void 0 : e.departures) ?? [], r = n[0], i = n[n.length - 1];
-	if (!e || r === void 0 || i === void 0) return Bt;
-	let a = jt(t), o = Pt(n), s = a < (o[0] ?? 0) ? "antes" : a > (o[o.length - 1] ?? 0) ? "terminado" : "en_servicio", c = o.findIndex((e) => e >= a), l = s === "en_servicio" ? e.periods.find((e) => a <= Nt(e.last)) : void 0;
+	if (!e || r === void 0 || i === void 0) return Ht;
+	let a = Nt(t), o = It(n), s = a < (o[0] ?? 0) ? "antes" : a > (o[o.length - 1] ?? 0) ? "terminado" : "en_servicio", c = o.findIndex((e) => e >= a), l = s === "en_servicio" ? e.periods.find((e) => a <= Ft(e.last)) : void 0;
 	return {
 		state: s,
 		first: r,
@@ -649,24 +655,24 @@ function Ft(e, t) {
 		interval_max_min: (l == null ? void 0 : l.interval_max_min) ?? null
 	};
 }
-function It(e, t) {
+function Rt(e, t) {
 	return t ? e == null ? void 0 : e.directions.find((e) => e.pattern_id === t) : void 0;
 }
-var Lt, Rt, zt, Bt, Vt = t((() => {
-	ae(), Lt = [
+var zt, Bt, Vt, Ht, Ut = t((() => {
+	oe(), zt = [
 		"antes",
 		"en_servicio",
 		"terminado",
 		"sin_servicio"
-	], Rt = 1440, zt = new Intl.DateTimeFormat("en-GB", {
-		timeZone: ie,
+	], Bt = 1440, Vt = new Intl.DateTimeFormat("en-GB", {
+		timeZone: ae,
 		year: "numeric",
 		month: "2-digit",
 		day: "2-digit",
 		hour: "2-digit",
 		minute: "2-digit",
 		hourCycle: "h23"
-	}), Bt = {
+	}), Ht = {
 		state: "sin_servicio",
 		first: null,
 		last: null,
@@ -677,14 +683,14 @@ var Lt, Rt, zt, Bt, Vt = t((() => {
 }));
 //#endregion
 //#region ../core/src/normalize.ts
-function Ht(e) {
-	let t = e.indexOf($t), n = t === -1 ? e : e.slice(0, t), r = (t === -1 ? "" : e.slice(t + 1)).split($t).filter((e) => e.trim()).map(se);
-	return [n.trim(), r.join(en)];
+function Wt(e) {
+	let t = e.indexOf(tn), n = t === -1 ? e : e.slice(0, t), r = (t === -1 ? "" : e.slice(t + 1)).split(tn).filter((e) => e.trim()).map(ce);
+	return [n.trim(), r.join(nn)];
 }
-function Ut(e) {
-	let [t, n] = Ht(e.name), r;
+function Gt(e) {
+	let [t, n] = Wt(e.name), r;
 	try {
-		r = je(e.colour);
+		r = Me(e.colour);
 	} catch (t) {
 		throw new s(t.message, `line[${e.id}].color`);
 	}
@@ -693,11 +699,11 @@ function Ut(e) {
 		label: t || e.id,
 		name: n || e.name,
 		colour: r,
-		text_colour: Pe(r)
+		text_colour: Fe(r)
 	};
 }
-function Wt(e) {
-	return re.flatMap((t) => {
+function Kt(e) {
+	return ie.flatMap((t) => {
 		let n = t === "asc" ? e.asc : e.desc, r = n[0], i = n[n.length - 1];
 		return !r || !i ? [] : [{
 			id: `${e.id}:${t}`,
@@ -709,8 +715,8 @@ function Wt(e) {
 		}];
 	});
 }
-function Gt(e, t) {
-	let n = [...new Set(e.lineIds)].filter((e) => t.has(e)).sort(h);
+function qt(e, t) {
+	let n = [...new Set(e.lineIds)].filter((e) => t.has(e)).sort(te);
 	return {
 		id: e.id,
 		name: e.name,
@@ -719,17 +725,17 @@ function Gt(e, t) {
 		line_ids: n
 	};
 }
-function Kt(e, t, n) {
-	let r = e.map(Ut).sort((e, t) => h(e.label, t.label)), i = new Map(r.map((e, t) => [e.id, t])), a = e.flatMap(Wt).sort((e, t) => (i.get(e.line_id) ?? 0) - (i.get(t.line_id) ?? 0) || re.indexOf(e.direction) - re.indexOf(t.direction)), o = new Set(i.keys());
+function Jt(e, t, n) {
+	let r = e.map(Gt).sort((e, t) => te(e.label, t.label)), i = new Map(r.map((e, t) => [e.id, t])), a = e.flatMap(Kt).sort((e, t) => (i.get(e.line_id) ?? 0) - (i.get(t.line_id) ?? 0) || ie.indexOf(e.direction) - ie.indexOf(t.direction)), o = new Set(i.keys());
 	return {
 		lines: r,
 		patterns: a,
-		stops: t.map((e) => Gt(e, o)).sort((e, t) => h(e.id, t.id)),
-		fetched_at: pt(n, "fetched_at")
+		stops: t.map((e) => qt(e, o)).sort((e, t) => te(e.id, t.id)),
+		fetched_at: mt(n, "fetched_at")
 	};
 }
-function qt(e, t, n, r, i) {
-	let a = pt(i, "now"), o = Date.parse(a), s = new Set(n.stop(t).line_ids), c = [];
+function Yt(e, t, n, r, i) {
+	let a = mt(i, "now"), o = Date.parse(a), s = new Set(n.stop(t).line_ids), c = [];
 	for (let n of e) {
 		if (n.stopId !== t || !s.has(n.lineId) || Date.parse(n.expected) < o - 6e4) continue;
 		let e = r.resolve(n.lineId, t, n.order, n.directionRef);
@@ -741,35 +747,35 @@ function qt(e, t, n, r, i) {
 			headsign: (e == null ? void 0 : e.headsign) ?? null,
 			aimed: n.aimed,
 			expected: n.expected,
-			minutes: ne(n.expected, o),
+			minutes: re(n.expected, o),
 			delay_s: n.delayS,
 			is_realtime: !!n.vehicleRef && n.arrivalStatus.toLowerCase() !== "scheduled",
 			is_approximate: n.inaccurate,
-			terminates: e ? pe(e, t) : !1,
+			terminates: e ? me(e, t) : !1,
 			cancelled: n.cancelled,
 			vehicle_id: n.vehicleRef || null
 		});
 	}
-	return c.sort((e, t) => Date.parse(e.expected) - Date.parse(t.expected) || h(n.line(e.line_id).label, n.line(t.line_id).label)), {
+	return c.sort((e, t) => Date.parse(e.expected) - Date.parse(t.expected) || te(n.line(e.line_id).label, n.line(t.line_id).label)), {
 		stop_id: t,
 		generated_at: a,
 		arrivals: c
 	};
 }
-function Jt(e, t) {
+function Xt(e, t) {
 	var n;
-	let r = Qt[e.directionRef.toLowerCase()];
+	let r = en[e.directionRef.toLowerCase()];
 	if (r !== void 0 || !e.nextStopId) return r ?? null;
 	let i = t.patternsAt(e.nextStopId).filter((t) => t.line_id === e.lineId);
 	return i.length === 1 ? ((n = i[0]) == null ? void 0 : n.direction) ?? null : null;
 }
-function Yt(e, t, n, r) {
-	let i = pt(r, "now"), a = Date.parse(i);
+function Zt(e, t, n, r) {
+	let i = mt(r, "now"), a = Date.parse(i);
 	return {
 		line_id: t,
 		generated_at: i,
 		vehicles: e.filter((e) => e.lineId === t && Date.parse(e.recordedAt) >= a - 18e4).map((e) => {
-			let r = Jt(e, n), i = r ? n.pattern(`${t}:${r}`) : void 0;
+			let r = Xt(e, n), i = r ? n.pattern(`${t}:${r}`) : void 0;
 			return {
 				id: e.vehicleRef,
 				line_id: t,
@@ -781,13 +787,13 @@ function Yt(e, t, n, r) {
 				recorded_at: e.recordedAt,
 				delay_s: e.delayS
 			};
-		}).sort((e, t) => h(e.id, t.id))
+		}).sort((e, t) => te(e.id, t.id))
 	};
 }
-function Xt(e, t, n, r) {
-	let i = pt(r, "now"), a = [];
+function Qt(e, t, n, r) {
+	let i = mt(r, "now"), a = [];
 	for (let r of e) {
-		let e = Qt[r.name.toLowerCase()], i = e ? n.pattern(`${t}:${e}`) : void 0;
+		let e = en[r.name.toLowerCase()], i = e ? n.pattern(`${t}:${e}`) : void 0;
 		i && a.push({
 			pattern_id: i.id,
 			direction: i.direction,
@@ -802,30 +808,30 @@ function Xt(e, t, n, r) {
 			}))
 		});
 	}
-	return a.sort((e, t) => re.indexOf(e.direction) - re.indexOf(t.direction)), {
+	return a.sort((e, t) => ie.indexOf(e.direction) - ie.indexOf(t.direction)), {
 		line_id: t,
-		service_date: At(i),
+		service_date: Mt(i),
 		generated_at: i,
 		directions: a
 	};
 }
-var Zt, Qt, $t, en, tn = t((() => {
-	ye(), Ue(), d(), ae(), Ot(), le(), Vt(), Zt = 18e4, Qt = {
+var $t, en, tn, nn, rn = t((() => {
+	be(), We(), d(), oe(), At(), ue(), Ut(), $t = 18e4, en = {
 		ida: "asc",
 		vuelta: "desc"
-	}, $t = "-", en = " – ";
+	}, tn = "-", nn = " – ";
 }));
 //#endregion
 //#region \0@oxc-project+runtime@0.152.0/helpers/esm/classPrivateMethodInitSpec.js
-function k(e, t) {
-	ue(e, t), t.add(e);
+function O(e, t) {
+	de(e, t), t.add(e);
 }
-var A = t((() => {
-	de();
+var k = t((() => {
+	fe();
 }));
 //#endregion
 //#region ../core/src/sources.ts
-function nn(e, t) {
+function an(e, t) {
 	let n = new AbortController(), r = setTimeout(() => n.abort(), t), i = () => n.abort();
 	return e != null && e.aborted && n.abort(), e == null || e.addEventListener("abort", i, { once: !0 }), {
 		signal: n.signal,
@@ -834,8 +840,8 @@ function nn(e, t) {
 		}
 	};
 }
-async function rn(e, t, { signal: n, timeoutMs: r = hn } = {}) {
-	let i = nn(n, r), a, c;
+async function on(e, t, { signal: n, timeoutMs: r = _n } = {}) {
+	let i = an(n, r), a, c;
 	try {
 		a = await e(t, {
 			signal: i.signal,
@@ -857,9 +863,9 @@ async function rn(e, t, { signal: n, timeoutMs: r = hn } = {}) {
 		body: l
 	};
 }
-function an(e) {
+function sn(e) {
 	var t;
-	let n = (t = S(Sn, this)) == null ? void 0 : t.get(e);
+	let n = (t = x(wn, this)) == null ? void 0 : t.get(e);
 	if (!n) return null;
 	try {
 		return JSON.parse(n);
@@ -867,51 +873,51 @@ function an(e) {
 		return null;
 	}
 }
-function on() {
-	if (!S(wn, this)) {
-		let e = v(N, this, sn).call(this).then((e) => {
-			let t = new ve(e);
+function cn() {
+	if (!x(M, this)) {
+		let e = _(N, this, ln).call(this).then((e) => {
+			let t = new ye(e);
 			return {
 				index: t,
-				resolver: new ot(t)
+				resolver: new st(t)
 			};
 		});
 		e.catch(() => {
-			S(wn, this) === e && b(wn, this, void 0);
-		}), b(wn, this, e);
+			x(M, this) === e && y(M, this, void 0);
+		}), y(M, this, e);
 	}
-	return S(wn, this);
+	return x(M, this);
 }
-async function sn() {
-	let e = v(N, this, cn).call(this);
-	if (e && S(M, this).call(this) - Date.parse(e.fetched_at) < 864e5) return e;
+async function ln() {
+	let e = _(N, this, un).call(this);
+	if (e && x(j, this).call(this) - Date.parse(e.fetched_at) < 864e5) return e;
 	try {
 		var t;
-		let [e, n] = await Promise.all([v(N, this, ln).call(this, `${S(j, this)}linesDiscovery/lines`), v(N, this, ln).call(this, `${S(j, this)}linesDiscovery/stops`)]), r = Kt(gt(e), _t(n), bn(S(M, this)));
-		return (t = S(Sn, this)) == null || t.set("logrono-bus:catalogo:v1", JSON.stringify(r)), r;
+		let [e, n] = await Promise.all([_(N, this, dn).call(this, `${x(A, this)}linesDiscovery/lines`), _(N, this, dn).call(this, `${x(A, this)}linesDiscovery/stops`)]), r = Jt(_t(e), vt(n), Sn(x(j, this)));
+		return (t = x(wn, this)) == null || t.set("logrono-bus:catalogo:v1", JSON.stringify(r)), r;
 	} catch (t) {
 		if (e && t instanceof o) return e;
 		throw t;
 	}
 }
-function cn() {
-	let e = v(N, this, an).call(this, _n);
+function un() {
+	let e = _(N, this, sn).call(this, yn);
 	return e && Array.isArray(e.stops) && typeof e.fetched_at == "string" ? e : null;
 }
-async function ln(e, t) {
-	let { response: n, body: r } = await rn(S(xn, this), e, {
+async function dn(e, t) {
+	let { response: n, body: r } = await on(x(Cn, this), e, {
 		signal: t,
-		timeoutMs: S(Cn, this)
+		timeoutMs: x(Tn, this)
 	});
 	if (n.status === 429 || n.status >= 500) throw new o(`${e}: HTTP ${n.status}`);
 	if (!n.ok) throw new s(`HTTP ${n.status} inesperado`, e);
 	return r;
 }
-async function un(e, t) {
+async function fn(e, t) {
 	var n;
-	let { response: r, body: i } = await rn(S(Dn, this), `${S(En, this)}${e}`, {
+	let { response: r, body: i } = await on(x(On, this), `${x(Dn, this)}${e}`, {
 		signal: t,
-		timeoutMs: S(On, this)
+		timeoutMs: x(kn, this)
 	});
 	if (r.ok) return i;
 	let a = i ?? {}, d = ((n = a.type) == null ? void 0 : n.split(/[#/]/).pop()) ?? "", f = a.detail ?? a.title ?? `HTTP ${r.status}`;
@@ -923,92 +929,92 @@ async function un(e, t) {
 		default: throw new o(f);
 	}
 }
-async function dn(e, t) {
+async function pn(e, t) {
 	try {
-		let { response: n, body: r } = await rn(t, `${e.replace(/\/+$/, "")}/health`, { timeoutMs: gn });
+		let { response: n, body: r } = await on(t, `${e.replace(/\/+$/, "")}/health`, { timeoutMs: vn });
 		return n.ok && (r == null ? void 0 : r.api_version) === 1;
 	} catch {
 		return !1;
 	}
 }
-async function fn(e, t = {}) {
+async function mn(e, t = {}) {
 	let n = t.fetch ?? ((e, t) => globalThis.fetch(e, t)), r = e.api ?? "./api/v1";
-	if (e.api && t.pageProtocol === "https:" && e.api.startsWith("http:")) throw new yn("Esta página es https y el servidor indicado es http: el navegador bloquea esa conexión. Abre la web desde tu propio servidor o publícalo con https.");
-	return e.source === "directa" ? new Tn(pn, t) : e.source === "servidor" || e.api || await dn(r, n) ? new An(r, t) : new Tn(pn, t);
+	if (e.api && t.pageProtocol === "https:" && e.api.startsWith("http:")) throw new xn("Esta página es https y el servidor indicado es http: el navegador bloquea esa conexión. Abre la web desde tu propio servidor o publícalo con https.");
+	return e.source === "directa" ? new En(hn, t) : e.source === "servidor" || e.api || await pn(r, n) ? new jn(r, t) : new En(hn, t);
 }
-var pn, mn, hn, gn, _n, vn, yn, bn, j, xn, Sn, M, Cn, wn, N, Tn, En, Dn, On, P, kn, An, jn = t((() => {
-	ye(), st(), d(), tn(), Ot(), Vt(), A(), _(), x(), y(), C(), pn = "https://transporteurbano.logrono.es/api/", mn = "./api/v1", hn = 1e4, gn = 3e3, _n = "logrono-bus:catalogo:v1", vn = "logrono-bus:horario:v1:", yn = class extends i {
+var hn, gn, _n, vn, yn, bn, xn, Sn, A, Cn, wn, j, Tn, M, N, En, Dn, On, kn, P, An, jn, Mn = t((() => {
+	be(), ct(), d(), rn(), At(), Ut(), k(), g(), b(), v(), S(), hn = "https://transporteurbano.logrono.es/api/", gn = "./api/v1", _n = 1e4, vn = 3e3, yn = "logrono-bus:catalogo:v1", bn = "logrono-bus:horario:v1:", xn = class extends i {
 		constructor(...e) {
 			super(...e), this.name = "UnusableSource";
 		}
-	}, bn = (e) => new Date(e()).toISOString(), j = /* @__PURE__ */ new WeakMap(), xn = /* @__PURE__ */ new WeakMap(), Sn = /* @__PURE__ */ new WeakMap(), M = /* @__PURE__ */ new WeakMap(), Cn = /* @__PURE__ */ new WeakMap(), wn = /* @__PURE__ */ new WeakMap(), N = /* @__PURE__ */ new WeakSet(), Tn = class {
-		constructor(e = pn, t = {}) {
-			k(this, N), g(this, j, void 0), g(this, xn, void 0), g(this, Sn, void 0), g(this, M, void 0), g(this, Cn, void 0), g(this, wn, void 0), this.kind = "directa", b(j, this, e.endsWith("/") ? e : `${e}/`), b(xn, this, t.fetch ?? ((e, t) => globalThis.fetch(e, t))), b(Sn, this, t.store), b(M, this, t.now ?? Date.now), b(Cn, this, t.timeoutMs ?? 1e4);
+	}, Sn = (e) => new Date(e()).toISOString(), A = /* @__PURE__ */ new WeakMap(), Cn = /* @__PURE__ */ new WeakMap(), wn = /* @__PURE__ */ new WeakMap(), j = /* @__PURE__ */ new WeakMap(), Tn = /* @__PURE__ */ new WeakMap(), M = /* @__PURE__ */ new WeakMap(), N = /* @__PURE__ */ new WeakSet(), En = class {
+		constructor(e = hn, t = {}) {
+			O(this, N), h(this, A, void 0), h(this, Cn, void 0), h(this, wn, void 0), h(this, j, void 0), h(this, Tn, void 0), h(this, M, void 0), this.kind = "directa", y(A, this, e.endsWith("/") ? e : `${e}/`), y(Cn, this, t.fetch ?? ((e, t) => globalThis.fetch(e, t))), y(wn, this, t.store), y(j, this, t.now ?? Date.now), y(Tn, this, t.timeoutMs ?? 1e4);
 		}
 		async catalog() {
-			return (await v(N, this, on).call(this)).index;
+			return (await _(N, this, cn).call(this)).index;
 		}
 		async arrivals(e, t) {
-			let { index: n, resolver: r } = await v(N, this, on).call(this), i = n.stop(e);
+			let { index: n, resolver: r } = await _(N, this, cn).call(this), i = n.stop(e);
 			if (i.line_ids.length === 0) return {
 				stop_id: i.id,
-				generated_at: bn(S(M, this)),
+				generated_at: Sn(x(j, this)),
 				arrivals: []
 			};
 			let a = new URLSearchParams({
 				lines: i.line_ids.join(","),
 				previewMinutes: "60"
-			}), o = `${S(j, this)}estimatedTimetable/byStop/${encodeURIComponent(i.id)}?${a}`;
-			return qt(vt(await v(N, this, ln).call(this, o, t)), i.id, n, r, bn(S(M, this)));
+			}), o = `${x(A, this)}estimatedTimetable/byStop/${encodeURIComponent(i.id)}?${a}`;
+			return Yt(bt(await _(N, this, dn).call(this, o, t)), i.id, n, r, Sn(x(j, this)));
 		}
 		async vehicles(e, t) {
-			let { index: n } = await v(N, this, on).call(this), r = n.line(e), i = `${S(j, this)}vehicleMonitoring/byLine/${encodeURIComponent(r.id)}`;
-			return Yt(yt(await v(N, this, ln).call(this, i, t)), r.id, n, bn(S(M, this)));
+			let { index: n } = await _(N, this, cn).call(this), r = n.line(e), i = `${x(A, this)}vehicleMonitoring/byLine/${encodeURIComponent(r.id)}`;
+			return Zt(xt(await _(N, this, dn).call(this, i, t)), r.id, n, Sn(x(j, this)));
 		}
 		async timetable(e, t) {
 			var n;
-			let { index: r } = await v(N, this, on).call(this), i = r.line(e), a = At(S(M, this).call(this)), o = `${vn}${i.id}`, s = v(N, this, an).call(this, o);
+			let { index: r } = await _(N, this, cn).call(this), i = r.line(e), a = Mt(x(j, this).call(this)), o = `${bn}${i.id}`, s = _(N, this, sn).call(this, o);
 			if ((s == null ? void 0 : s.service_date) === a && Array.isArray(s.directions)) return s;
-			let c = `${S(j, this)}productionTimetable/byLine/${encodeURIComponent(i.id)}`, l = Xt(St(await v(N, this, ln).call(this, c, t)), i.id, r, bn(S(M, this)));
-			return (n = S(Sn, this)) == null || n.set(o, JSON.stringify(l)), l;
+			let c = `${x(A, this)}productionTimetable/byLine/${encodeURIComponent(i.id)}`, l = Qt(wt(await _(N, this, dn).call(this, c, t)), i.id, r, Sn(x(j, this)));
+			return (n = x(wn, this)) == null || n.set(o, JSON.stringify(l)), l;
 		}
-	}, En = /* @__PURE__ */ new WeakMap(), Dn = /* @__PURE__ */ new WeakMap(), On = /* @__PURE__ */ new WeakMap(), P = /* @__PURE__ */ new WeakMap(), kn = /* @__PURE__ */ new WeakSet(), An = class {
-		constructor(e = mn, t = {}) {
-			k(this, kn), g(this, En, void 0), g(this, Dn, void 0), g(this, On, void 0), g(this, P, void 0), this.kind = "servidor", b(En, this, e.replace(/\/+$/, "")), b(Dn, this, t.fetch ?? ((e, t) => globalThis.fetch(e, t))), b(On, this, t.timeoutMs ?? 1e4);
+	}, Dn = /* @__PURE__ */ new WeakMap(), On = /* @__PURE__ */ new WeakMap(), kn = /* @__PURE__ */ new WeakMap(), P = /* @__PURE__ */ new WeakMap(), An = /* @__PURE__ */ new WeakSet(), jn = class {
+		constructor(e = gn, t = {}) {
+			O(this, An), h(this, Dn, void 0), h(this, On, void 0), h(this, kn, void 0), h(this, P, void 0), this.kind = "servidor", y(Dn, this, e.replace(/\/+$/, "")), y(On, this, t.fetch ?? ((e, t) => globalThis.fetch(e, t))), y(kn, this, t.timeoutMs ?? 1e4);
 		}
 		catalog() {
-			if (!S(P, this)) {
-				let e = v(kn, this, un).call(this, "/catalog").then((e) => new ve(e));
+			if (!x(P, this)) {
+				let e = _(An, this, fn).call(this, "/catalog").then((e) => new ye(e));
 				e.catch(() => {
-					S(P, this) === e && b(P, this, void 0);
-				}), b(P, this, e);
+					x(P, this) === e && y(P, this, void 0);
+				}), y(P, this, e);
 			}
-			return S(P, this);
+			return x(P, this);
 		}
 		arrivals(e, t) {
-			return v(kn, this, un).call(this, `/stops/${encodeURIComponent(e)}/arrivals`, t);
+			return _(An, this, fn).call(this, `/stops/${encodeURIComponent(e)}/arrivals`, t);
 		}
 		vehicles(e, t) {
-			return v(kn, this, un).call(this, `/lines/${encodeURIComponent(e)}/vehicles`, t);
+			return _(An, this, fn).call(this, `/lines/${encodeURIComponent(e)}/vehicles`, t);
 		}
 		timetable(e, t) {
-			return v(kn, this, un).call(this, `/lines/${encodeURIComponent(e)}/timetable`, t);
+			return _(An, this, fn).call(this, `/lines/${encodeURIComponent(e)}/timetable`, t);
 		}
 	};
-})), Mn, Nn, Pn = t((() => {
-	_(), C(), x(), Mn = /* @__PURE__ */ new WeakMap(), Nn = class {
+})), F, Nn, Pn = t((() => {
+	g(), S(), b(), F = /* @__PURE__ */ new WeakMap(), Nn = class {
 		constructor(e) {
-			g(this, Mn, void 0);
+			h(this, F, void 0);
 			try {
-				b(Mn, this, e());
+				y(F, this, e());
 			} catch {
-				b(Mn, this, void 0);
+				y(F, this, void 0);
 			}
 		}
 		get(e) {
 			try {
 				var t;
-				return ((t = S(Mn, this)) == null ? void 0 : t.getItem(e)) ?? null;
+				return ((t = x(F, this)) == null ? void 0 : t.getItem(e)) ?? null;
 			} catch {
 				return null;
 			}
@@ -1016,18 +1022,18 @@ var pn, mn, hn, gn, _n, vn, yn, bn, j, xn, Sn, M, Cn, wn, N, Tn, En, Dn, On, P, 
 		set(e, t) {
 			try {
 				var n;
-				(n = S(Mn, this)) == null || n.setItem(e, t);
+				(n = x(F, this)) == null || n.setItem(e, t);
 			} catch {}
 		}
 		remove(e) {
 			try {
 				var t;
-				(t = S(Mn, this)) == null || t.removeItem(e);
+				(t = x(F, this)) == null || t.removeItem(e);
 			} catch {}
 		}
 	};
-})), F = t((() => {
-	Ae(), ye(), Ue(), nt(), st(), d(), ee(), ae(), tn(), Ot(), Ye(), Ce(), jn(), Pn(), le(), Vt();
+})), I = t((() => {
+	je(), be(), We(), rt(), ct(), d(), ee(), oe(), rn(), At(), Xe(), we(), Mn(), Pn(), ue(), Ut();
 }));
 //#endregion
 //#region src/config.ts
@@ -1035,29 +1041,29 @@ function Fn(e) {
 	if (typeof e != "object" || !e) throw new Ln("La configuración de la tarjeta no es válida.");
 	let t = e, n = t.entities;
 	if (!Array.isArray(n) || n.length === 0) throw new Ln("Indica al menos un sensor en «entities» (los de Logroño Bus terminados en _minutos).");
-	let r = Number(t.aviso ?? w.alertMinutes), i = Number(t.tam ?? w.textScale), a = Number(t.previas ?? w.previousStops), o = t.titulo;
+	let r = Number(t.aviso ?? C.alertMinutes), i = Number(t.tam ?? C.textScale), a = Number(t.previas ?? C.previousStops), o = t.titulo;
 	return {
-		type: typeof t.type == "string" ? t.type : `custom:${I}`,
+		type: typeof t.type == "string" ? t.type : `custom:${L}`,
 		entities: n.filter((e) => typeof e == "string"),
 		...typeof o == "string" && o.trim() ? { titulo: o.trim() } : {},
-		orden: Rn(tt, t.orden, w.order),
-		aviso: Number.isFinite(r) ? Math.min(15, Math.max(0, Math.round(r))) : w.alertMinutes,
-		efecto: Rn(et, t.efecto, w.effect),
-		color: Rn(Qe, t.color, w.colour),
-		letra: Rn($e, t.letra, w.font),
-		tam: Number.isFinite(i) ? Xe(i) : w.textScale,
+		orden: Rn(nt, t.orden, C.order),
+		aviso: Number.isFinite(r) ? Math.min(15, Math.max(0, Math.round(r))) : C.alertMinutes,
+		efecto: Rn(tt, t.efecto, C.effect),
+		color: Rn($e, t.color, C.colour),
+		letra: Rn(et, t.letra, C.font),
+		tam: Number.isFinite(i) ? Ze(i) : C.textScale,
 		modo: Rn(In, t.modo, "normal"),
 		recorrido: t.recorrido !== !1,
-		previas: Number.isFinite(a) ? Ze(a) : w.previousStops
+		previas: Number.isFinite(a) ? Qe(a) : C.previousStops
 	};
 }
-var I, In, Ln, Rn, zn = t((() => {
-	F(), I = "logrono-bus-card", In = ["normal", "pantalla"], Ln = class extends Error {
+var L, In, Ln, Rn, zn = t((() => {
+	I(), L = "logrono-bus-card", In = ["normal", "pantalla"], Ln = class extends Error {
 		constructor(...e) {
 			super(...e), this.name = "CardConfigError";
 		}
 	}, Rn = (e, t, n) => typeof t == "string" && e.includes(t) ? t : n;
-})), Bn, Vn, Hn, Un, Wn, Gn, L, Kn, qn, Jn = t((() => {
+})), Bn, Vn, Hn, Un, Wn, Gn, R, Kn, qn, Jn = t((() => {
 	Bn = globalThis, Vn = Bn.ShadowRoot && (Bn.ShadyCSS === void 0 || Bn.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Hn = Symbol(), Un = /* @__PURE__ */ new WeakMap(), Wn = class {
 		constructor(e, t, n) {
 			if (this._$cssResult$ = !0, n !== Hn) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
@@ -1074,7 +1080,7 @@ var I, In, Ln, Rn, zn = t((() => {
 		toString() {
 			return this.cssText;
 		}
-	}, Gn = (e) => new Wn(typeof e == "string" ? e : e + "", void 0, Hn), L = (e, ...t) => {
+	}, Gn = (e) => new Wn(typeof e == "string" ? e : e + "", void 0, Hn), R = (e, ...t) => {
 		let n = e.length === 1 ? e[0] : t.reduce((t, n, r) => t + ((e) => {
 			if (!0 === e._$cssResult$) return e.cssText;
 			if (typeof e == "number") return e;
@@ -1092,8 +1098,8 @@ var I, In, Ln, Rn, zn = t((() => {
 		for (let n of e.cssRules) t += n.cssText;
 		return Gn(t);
 	})(e) : e;
-})), Yn, Xn, Zn, Qn, $n, er, tr, R, nr, rr, ir, ar, or, sr, cr, z, lr = t((() => {
-	Jn(), {is: Xn, defineProperty: Zn, getOwnPropertyDescriptor: Qn, getOwnPropertyNames: $n, getOwnPropertySymbols: er, getPrototypeOf: tr} = Object, R = globalThis, nr = R.trustedTypes, rr = nr ? nr.emptyScript : "", ir = R.reactiveElementPolyfillSupport, ar = (e, t) => e, or = {
+})), Yn, Xn, Zn, Qn, $n, er, tr, z, nr, rr, ir, ar, or, sr, cr, lr, ur = t((() => {
+	Jn(), {is: Xn, defineProperty: Zn, getOwnPropertyDescriptor: Qn, getOwnPropertyNames: $n, getOwnPropertySymbols: er, getPrototypeOf: tr} = Object, z = globalThis, nr = z.trustedTypes, rr = nr ? nr.emptyScript : "", ir = z.reactiveElementPolyfillSupport, ar = (e, t) => e, or = {
 		toAttribute(e, t) {
 			switch (t) {
 				case Boolean:
@@ -1129,7 +1135,7 @@ var I, In, Ln, Rn, zn = t((() => {
 		reflect: !1,
 		useDefault: !1,
 		hasChanged: sr
-	}, (Yn = Symbol).metadata ?? (Yn.metadata = Symbol("metadata")), R.litPropertyMetadata ?? (R.litPropertyMetadata = /* @__PURE__ */ new WeakMap()), z = class extends HTMLElement {
+	}, (Yn = Symbol).metadata ?? (Yn.metadata = Symbol("metadata")), z.litPropertyMetadata ?? (z.litPropertyMetadata = /* @__PURE__ */ new WeakMap()), lr = class extends HTMLElement {
 		static addInitializer(e) {
 			this._$Ei(), (this.l ?? (this.l = [])).push(e);
 		}
@@ -1334,71 +1340,71 @@ var I, In, Ln, Rn, zn = t((() => {
 		}
 		updated(e) {}
 		firstUpdated(e) {}
-	}, z.elementStyles = [], z.shadowRootOptions = { mode: "open" }, z[ar("elementProperties")] = /* @__PURE__ */ new Map(), z[ar("finalized")] = /* @__PURE__ */ new Map(), ir == null || ir({ ReactiveElement: z }), (R.reactiveElementVersions ?? (R.reactiveElementVersions = [])).push("2.1.2");
+	}, lr.elementStyles = [], lr.shadowRootOptions = { mode: "open" }, lr[ar("elementProperties")] = /* @__PURE__ */ new Map(), lr[ar("finalized")] = /* @__PURE__ */ new Map(), ir == null || ir({ ReactiveElement: lr }), (z.reactiveElementVersions ?? (z.reactiveElementVersions = [])).push("2.1.2");
 }));
 //#endregion
 //#region ../../node_modules/.pnpm/lit-html@3.3.3/node_modules/lit-html/lit-html.js
-function ur(e, t) {
-	if (!xr(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
-	return hr === void 0 ? t : hr.createHTML(t);
+function dr(e, t) {
+	if (!Sr(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
+	return gr === void 0 ? t : gr.createHTML(t);
 }
-function dr(e, t, n = e, r) {
+function fr(e, t, n = e, r) {
 	var i, a;
 	if (t === W) return t;
-	let o = r === void 0 ? n._$Cl : (i = n._$Co) == null ? void 0 : i[r], s = br(t) ? void 0 : t._$litDirective$;
-	return (o == null ? void 0 : o.constructor) !== s && (o == null || (a = o._$AO) == null || a.call(o, !1), s === void 0 ? o = void 0 : (o = new s(e), o._$AT(e, n, r)), r === void 0 ? n._$Cl = o : (n._$Co ?? (n._$Co = []))[r] = o), o !== void 0 && (t = dr(e, o._$AS(e, t.values), o, r)), t;
+	let o = r === void 0 ? n._$Cl : (i = n._$Co) == null ? void 0 : i[r], s = xr(t) ? void 0 : t._$litDirective$;
+	return (o == null ? void 0 : o.constructor) !== s && (o == null || (a = o._$AO) == null || a.call(o, !1), s === void 0 ? o = void 0 : (o = new s(e), o._$AT(e, n, r)), r === void 0 ? n._$Cl = o : (n._$Co ?? (n._$Co = []))[r] = o), o !== void 0 && (t = fr(e, o._$AS(e, t.values), o, r)), t;
 }
-var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or, kr, Ar, U, W, G, jr, K, Mr, Nr, Pr, Fr, Ir, Lr, Rr, zr, Br, Vr, Hr, Ur, Wr = t((() => {
-	fr = globalThis, pr = (e) => e, mr = fr.trustedTypes, hr = mr ? mr.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, gr = "$lit$", B = `lit$${Math.random().toFixed(9).slice(2)}$`, _r = "?" + B, vr = `<${_r}>`, V = document, yr = () => V.createComment(""), br = (e) => e === null || typeof e != "object" && typeof e != "function", xr = Array.isArray, Sr = (e) => xr(e) || typeof (e == null ? void 0 : e[Symbol.iterator]) == "function", Cr = "[ 	\n\f\r]", wr = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Tr = /-->/g, Er = />/g, H = RegExp(`>|${Cr}(?:([^\\s"'>=/]+)(${Cr}*=${Cr}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"), Dr = /'/g, Or = /"/g, kr = /^(?:script|style|textarea|title)$/i, Ar = (e) => (t, ...n) => ({
+var pr, mr, hr, gr, _r, B, vr, yr, V, br, xr, Sr, Cr, wr, Tr, Er, Dr, H, Or, kr, Ar, jr, U, W, G, Mr, K, Nr, Pr, Fr, Ir, Lr, Rr, zr, Br, Vr, Hr, Ur, Wr, Gr = t((() => {
+	pr = globalThis, mr = (e) => e, hr = pr.trustedTypes, gr = hr ? hr.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, _r = "$lit$", B = `lit$${Math.random().toFixed(9).slice(2)}$`, vr = "?" + B, yr = `<${vr}>`, V = document, br = () => V.createComment(""), xr = (e) => e === null || typeof e != "object" && typeof e != "function", Sr = Array.isArray, Cr = (e) => Sr(e) || typeof (e == null ? void 0 : e[Symbol.iterator]) == "function", wr = "[ 	\n\f\r]", Tr = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Er = /-->/g, Dr = />/g, H = RegExp(`>|${wr}(?:([^\\s"'>=/]+)(${wr}*=${wr}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"), Or = /'/g, kr = /"/g, Ar = /^(?:script|style|textarea|title)$/i, jr = (e) => (t, ...n) => ({
 		_$litType$: e,
 		strings: t,
 		values: n
-	}), U = Ar(1), Ar(2), Ar(3), W = Symbol.for("lit-noChange"), G = Symbol.for("lit-nothing"), jr = /* @__PURE__ */ new WeakMap(), K = V.createTreeWalker(V, 129), Mr = (e, t) => {
-		let n = e.length - 1, r = [], i, a = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", o = wr;
+	}), U = jr(1), jr(2), jr(3), W = Symbol.for("lit-noChange"), G = Symbol.for("lit-nothing"), Mr = /* @__PURE__ */ new WeakMap(), K = V.createTreeWalker(V, 129), Nr = (e, t) => {
+		let n = e.length - 1, r = [], i, a = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", o = Tr;
 		for (let t = 0; t < n; t++) {
 			let n = e[t], s, c, l = -1, u = 0;
-			for (; u < n.length && (o.lastIndex = u, c = o.exec(n), c !== null);) u = o.lastIndex, o === wr ? c[1] === "!--" ? o = Tr : c[1] === void 0 ? c[2] === void 0 ? c[3] !== void 0 && (o = H) : (kr.test(c[2]) && (i = RegExp("</" + c[2], "g")), o = H) : o = Er : o === H ? c[0] === ">" ? (o = i ?? wr, l = -1) : c[1] === void 0 ? l = -2 : (l = o.lastIndex - c[2].length, s = c[1], o = c[3] === void 0 ? H : c[3] === "\"" ? Or : Dr) : o === Or || o === Dr ? o = H : o === Tr || o === Er ? o = wr : (o = H, i = void 0);
+			for (; u < n.length && (o.lastIndex = u, c = o.exec(n), c !== null);) u = o.lastIndex, o === Tr ? c[1] === "!--" ? o = Er : c[1] === void 0 ? c[2] === void 0 ? c[3] !== void 0 && (o = H) : (Ar.test(c[2]) && (i = RegExp("</" + c[2], "g")), o = H) : o = Dr : o === H ? c[0] === ">" ? (o = i ?? Tr, l = -1) : c[1] === void 0 ? l = -2 : (l = o.lastIndex - c[2].length, s = c[1], o = c[3] === void 0 ? H : c[3] === "\"" ? kr : Or) : o === kr || o === Or ? o = H : o === Er || o === Dr ? o = Tr : (o = H, i = void 0);
 			let d = o === H && e[t + 1].startsWith("/>") ? " " : "";
-			a += o === wr ? n + vr : l >= 0 ? (r.push(s), n.slice(0, l) + gr + n.slice(l) + B + d) : n + B + (l === -2 ? t : d);
+			a += o === Tr ? n + yr : l >= 0 ? (r.push(s), n.slice(0, l) + _r + n.slice(l) + B + d) : n + B + (l === -2 ? t : d);
 		}
-		return [ur(e, a + (e[n] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), r];
-	}, Nr = class e {
+		return [dr(e, a + (e[n] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), r];
+	}, Pr = class e {
 		constructor({ strings: t, _$litType$: n }, r) {
 			let i;
 			this.parts = [];
-			let a = 0, o = 0, s = t.length - 1, c = this.parts, [l, u] = Mr(t, n);
+			let a = 0, o = 0, s = t.length - 1, c = this.parts, [l, u] = Nr(t, n);
 			if (this.el = e.createElement(l, r), K.currentNode = this.el.content, n === 2 || n === 3) {
 				let e = this.el.content.firstChild;
 				e.replaceWith(...e.childNodes);
 			}
 			for (; (i = K.nextNode()) !== null && c.length < s;) {
 				if (i.nodeType === 1) {
-					if (i.hasAttributes()) for (let e of i.getAttributeNames()) if (e.endsWith(gr)) {
+					if (i.hasAttributes()) for (let e of i.getAttributeNames()) if (e.endsWith(_r)) {
 						let t = u[o++], n = i.getAttribute(e).split(B), r = /([.?@])?(.*)/.exec(t);
 						c.push({
 							type: 1,
 							index: a,
 							name: r[2],
 							strings: n,
-							ctor: r[1] === "." ? Lr : r[1] === "?" ? Rr : r[1] === "@" ? zr : Ir
+							ctor: r[1] === "." ? Rr : r[1] === "?" ? zr : r[1] === "@" ? Br : Lr
 						}), i.removeAttribute(e);
 					} else e.startsWith(B) && (c.push({
 						type: 6,
 						index: a
 					}), i.removeAttribute(e));
-					if (kr.test(i.tagName)) {
+					if (Ar.test(i.tagName)) {
 						let e = i.textContent.split(B), t = e.length - 1;
 						if (t > 0) {
-							i.textContent = mr ? mr.emptyScript : "";
-							for (let n = 0; n < t; n++) i.append(e[n], yr()), K.nextNode(), c.push({
+							i.textContent = hr ? hr.emptyScript : "";
+							for (let n = 0; n < t; n++) i.append(e[n], br()), K.nextNode(), c.push({
 								type: 2,
 								index: ++a
 							});
-							i.append(e[t], yr());
+							i.append(e[t], br());
 						}
 					}
 				} else if (i.nodeType === 8) {
-					if (i.data === _r) c.push({
+					if (i.data === vr) c.push({
 						type: 2,
 						index: a
 					});
@@ -1417,7 +1423,7 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 			let n = V.createElement("template");
 			return n.innerHTML = e, n;
 		}
-	}, Pr = class {
+	}, Fr = class {
 		constructor(e, t) {
 			this._$AV = [], this._$AN = void 0, this._$AD = e, this._$AM = t;
 		}
@@ -1434,7 +1440,7 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 			for (; s !== void 0;) {
 				if (a === s.index) {
 					let t;
-					s.type === 2 ? t = new Fr(i, i.nextSibling, this, e) : s.type === 1 ? t = new s.ctor(i, s.name, s.strings, this, e) : s.type === 6 && (t = new Br(i, this, e)), this._$AV.push(t), s = n[++o];
+					s.type === 2 ? t = new Ir(i, i.nextSibling, this, e) : s.type === 1 ? t = new s.ctor(i, s.name, s.strings, this, e) : s.type === 6 && (t = new Vr(i, this, e)), this._$AV.push(t), s = n[++o];
 				}
 				a !== (s == null ? void 0 : s.index) && (i = K.nextNode(), a++);
 			}
@@ -1444,7 +1450,7 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 			let t = 0;
 			for (let n of this._$AV) n !== void 0 && (n.strings === void 0 ? n._$AI(e[t]) : (n._$AI(e, n, t), t += n.strings.length - 2)), t++;
 		}
-	}, Fr = class e {
+	}, Ir = class e {
 		get _$AU() {
 			var e;
 			return ((e = this._$AM) == null ? void 0 : e._$AU) ?? this._$Cv;
@@ -1463,7 +1469,7 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 			return this._$AB;
 		}
 		_$AI(e, t = this) {
-			e = dr(this, e, t), br(e) ? e === G || e == null || e === "" ? (this._$AH !== G && this._$AR(), this._$AH = G) : e !== this._$AH && e !== W && this._(e) : e._$litType$ === void 0 ? e.nodeType === void 0 ? Sr(e) ? this.k(e) : this._(e) : this.T(e) : this.$(e);
+			e = fr(this, e, t), xr(e) ? e === G || e == null || e === "" ? (this._$AH !== G && this._$AR(), this._$AH = G) : e !== this._$AH && e !== W && this._(e) : e._$litType$ === void 0 ? e.nodeType === void 0 ? Cr(e) ? this.k(e) : this._(e) : this.T(e) : this.$(e);
 		}
 		O(e) {
 			return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -1472,39 +1478,39 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 			this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
 		}
 		_(e) {
-			this._$AH !== G && br(this._$AH) ? this._$AA.nextSibling.data = e : this.T(V.createTextNode(e)), this._$AH = e;
+			this._$AH !== G && xr(this._$AH) ? this._$AA.nextSibling.data = e : this.T(V.createTextNode(e)), this._$AH = e;
 		}
 		$(e) {
 			var t;
-			let { values: n, _$litType$: r } = e, i = typeof r == "number" ? this._$AC(e) : (r.el === void 0 && (r.el = Nr.createElement(ur(r.h, r.h[0]), this.options)), r);
+			let { values: n, _$litType$: r } = e, i = typeof r == "number" ? this._$AC(e) : (r.el === void 0 && (r.el = Pr.createElement(dr(r.h, r.h[0]), this.options)), r);
 			if (((t = this._$AH) == null ? void 0 : t._$AD) === i) this._$AH.p(n);
 			else {
-				let e = new Pr(i, this), t = e.u(this.options);
+				let e = new Fr(i, this), t = e.u(this.options);
 				e.p(n), this.T(t), this._$AH = e;
 			}
 		}
 		_$AC(e) {
-			let t = jr.get(e.strings);
-			return t === void 0 && jr.set(e.strings, t = new Nr(e)), t;
+			let t = Mr.get(e.strings);
+			return t === void 0 && Mr.set(e.strings, t = new Pr(e)), t;
 		}
 		k(t) {
-			xr(this._$AH) || (this._$AH = [], this._$AR());
+			Sr(this._$AH) || (this._$AH = [], this._$AR());
 			let n = this._$AH, r, i = 0;
-			for (let a of t) i === n.length ? n.push(r = new e(this.O(yr()), this.O(yr()), this, this.options)) : r = n[i], r._$AI(a), i++;
+			for (let a of t) i === n.length ? n.push(r = new e(this.O(br()), this.O(br()), this, this.options)) : r = n[i], r._$AI(a), i++;
 			i < n.length && (this._$AR(r && r._$AB.nextSibling, i), n.length = i);
 		}
 		_$AR(e = this._$AA.nextSibling, t) {
 			var n;
 			for ((n = this._$AP) == null || n.call(this, !1, !0, t); e !== this._$AB;) {
-				let t = pr(e).nextSibling;
-				pr(e).remove(), e = t;
+				let t = mr(e).nextSibling;
+				mr(e).remove(), e = t;
 			}
 		}
 		setConnected(e) {
 			var t;
 			this._$AM === void 0 && (this._$Cv = e, (t = this._$AP) == null || t.call(this, e));
 		}
-	}, Ir = class {
+	}, Lr = class {
 		get tagName() {
 			return this.element.tagName;
 		}
@@ -1516,36 +1522,36 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 		}
 		_$AI(e, t = this, n, r) {
 			let i = this.strings, a = !1;
-			if (i === void 0) e = dr(this, e, t, 0), a = !br(e) || e !== this._$AH && e !== W, a && (this._$AH = e);
+			if (i === void 0) e = fr(this, e, t, 0), a = !xr(e) || e !== this._$AH && e !== W, a && (this._$AH = e);
 			else {
 				let r = e, o, s;
-				for (e = i[0], o = 0; o < i.length - 1; o++) s = dr(this, r[n + o], t, o), s === W && (s = this._$AH[o]), a || (a = !br(s) || s !== this._$AH[o]), s === G ? e = G : e !== G && (e += (s ?? "") + i[o + 1]), this._$AH[o] = s;
+				for (e = i[0], o = 0; o < i.length - 1; o++) s = fr(this, r[n + o], t, o), s === W && (s = this._$AH[o]), a || (a = !xr(s) || s !== this._$AH[o]), s === G ? e = G : e !== G && (e += (s ?? "") + i[o + 1]), this._$AH[o] = s;
 			}
 			a && !r && this.j(e);
 		}
 		j(e) {
 			e === G ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
 		}
-	}, Lr = class extends Ir {
+	}, Rr = class extends Lr {
 		constructor() {
 			super(...arguments), this.type = 3;
 		}
 		j(e) {
 			this.element[this.name] = e === G ? void 0 : e;
 		}
-	}, Rr = class extends Ir {
+	}, zr = class extends Lr {
 		constructor() {
 			super(...arguments), this.type = 4;
 		}
 		j(e) {
 			this.element.toggleAttribute(this.name, !!e && e !== G);
 		}
-	}, zr = class extends Ir {
+	}, Br = class extends Lr {
 		constructor(e, t, n, r, i) {
 			super(e, t, n, r, i), this.type = 5;
 		}
 		_$AI(e, t = this) {
-			if ((e = dr(this, e, t, 0) ?? G) === W) return;
+			if ((e = fr(this, e, t, 0) ?? G) === W) return;
 			let n = this._$AH, r = e === G && n !== G || e.capture !== n.capture || e.once !== n.once || e.passive !== n.passive, i = e !== G && (n === G || r);
 			r && this.element.removeEventListener(this.name, this, n), i && this.element.addEventListener(this.name, this, e), this._$AH = e;
 		}
@@ -1553,7 +1559,7 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 			var t;
 			typeof this._$AH == "function" ? this._$AH.call(((t = this.options) == null ? void 0 : t.host) ?? this.element, e) : this._$AH.handleEvent(e);
 		}
-	}, Br = class {
+	}, Vr = class {
 		constructor(e, t, n) {
 			this.element = e, this.type = 6, this._$AN = void 0, this._$AM = t, this.options = n;
 		}
@@ -1561,33 +1567,33 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 			return this._$AM._$AU;
 		}
 		_$AI(e) {
-			dr(this, e);
+			fr(this, e);
 		}
-	}, Vr = {
-		M: gr,
+	}, Hr = {
+		M: _r,
 		P: B,
-		A: _r,
+		A: vr,
 		C: 1,
-		L: Mr,
-		R: Pr,
-		D: Sr,
-		V: dr,
-		I: Fr,
-		H: Ir,
-		N: Rr,
-		U: zr,
-		B: Lr,
-		F: Br
-	}, Hr = fr.litHtmlPolyfillSupport, Hr == null || Hr(Nr, Fr), (fr.litHtmlVersions ?? (fr.litHtmlVersions = [])).push("3.3.3"), Ur = (e, t, n) => {
+		L: Nr,
+		R: Fr,
+		D: Cr,
+		V: fr,
+		I: Ir,
+		H: Lr,
+		N: zr,
+		U: Br,
+		B: Rr,
+		F: Vr
+	}, Ur = pr.litHtmlPolyfillSupport, Ur == null || Ur(Pr, Ir), (pr.litHtmlVersions ?? (pr.litHtmlVersions = [])).push("3.3.3"), Wr = (e, t, n) => {
 		let r = (n == null ? void 0 : n.renderBefore) ?? t, i = r._$litPart$;
 		if (i === void 0) {
 			let e = (n == null ? void 0 : n.renderBefore) ?? null;
-			r._$litPart$ = i = new Fr(t.insertBefore(yr(), e), e, void 0, n ?? {});
+			r._$litPart$ = i = new Ir(t.insertBefore(br(), e), e, void 0, n ?? {});
 		}
 		return i._$AI(e), i;
 	};
-})), Gr, Kr, q, qr, Jr = t((() => {
-	lr(), lr(), Wr(), Wr(), Kr = globalThis, q = class extends z {
+})), Kr, qr, q, Jr, Yr = t((() => {
+	ur(), ur(), Gr(), Gr(), qr = globalThis, q = class extends lr {
 		constructor() {
 			super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
 		}
@@ -1598,7 +1604,7 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 		}
 		update(e) {
 			let t = this.render();
-			this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(e), this._$Do = Ur(t, this.renderRoot, this.renderOptions);
+			this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(e), this._$Do = Wr(t, this.renderRoot, this.renderOptions);
 		}
 		connectedCallback() {
 			var e;
@@ -1611,33 +1617,33 @@ var fr, pr, mr, hr, gr, B, _r, vr, V, yr, br, xr, Sr, Cr, wr, Tr, Er, H, Dr, Or,
 		render() {
 			return W;
 		}
-	}, q._$litElement$ = !0, q.finalized = !0, (Gr = Kr.litElementHydrateSupport) == null || Gr.call(Kr, { LitElement: q }), qr = Kr.litElementPolyfillSupport, qr == null || qr({ LitElement: q }), (Kr.litElementVersions ?? (Kr.litElementVersions = [])).push("4.2.2");
-})), Yr = t((() => {})), Xr = t((() => {
-	lr(), Wr(), Jr(), Yr();
+	}, q._$litElement$ = !0, q.finalized = !0, (Kr = qr.litElementHydrateSupport) == null || Kr.call(qr, { LitElement: q }), Jr = qr.litElementPolyfillSupport, Jr == null || Jr({ LitElement: q }), (qr.litElementVersions ?? (qr.litElementVersions = [])).push("4.2.2");
+})), Xr = t((() => {})), Zr = t((() => {
+	ur(), Gr(), Yr(), Xr();
 }));
-zn(), Xr(), F();
-var Zr = new Intl.DateTimeFormat("es-ES", {
+zn(), Zr(), I();
+var Qr = new Intl.DateTimeFormat("es-ES", {
 	hour: "2-digit",
 	minute: "2-digit",
-	timeZone: ie
+	timeZone: ae
 });
-function Qr(e) {
-	return Zr.format(new Date(e));
+function $r(e) {
+	return Qr.format(new Date(e));
 }
-function $r(e, t) {
+function ei(e, t) {
 	if (e.cancelled) return {
 		value: "Cancelado",
 		unit: "",
 		spoken: "cancelado"
 	};
-	let n = ne(e.expected, t);
+	let n = re(e.expected, t);
 	if (n === 0) return {
 		value: "Llegando",
 		unit: "",
 		spoken: "llegando"
 	};
 	if (n >= 60) {
-		let t = Qr(e.expected);
+		let t = $r(e.expected);
 		return {
 			value: t,
 			unit: "",
@@ -1650,32 +1656,32 @@ function $r(e, t) {
 		spoken: n === 1 ? "en 1 minuto" : `en ${n} minutos`
 	};
 }
-function ei(e) {
+function ti(e) {
 	let t = Math.max(0, Math.round(e / 1e3));
 	return t < 60 ? `hace ${t} s` : `hace ${Math.round(t / 60)} min`;
 }
-function ti(e) {
+function ni(e) {
 	switch (e == null ? void 0 : e.state) {
 		case "antes": return `Primera salida a las ${e.first}`;
 		case "terminado": return `Servicio terminado · última salida ${e.last}`;
 		case "sin_servicio": return "Hoy no hay servicio";
-		case "en_servicio": return e.interval_min === null ? "Sin llegadas próximas" : `Sin llegadas próximas · pasa ${Mt(e.interval_min, e.interval_max_min)}`;
+		case "en_servicio": return e.interval_min === null ? "Sin llegadas próximas" : `Sin llegadas próximas · pasa ${Pt(e.interval_min, e.interval_max_min)}`;
 		default: return "Sin llegadas próximas";
 	}
 }
 //#endregion
 //#region ../../node_modules/.pnpm/lit-html@3.3.3/node_modules/lit-html/directive.js
-var ni = {
+var ri = {
 	ATTRIBUTE: 1,
 	CHILD: 2,
 	PROPERTY: 3,
 	BOOLEAN_ATTRIBUTE: 4,
 	EVENT: 5,
 	ELEMENT: 6
-}, ri = (e) => (...t) => ({
+}, ii = (e) => (...t) => ({
 	_$litDirective$: e,
 	values: t
-}), ii = class {
+}), ai = class {
 	constructor(e) {}
 	get _$AU() {
 		return this._$AM._$AU;
@@ -1692,10 +1698,10 @@ var ni = {
 };
 //#endregion
 //#region ../../node_modules/.pnpm/lit-html@3.3.3/node_modules/lit-html/directive-helpers.js
-Wr();
-var { I: ai } = Vr, oi = (e) => e, si = () => document.createComment(""), ci = (e, t, n) => {
+Gr();
+var { I: oi } = Hr, si = (e) => e, ci = () => document.createComment(""), li = (e, t, n) => {
 	let r = e._$AA.parentNode, i = t === void 0 ? e._$AB : t._$AA;
-	if (n === void 0) n = new ai(r.insertBefore(si(), i), r.insertBefore(si(), i), e, e.options);
+	if (n === void 0) n = new oi(r.insertBefore(ci(), i), r.insertBefore(ci(), i), e, e.options);
 	else {
 		let t = n._$AB.nextSibling, o = n._$AM, s = o !== e;
 		if (s) {
@@ -1706,25 +1712,25 @@ var { I: ai } = Vr, oi = (e) => e, si = () => document.createComment(""), ci = (
 		if (t !== i || s) {
 			let e = n._$AA;
 			for (; e !== t;) {
-				let t = oi(e).nextSibling;
-				oi(r).insertBefore(e, i), e = t;
+				let t = si(e).nextSibling;
+				si(r).insertBefore(e, i), e = t;
 			}
 		}
 	}
 	return n;
-}, li = (e, t, n = e) => (e._$AI(t, n), e), ui = {}, di = (e, t = ui) => e._$AH = t, fi = (e) => e._$AH, pi = (e) => {
+}, ui = (e, t, n = e) => (e._$AI(t, n), e), di = {}, fi = (e, t = di) => e._$AH = t, pi = (e) => e._$AH, mi = (e) => {
 	e._$AR(), e._$AA.remove();
 };
 //#endregion
 //#region ../../node_modules/.pnpm/lit-html@3.3.3/node_modules/lit-html/directives/repeat.js
-Wr();
-var mi = (e, t, n) => {
+Gr();
+var hi = (e, t, n) => {
 	let r = /* @__PURE__ */ new Map();
 	for (let i = t; i <= n; i++) r.set(e[i], i);
 	return r;
-}, hi = ri(class extends ii {
+}, gi = ii(class extends ai {
 	constructor(e) {
-		if (super(e), e.type !== ni.CHILD) throw Error("repeat() can only be used in text expressions");
+		if (super(e), e.type !== ri.CHILD) throw Error("repeat() can only be used in text expressions");
 	}
 	dt(e, t, n) {
 		let r;
@@ -1740,43 +1746,43 @@ var mi = (e, t, n) => {
 		return this.dt(e, t, n).values;
 	}
 	update(e, [t, n, r]) {
-		let i = fi(e), { values: a, keys: o } = this.dt(t, n, r);
+		let i = pi(e), { values: a, keys: o } = this.dt(t, n, r);
 		if (!Array.isArray(i)) return this.ut = o, a;
 		let s = this.ut ?? (this.ut = []), c = [], l, u, d = 0, f = i.length - 1, p = 0, m = a.length - 1;
 		for (; d <= f && p <= m;) if (i[d] === null) d++;
 		else if (i[f] === null) f--;
-		else if (s[d] === o[p]) c[p] = li(i[d], a[p]), d++, p++;
-		else if (s[f] === o[m]) c[m] = li(i[f], a[m]), f--, m--;
-		else if (s[d] === o[m]) c[m] = li(i[d], a[m]), ci(e, c[m + 1], i[d]), d++, m--;
-		else if (s[f] === o[p]) c[p] = li(i[f], a[p]), ci(e, i[d], i[f]), f--, p++;
-		else if (l === void 0 && (l = mi(o, p, m), u = mi(s, d, f)), l.has(s[d])) {
+		else if (s[d] === o[p]) c[p] = ui(i[d], a[p]), d++, p++;
+		else if (s[f] === o[m]) c[m] = ui(i[f], a[m]), f--, m--;
+		else if (s[d] === o[m]) c[m] = ui(i[d], a[m]), li(e, c[m + 1], i[d]), d++, m--;
+		else if (s[f] === o[p]) c[p] = ui(i[f], a[p]), li(e, i[d], i[f]), f--, p++;
+		else if (l === void 0 && (l = hi(o, p, m), u = hi(s, d, f)), l.has(s[d])) {
 			if (l.has(s[f])) {
 				let t = u.get(o[p]), n = t === void 0 ? null : i[t];
 				if (n === null) {
-					let t = ci(e, i[d]);
-					li(t, a[p]), c[p] = t;
-				} else c[p] = li(n, a[p]), ci(e, i[d], n), i[t] = null;
+					let t = li(e, i[d]);
+					ui(t, a[p]), c[p] = t;
+				} else c[p] = ui(n, a[p]), li(e, i[d], n), i[t] = null;
 				p++;
-			} else pi(i[f]), f--;
-		} else pi(i[d]), d++;
+			} else mi(i[f]), f--;
+		} else mi(i[d]), d++;
 		for (; p <= m;) {
-			let t = ci(e, c[m + 1]);
-			li(t, a[p]), c[p++] = t;
+			let t = li(e, c[m + 1]);
+			ui(t, a[p]), c[p++] = t;
 		}
 		for (; d <= f;) {
 			let e = i[d++];
-			e !== null && pi(e);
+			e !== null && mi(e);
 		}
-		return this.ut = o, di(e, c), W;
+		return this.ut = o, fi(e, c), W;
 	}
 });
 //#endregion
 //#region ../../node_modules/.pnpm/lit-html@3.3.3/node_modules/lit-html/directives/style-map.js
-Wr();
-var gi = "important", _i = " !" + gi, vi = ri(class extends ii {
+Gr();
+var _i = "important", vi = " !" + _i, yi = ii(class extends ai {
 	constructor(e) {
 		var t;
-		if (super(e), e.type !== ni.ATTRIBUTE || e.name !== "style" || ((t = e.strings) == null ? void 0 : t.length) > 2) throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
+		if (super(e), e.type !== ri.ATTRIBUTE || e.name !== "style" || ((t = e.strings) == null ? void 0 : t.length) > 2) throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.");
 	}
 	render(e) {
 		return Object.keys(e).reduce((t, n) => {
@@ -1792,20 +1798,20 @@ var gi = "important", _i = " !" + gi, vi = ri(class extends ii {
 			let r = t[e];
 			if (r != null) {
 				this.ft.add(e);
-				let t = typeof r == "string" && r.endsWith(_i);
-				e.includes("-") || t ? n.setProperty(e, t ? r.slice(0, -11) : r, t ? gi : "") : n[e] = r;
+				let t = typeof r == "string" && r.endsWith(vi);
+				e.includes("-") || t ? n.setProperty(e, t ? r.slice(0, -11) : r, t ? _i : "") : n[e] = r;
 			}
 		}
 		return W;
 	}
 });
-F(), A(), y();
-var yi, bi = "sentido desconocido", xi = "¡Ya llega!", J = /* @__PURE__ */ new WeakSet(), Si = class extends q {
+I(), k(), v();
+var bi, xi = "sentido desconocido", Si = "¡Ya llega!", J = /* @__PURE__ */ new WeakSet(), Ci = class extends q {
 	constructor() {
-		super(), k(this, J), this.card = void 0, this.now = Date.now(), this.variant = "fill", this.fit = !1, this.intensity = "normal", this.effect = "pulso", this.still = !1, this.alertMinutes = 0, this.openable = !1, this.service = null;
+		super(), O(this, J), this.card = void 0, this.now = Date.now(), this.variant = "fill", this.fit = !1, this.intensity = "normal", this.effect = "pulso", this.still = !1, this.alertMinutes = 0, this.openable = !1, this.service = null;
 	}
 	get alerting() {
-		return v(J, this, Ti).call(this) !== void 0;
+		return _(J, this, Ei).call(this) !== void 0;
 	}
 	willUpdate() {
 		this.toggleAttribute("alert", this.alerting);
@@ -1813,18 +1819,18 @@ var yi, bi = "sentido desconocido", xi = "¡Ya llega!", J = /* @__PURE__ */ new 
 	render() {
 		let e = this.card;
 		if (!e) return G;
-		let [t, ...n] = e.arrivals, r = e.headsign ? null : (t == null ? void 0 : t.headsign) ?? bi;
+		let [t, ...n] = e.arrivals, r = e.headsign ? null : (t == null ? void 0 : t.headsign) ?? xi;
 		return U`
       <article
-        style=${vi({
+        style=${yi({
 			"--line-colour": e.colour,
 			"--line-text": e.text_colour
 		})}
-        aria-label=${v(J, this, Oi).call(this, e, e.arrivals)}
+        aria-label=${_(J, this, ki).call(this, e, e.arrivals)}
         role=${this.openable ? "button" : G}
         tabindex=${this.openable ? 0 : G}
-        @click=${v(J, this, Ci)}
-        @keydown=${v(J, this, wi)}
+        @click=${_(J, this, wi)}
+        @keydown=${_(J, this, Ti)}
       >
         <header>
           <span class="badge" aria-hidden="true">${e.line_label}</span>
@@ -1834,38 +1840,38 @@ var yi, bi = "sentido desconocido", xi = "¡Ya llega!", J = /* @__PURE__ */ new 
           </div>
         </header>
         ${t ? U`<div class="next">
-                ${v(J, this, Di).call(this, t, !0)}
+                ${_(J, this, Oi).call(this, t, !0)}
                 ${r ? U`<span class="headsign">→ ${r}</span>` : G}
-                ${v(J, this, Ei).call(this, t)}
-              </div>` : U`<div class="empty">${ti(this.service)}</div>`}
+                ${_(J, this, Di).call(this, t)}
+              </div>` : U`<div class="empty">${ni(this.service)}</div>`}
         <ul aria-hidden="true">
-          ${n.map((e) => U`<li>${v(J, this, Di).call(this, e, !1)}${v(J, this, Ei).call(this, e)}</li>`)}
+          ${n.map((e) => U`<li>${_(J, this, Oi).call(this, e, !1)}${_(J, this, Di).call(this, e)}</li>`)}
         </ul>
       </article>
     `;
 	}
 };
-yi = Si;
-function Ci() {
+bi = Ci;
+function wi() {
 	this.openable && this.card && this.dispatchEvent(new CustomEvent("card-open", {
 		detail: this.card,
 		bubbles: !0,
 		composed: !0
 	}));
 }
-function wi(e) {
-	(e.key === "Enter" || e.key === " ") && (e.preventDefault(), v(J, this, Ci).call(this));
+function Ti(e) {
+	(e.key === "Enter" || e.key === " ") && (e.preventDefault(), _(J, this, wi).call(this));
 }
-function Ti() {
+function Ei() {
 	var e;
 	let t = (e = this.card) == null ? void 0 : e.arrivals.find((e) => !e.cancelled);
-	return this.alertMinutes > 0 && this.effect !== "ninguno" && t !== void 0 && ne(t.expected, this.now) <= this.alertMinutes ? t : void 0;
+	return this.alertMinutes > 0 && this.effect !== "ninguno" && t !== void 0 && re(t.expected, this.now) <= this.alertMinutes ? t : void 0;
 }
-function Ei(e) {
-	return this.effect === "etiqueta" && e === v(J, this, Ti).call(this) ? U`<span class="soon" aria-hidden="true">${xi}</span>` : G;
+function Di(e) {
+	return this.effect === "etiqueta" && e === _(J, this, Ei).call(this) ? U`<span class="soon" aria-hidden="true">${Si}</span>` : G;
 }
-function Di(e, t) {
-	let n = $r(e, this.now), r = [
+function Oi(e, t) {
+	let n = ei(e, this.now), r = [
 		t ? "value" : "",
 		t && !n.unit ? "word" : "",
 		e.is_realtime ? "" : "scheduled",
@@ -1875,11 +1881,11 @@ function Di(e, t) {
               · prog.</span
             >`}`;
 }
-function Oi(e, t) {
-	let n = e.headsign ? `hacia ${e.headsign}` : "", r = t.map((e) => $r(e, this.now).spoken).join(", "), i = this.alerting ? ". ¡Llega pronto!" : "";
-	return `Línea ${e.line_label} ${n}, parada ${e.stop_name}: ${r || ti(this.service).toLowerCase()}${i}`;
+function ki(e, t) {
+	let n = e.headsign ? `hacia ${e.headsign}` : "", r = t.map((e) => ei(e, this.now).spoken).join(", "), i = this.alerting ? ". ¡Llega pronto!" : "";
+	return `Línea ${e.line_label} ${n}, parada ${e.stop_name}: ${r || ni(this.service).toLowerCase()}${i}`;
 }
-yi.properties = {
+bi.properties = {
 	card: { attribute: !1 },
 	now: { type: Number },
 	variant: {
@@ -1911,7 +1917,7 @@ yi.properties = {
 		reflect: !0
 	},
 	service: { attribute: !1 }
-}, yi.styles = L`
+}, bi.styles = R`
     :host {
       display: block;
       container-type: inline-size;
@@ -2093,6 +2099,10 @@ yi.properties = {
       container-type: size;
       height: 100%;
     }
+    /* A fixed inset vanishes on a wall-sized card, and the alert ring is drawn over it. */
+    :host([fit]) article {
+      padding: max(10px, 3cqh) max(14px, 4cqi);
+    }
     header {
       display: flex;
       align-items: center;
@@ -2197,13 +2207,16 @@ yi.properties = {
       font-size: clamp(0.7em, calc(min(3.6cqi, 7cqh) * var(--lb-text-scale, 1)), 1.6em);
     }
     :host([fit]) .next .value {
-      font-size: clamp(1.6em, calc(min(30cqi, 34cqh) * var(--lb-text-scale, 1)), 12em);
+      font-size: clamp(1.6em, calc(min(30cqi, 34cqh) * var(--lb-text-scale, 1)), 20em);
     }
     :host([fit]) .next .value.word {
-      font-size: clamp(1.3em, calc(min(17cqi, 22cqh) * var(--lb-text-scale, 1)), 7em);
+      font-size: clamp(1.3em, calc(min(17cqi, 22cqh) * var(--lb-text-scale, 1)), 11.5em);
     }
     :host([fit]) .next .unit {
-      font-size: clamp(0.9em, calc(min(7cqi, 12cqh) * var(--lb-text-scale, 1)), 3.6em);
+      font-size: clamp(0.9em, calc(min(7cqi, 12cqh) * var(--lb-text-scale, 1)), 6em);
+    }
+    :host([fit]) .next .mark {
+      font-size: clamp(0.63em, calc(min(4.9cqi, 8.4cqh) * var(--lb-text-scale, 1)), 4.2em);
     }
     :host([fit]) .soon {
       font-size: clamp(0.8em, calc(min(4.5cqi, 9cqh) * var(--lb-text-scale, 1)), 2.4em);
@@ -2216,36 +2229,41 @@ yi.properties = {
       font-weight: 500;
       opacity: 0.85;
     }
-  `, customElements.get("lb-card") || customElements.define("lb-card", Si), F(), Xr(), A(), _(), C(), x(), y();
-var ki, Ai = 1.05, ji = 1.7;
-function Mi(e) {
+    /* Beside the big number its parent is .next, which keeps the base size: scale like .unit. */
+    .next .mark {
+      font-size: 1.05em;
+      font-size: clamp(0.7em, calc(4.9cqi * var(--lb-text-scale, 1)), 1.4em);
+    }
+  `, customElements.get("lb-card") || customElements.define("lb-card", Ci), I(), Zr(), k(), g(), S(), b(), v();
+var Ai, ji = 1.05, Mi = 1.7;
+function Ni(e) {
 	var t;
 	return e.direction ? `${e.line_id}:${e.direction}` : ((t = e.arrivals.find((e) => e.pattern_id)) == null ? void 0 : t.pattern_id) ?? null;
 }
-function Ni(e) {
-	return Mi(e) !== null;
+function Pi(e) {
+	return Ni(e) !== null;
 }
 function Y(e) {
 	return `${e.stop_id}|${e.line_id}|${e.direction ?? "x"}`;
 }
-function Pi(e, t, n) {
+function Fi(e, t, n) {
 	if (e <= 1 || t <= 0 || n <= 0) return 1;
 	let r = 1, i = Infinity;
 	for (let a = 1; a <= e; a += 1) {
-		let o = Math.ceil(e / a), s = t / a / (n / o), c = a * o - e, l = Math.abs(Math.log(s / ji)) + c * .15;
+		let o = Math.ceil(e / a), s = t / a / (n / o), c = a * o - e, l = Math.abs(Math.log(s / Mi)) + c * .15;
 		l < i && (r = a, i = l);
 	}
 	return r;
 }
-function Fi(e) {
+function Ii(e) {
 	return getComputedStyle(e).getPropertyValue("--lb-card-style").trim() === "strip" ? "strip" : "fill";
 }
-function Ii(e) {
+function Li(e) {
 	return getComputedStyle(e).getPropertyValue("--lb-motion").trim() !== "none";
 }
-var Li = /* @__PURE__ */ new WeakMap(), Ri = /* @__PURE__ */ new WeakMap(), zi = /* @__PURE__ */ new WeakMap(), X = /* @__PURE__ */ new WeakSet(), Bi = class extends q {
+var Ri = /* @__PURE__ */ new WeakMap(), zi = /* @__PURE__ */ new WeakMap(), Bi = /* @__PURE__ */ new WeakMap(), Vi = /* @__PURE__ */ new WeakSet(), Hi = class extends q {
 	constructor() {
-		super(), k(this, X), g(this, Li, /* @__PURE__ */ new Map()), g(this, Ri, ""), g(this, zi, typeof ResizeObserver > "u" ? void 0 : new ResizeObserver(([e]) => {
+		super(), O(this, Vi), h(this, Ri, /* @__PURE__ */ new Map()), h(this, zi, ""), h(this, Bi, typeof ResizeObserver > "u" ? void 0 : new ResizeObserver(([e]) => {
 			e && (this.size = {
 				width: e.contentRect.width,
 				height: e.contentRect.height
@@ -2257,23 +2275,23 @@ var Li = /* @__PURE__ */ new WeakMap(), Ri = /* @__PURE__ */ new WeakMap(), zi =
 	}
 	connectedCallback() {
 		var e;
-		super.connectedCallback(), (e = S(zi, this)) == null || e.observe(this);
+		super.connectedCallback(), (e = x(Bi, this)) == null || e.observe(this);
 	}
 	disconnectedCallback() {
 		var e;
-		super.disconnectedCallback(), (e = S(zi, this)) == null || e.disconnect();
+		super.disconnectedCallback(), (e = x(Bi, this)) == null || e.disconnect();
 	}
 	willUpdate() {
-		b(Li, this, v(X, this, Hi).call(this));
+		y(Ri, this, _(Vi, this, Wi).call(this));
 	}
 	updated() {
-		let e = v(X, this, Vi).call(this).map((e) => e.dataset.key ?? "").join(","), t = S(Ri, this) !== "" && e !== S(Ri, this);
-		b(Ri, this, e), t && v(X, this, Wi).call(this);
+		let e = _(Vi, this, Ui).call(this).map((e) => e.dataset.key ?? "").join(","), t = x(zi, this) !== "" && e !== x(zi, this);
+		y(zi, this, e), t && _(Vi, this, Ki).call(this);
 	}
 	render() {
-		let e = Fi(this), t = !Ii(this), n = this.layout === "kiosk" ? `--lb-columns: ${Pi(this.cards.length, this.size.width, this.size.height)}` : "";
+		let e = Ii(this), t = !Li(this), n = this.layout === "kiosk" ? `--lb-columns: ${Fi(this.cards.length, this.size.width, this.size.height)}` : "";
 		return U`<div class="grid" part="grid" style=${n}>
-      ${hi(De(this.cards, this.order), Y, (n) => U`<lb-card
+      ${gi(Oe(this.cards, this.order), Y, (n) => U`<lb-card
             data-key=${Y(n)}
             .card=${n}
             .now=${this.now}
@@ -2283,30 +2301,30 @@ var Li = /* @__PURE__ */ new WeakMap(), Ri = /* @__PURE__ */ new WeakMap(), zi =
             ?still=${t}
             alert-minutes=${this.alertMinutes}
             ?fit=${this.layout === "kiosk"}
-            ?openable=${this.openable && Ni(n)}
+            ?openable=${this.openable && Pi(n)}
             .service=${this.services.get(Y(n)) ?? null}
           ></lb-card>`)}
     </div>`;
 	}
 };
-ki = Bi;
-function Vi() {
+Ai = Hi;
+function Ui() {
 	return [...this.renderRoot.querySelectorAll("lb-card[data-key]")];
 }
-function Hi() {
-	return new Map(v(X, this, Vi).call(this).map((e) => [e.dataset.key ?? "", e.getBoundingClientRect()]));
-}
-function Ui() {
-	return !matchMedia("(prefers-reduced-motion: reduce)").matches && Ii(this);
-}
 function Wi() {
-	let e = S(Li, this);
-	if (e.size !== 0 && v(X, this, Ui).call(this)) for (let t of v(X, this, Vi).call(this)) {
+	return new Map(_(Vi, this, Ui).call(this).map((e) => [e.dataset.key ?? "", e.getBoundingClientRect()]));
+}
+function Gi() {
+	return !matchMedia("(prefers-reduced-motion: reduce)").matches && Li(this);
+}
+function Ki() {
+	let e = x(Ri, this);
+	if (e.size !== 0 && _(Vi, this, Gi).call(this)) for (let t of _(Vi, this, Ui).call(this)) {
 		let n = e.get(t.dataset.key ?? "");
 		if (!n || typeof t.animate != "function") continue;
 		let r = t.getBoundingClientRect(), i = n.left - r.left, a = n.top - r.top;
 		if (Math.abs(i) < 1 && Math.abs(a) < 1) continue;
-		let o = a > 1 || Math.abs(a) <= 1 && i > 1, s = `translate(${i}px, ${a}px)`, c = `translate(${i / 2}px, ${a / 2}px) scale(${o ? Ai : 1})`;
+		let o = a > 1 || Math.abs(a) <= 1 && i > 1, s = `translate(${i}px, ${a}px)`, c = `translate(${i / 2}px, ${a / 2}px) scale(${o ? ji : 1})`;
 		t.style.zIndex = o ? "2" : "1", t.style.position = "relative";
 		let l = t.animate([
 			{ transform: s },
@@ -2324,7 +2342,7 @@ function Wi() {
 		};
 	}
 }
-ki.properties = {
+Ai.properties = {
 	cards: { attribute: !1 },
 	now: { type: Number },
 	order: { type: String },
@@ -2341,7 +2359,7 @@ ki.properties = {
 	openable: { type: Boolean },
 	services: { attribute: !1 },
 	size: { state: !0 }
-}, ki.styles = L`
+}, Ai.styles = R`
     :host {
       display: block;
       min-height: 0;
@@ -2360,22 +2378,22 @@ ki.properties = {
       grid-template-columns: repeat(var(--lb-columns, 2), minmax(0, 1fr));
       grid-auto-rows: minmax(0, 1fr);
     }
-  `, customElements.get("lb-card-grid") || customElements.define("lb-card-grid", Bi), F(), Xr(), _(), C(), x();
-var Gi, Ki = /* @__PURE__ */ new WeakMap(), qi = class extends q {
+  `, customElements.get("lb-card-grid") || customElements.define("lb-card-grid", Hi), I(), Zr(), g(), S(), b();
+var qi, Ji = /* @__PURE__ */ new WeakMap(), Yi = class extends q {
 	constructor() {
-		super(), g(this, Ki, null), this.timetable = null, this.now = Date.now(), this.stopName = "";
+		super(), h(this, Ji, null), this.timetable = null, this.now = Date.now(), this.stopName = "";
 	}
 	updated() {
 		let e = this.renderRoot.querySelector("li.next"), t = this.timetable ? `${this.timetable.pattern_id}|${(e == null ? void 0 : e.textContent) ?? ""}` : null;
-		e && t !== S(Ki, this) && (b(Ki, this, t), e.scrollIntoView({ block: "nearest" }));
+		e && t !== x(Ji, this) && (y(Ji, this, t), e.scrollIntoView({ block: "nearest" }));
 	}
 	render() {
 		let e = this.timetable;
 		if (!e || e.departures.length === 0) return U`<p class="status">Hoy no hay servicio en este sentido.</p>`;
-		let t = Ft(e, this.now), n = t.next_departure, r = !1;
+		let t = Lt(e, this.now), n = t.next_departure, r = !1;
 		return U`
       <p class="status">
-        ${t.state === "en_servicio" && t.next_departure ? `Próxima salida ${t.next_departure}${t.interval_min === null ? "" : ` · ${Mt(t.interval_min, t.interval_max_min)}`}` : ti(t)}
+        ${t.state === "en_servicio" && t.next_departure ? `Próxima salida ${t.next_departure}${t.interval_min === null ? "" : ` · ${Pt(t.interval_min, t.interval_max_min)}`}` : ni(t)}
       </p>
       <p class="note">
         Salidas de ${e.origin} hacia ${e.headsign}.
@@ -2384,7 +2402,7 @@ var Gi, Ki = /* @__PURE__ */ new WeakMap(), qi = class extends q {
       <ul class="periods" aria-label="Frecuencia por franjas">
         ${e.periods.map((e) => U`<li>
               ${e.first}–${e.last} ·
-              ${Mt(e.interval_min, e.interval_max_min)}
+              ${Pt(e.interval_min, e.interval_max_min)}
             </li>`)}
       </ul>
       <ul class="departures" aria-label="Salidas de hoy">
@@ -2403,14 +2421,14 @@ var Gi, Ki = /* @__PURE__ */ new WeakMap(), qi = class extends q {
     `;
 	}
 };
-Gi = qi, Gi.properties = {
+qi = Yi, qi.properties = {
 	timetable: { attribute: !1 },
 	now: { type: Number },
 	stopName: {
 		type: String,
 		attribute: "stop-name"
 	}
-}, Gi.styles = L`
+}, qi.styles = R`
     :host {
       display: flex;
       flex-direction: column;
@@ -2463,101 +2481,101 @@ Gi = qi, Gi.properties = {
       color: var(--line-text);
       border-color: var(--line-colour);
     }
-  `, customElements.get("lb-timetable") || customElements.define("lb-timetable", qi), A(), _(), x(), C(), y();
-var Ji = .2, Yi = /* @__PURE__ */ new WeakMap(), Xi = /* @__PURE__ */ new WeakMap(), Zi = /* @__PURE__ */ new WeakMap(), Qi = /* @__PURE__ */ new WeakMap(), $i = /* @__PURE__ */ new WeakMap(), ea = /* @__PURE__ */ new WeakMap(), ta = /* @__PURE__ */ new WeakMap(), na = /* @__PURE__ */ new WeakMap(), ra = /* @__PURE__ */ new WeakMap(), ia = /* @__PURE__ */ new WeakMap(), aa = /* @__PURE__ */ new WeakMap(), oa = /* @__PURE__ */ new WeakSet(), sa = class {
+  `, customElements.get("lb-timetable") || customElements.define("lb-timetable", Yi), k(), g(), b(), S(), v();
+var Xi = .2, Zi = /* @__PURE__ */ new WeakMap(), Qi = /* @__PURE__ */ new WeakMap(), $i = /* @__PURE__ */ new WeakMap(), ea = /* @__PURE__ */ new WeakMap(), ta = /* @__PURE__ */ new WeakMap(), na = /* @__PURE__ */ new WeakMap(), ra = /* @__PURE__ */ new WeakMap(), ia = /* @__PURE__ */ new WeakMap(), X = /* @__PURE__ */ new WeakMap(), aa = /* @__PURE__ */ new WeakMap(), oa = /* @__PURE__ */ new WeakMap(), sa = /* @__PURE__ */ new WeakSet(), ca = class {
 	constructor(e, t = {}) {
-		k(this, oa), g(this, Yi, void 0), g(this, Xi, void 0), g(this, Zi, void 0), g(this, Qi, void 0), g(this, $i, void 0), g(this, ea, void 0), g(this, ta, void 0), g(this, na, void 0), g(this, ra, 0), g(this, ia, !1), g(this, aa, !1), b(Yi, this, e), b(Xi, this, t.intervalMs ?? 3e4), b(Zi, this, t.maxBackoffMs ?? 3e5), b(Qi, this, t.random ?? Math.random), b($i, this, t.setTimer ?? ((e, t) => setTimeout(e, t))), b(ea, this, t.clearTimer ?? ((e) => clearTimeout(e)));
+		O(this, sa), h(this, Zi, void 0), h(this, Qi, void 0), h(this, $i, void 0), h(this, ea, void 0), h(this, ta, void 0), h(this, na, void 0), h(this, ra, void 0), h(this, ia, void 0), h(this, X, 0), h(this, aa, !1), h(this, oa, !1), y(Zi, this, e), y(Qi, this, t.intervalMs ?? 3e4), y($i, this, t.maxBackoffMs ?? 3e5), y(ea, this, t.random ?? Math.random), y(ta, this, t.setTimer ?? ((e, t) => setTimeout(e, t))), y(na, this, t.clearTimer ?? ((e) => clearTimeout(e)));
 	}
 	get failures() {
-		return S(ra, this);
+		return x(X, this);
 	}
 	nextDelayMs() {
-		if (S(ra, this) === 0) return S(Xi, this);
-		let e = Math.min(S(Zi, this), S(Xi, this) * 2 ** S(ra, this)), t = e * Ji * (S(Qi, this).call(this) * 2 - 1);
-		return Math.round(Math.min(S(Zi, this), e + t));
+		if (x(X, this) === 0) return x(Qi, this);
+		let e = Math.min(x($i, this), x(Qi, this) * 2 ** x(X, this)), t = e * Xi * (x(ea, this).call(this) * 2 - 1);
+		return Math.round(Math.min(x($i, this), e + t));
 	}
 	start() {
-		S(ia, this) || (b(ia, this, !0), S(aa, this) || this.runNow());
+		x(aa, this) || (y(aa, this, !0), x(oa, this) || this.runNow());
 	}
 	stop() {
 		var e;
-		b(ia, this, !1), v(oa, this, ca).call(this), (e = S(na, this)) == null || e.abort();
+		y(aa, this, !1), _(sa, this, la).call(this), (e = x(ia, this)) == null || e.abort();
 	}
 	setPaused(e) {
-		e !== S(aa, this) && (b(aa, this, e), e ? v(oa, this, ca).call(this) : S(ia, this) && this.runNow());
+		e !== x(oa, this) && (y(oa, this, e), e ? _(sa, this, la).call(this) : x(aa, this) && this.runNow());
 	}
 	async runNow() {
 		var e;
-		v(oa, this, ca).call(this), (e = S(na, this)) == null || e.abort();
+		_(sa, this, la).call(this), (e = x(ia, this)) == null || e.abort();
 		let t = new AbortController();
-		b(na, this, t);
+		y(ia, this, t);
 		try {
-			await S(Yi, this).call(this, t.signal), b(ra, this, 0);
+			await x(Zi, this).call(this, t.signal), y(X, this, 0);
 		} catch {
 			if (t.signal.aborted) return;
-			b(ra, this, S(ra, this) + 1);
+			y(X, this, x(X, this) + 1);
 		}
-		S(ia, this) && !S(aa, this) && S(na, this) === t && b(ta, this, S($i, this).call(this, () => void this.runNow(), this.nextDelayMs()));
+		x(aa, this) && !x(oa, this) && x(ia, this) === t && y(ra, this, x(ta, this).call(this, () => void this.runNow(), this.nextDelayMs()));
 	}
 };
-function ca() {
-	S(ta, this) !== void 0 && S(ea, this).call(this, S(ta, this)), b(ta, this, void 0);
+function la() {
+	x(ra, this) !== void 0 && x(na, this).call(this, x(ra, this)), y(ra, this, void 0);
 }
-F(), Xr(), A(), _(), y(), C(), x();
-var la, ua = 15e3, da = 9e5, fa = {
+I(), Zr(), k(), g(), v(), S(), b();
+var ua, da = 15e3, fa = 9e5, pa = {
 	vertical: 2.4,
 	horizontal: 4.6
-}, pa = {
+}, ma = {
 	vertical: 7,
 	horizontal: 9
-}, ma = .8;
-function ha(e, t, n) {
+}, ha = .8;
+function ga(e, t, n) {
 	if (e <= 0 || n <= 0) return 12;
-	let r = e - pa[t] * n, i = Math.floor(r / (fa[t] * n));
+	let r = e - ma[t] * n, i = Math.floor(r / (pa[t] * n));
 	return Math.min(12, Math.max(1, i));
 }
-function ga(e, t = ma) {
+function _a(e, t = ha) {
 	let n = /* @__PURE__ */ new Set();
 	return e.stops.forEach((r, i) => {
 		e.buses.some((e) => Math.abs(e.at - i) < t) && n.add(i);
 	}), n;
 }
-function _a(e) {
+function va(e) {
 	return `${e.hiddenStops === 1 ? "1 parada" : `${e.hiddenStops} paradas`} antes, desde ${e.origin}`;
 }
-function va(e) {
+function ya(e) {
 	return e.minutes === null ? "" : e.minutes === 0 ? "llegando" : `${e.minutes} min`;
 }
-function ya(e, t) {
+function ba(e, t) {
 	let n = e.arrivals.find((e) => !e.cancelled);
 	if (!n) return e.stop_name;
 	let r = n.is_realtime ? "" : " (horario programado)";
-	return `${e.stop_name} · próximo ${$r(n, t).spoken}${r}`;
+	return `${e.stop_name} · próximo ${ei(n, t).spoken}${r}`;
 }
-function ba(e, t) {
+function xa(e, t) {
 	let n = Date.parse(e.generated_at);
 	return {
 		...e,
-		vehicles: e.vehicles.filter((e) => Math.max(0, n - Date.parse(e.recorded_at)) + t <= Zt)
+		vehicles: e.vehicles.filter((e) => Math.max(0, n - Date.parse(e.recorded_at)) + t <= $t)
 	};
 }
-var xa = /* @__PURE__ */ new WeakMap(), Sa = /* @__PURE__ */ new WeakMap(), Ca = /* @__PURE__ */ new WeakMap(), wa = /* @__PURE__ */ new WeakMap(), Ta = /* @__PURE__ */ new WeakMap(), Ea = /* @__PURE__ */ new WeakMap(), Da = /* @__PURE__ */ new WeakMap(), Oa = /* @__PURE__ */ new WeakMap(), ka = /* @__PURE__ */ new WeakMap(), Z = /* @__PURE__ */ new WeakSet(), Aa = class extends q {
+var Sa = /* @__PURE__ */ new WeakMap(), Ca = /* @__PURE__ */ new WeakMap(), wa = /* @__PURE__ */ new WeakMap(), Ta = /* @__PURE__ */ new WeakMap(), Ea = /* @__PURE__ */ new WeakMap(), Da = /* @__PURE__ */ new WeakMap(), Oa = /* @__PURE__ */ new WeakMap(), ka = /* @__PURE__ */ new WeakMap(), Aa = /* @__PURE__ */ new WeakMap(), Z = /* @__PURE__ */ new WeakSet(), ja = class extends q {
 	constructor() {
-		super(), k(this, Z), g(this, xa, void 0), g(this, Sa, 0), g(this, Ca, !1), g(this, wa, new sa((e) => v(Z, this, Pa).call(this, e), { intervalMs: ua })), g(this, Ta, void 0), g(this, Ea, void 0), g(this, Da, typeof ResizeObserver > "u" ? void 0 : new ResizeObserver(([e]) => {
+		super(), O(this, Z), h(this, Sa, void 0), h(this, Ca, 0), h(this, wa, !1), h(this, Ta, new ca((e) => _(Z, this, Fa).call(this, e), { intervalMs: da })), h(this, Ea, void 0), h(this, Da, void 0), h(this, Oa, typeof ResizeObserver > "u" ? void 0 : new ResizeObserver(([e]) => {
 			if (!e) return;
 			let { width: t, height: n } = e.contentRect;
 			this.orientation = t > n * 1.1 ? "horizontal" : "vertical";
 			let r = this.renderRoot.querySelector(".body") ?? this, i = Number.parseFloat(getComputedStyle(r).fontSize);
-			this.room = ha(this.orientation === "horizontal" ? t : n * .7, this.orientation, i);
-		})), g(this, Oa, (e) => {
+			this.room = ga(this.orientation === "horizontal" ? t : n * .7, this.orientation, i);
+		})), h(this, ka, (e) => {
 			e.key === "Escape" && this.close();
-		}), g(this, ka, () => v(Z, this, ja).call(this)), this.card = void 0, this.source = void 0, this.arrivals = null, this.previousStops = 4, this.route = null, this.vehicles = void 0, this.problem = void 0, this.timetableProblem = void 0, this.now = Date.now(), this.orientation = "vertical", this.room = 12, this.screen = "recorrido", this.timetable = void 0;
+		}), h(this, Aa, () => _(Z, this, Ma).call(this)), this.card = void 0, this.source = void 0, this.arrivals = null, this.previousStops = 4, this.route = null, this.vehicles = void 0, this.problem = void 0, this.timetableProblem = void 0, this.now = Date.now(), this.orientation = "vertical", this.room = 12, this.screen = "recorrido", this.timetable = void 0;
 	}
 	willUpdate() {
 		let e = this.patternId;
-		if (!S(xa, this) || !this.vehicles || !this.card || !e) return;
-		let t = ba(this.vehicles, this.now - S(Sa, this)), n = (t) => t.vehicles.filter((t) => t.pattern_id === e).length;
-		b(Ca, this, n(t) < n(this.vehicles)), this.route = We(S(xa, this), e, this.card.stop_id, t, this.arrivals, {
+		if (!x(Sa, this) || !this.vehicles || !this.card || !e) return;
+		let t = xa(this.vehicles, this.now - x(Ca, this)), n = (t) => t.vehicles.filter((t) => t.pattern_id === e).length;
+		y(wa, this, n(t) < n(this.vehicles)), this.route = Ge(x(Sa, this), e, this.card.stop_id, t, this.arrivals, {
 			previousStops: Math.min(this.previousStops, this.room),
 			now: new Date(this.now).toISOString(),
 			previous: this.route
@@ -2565,14 +2583,14 @@ var xa = /* @__PURE__ */ new WeakMap(), Sa = /* @__PURE__ */ new WeakMap(), Ca =
 	}
 	connectedCallback() {
 		var e;
-		super.connectedCallback(), this.card && !this.card.arrivals.some((e) => !e.cancelled) && this.show("horario"), v(Z, this, ja).call(this), S(wa, this).start(), (e = S(Da, this)) == null || e.observe(this), b(Ea, this, setInterval(() => this.now = Date.now(), 1e3)), document.addEventListener("keydown", S(Oa, this)), document.addEventListener("visibilitychange", S(ka, this)), v(Z, this, Na).call(this);
+		super.connectedCallback(), this.card && !this.card.arrivals.some((e) => !e.cancelled) && this.show("horario"), _(Z, this, Ma).call(this), x(Ta, this).start(), (e = x(Oa, this)) == null || e.observe(this), y(Da, this, setInterval(() => this.now = Date.now(), 1e3)), document.addEventListener("keydown", x(ka, this)), document.addEventListener("visibilitychange", x(Aa, this)), _(Z, this, Pa).call(this);
 	}
 	disconnectedCallback() {
 		var e;
-		super.disconnectedCallback(), S(wa, this).stop(), (e = S(Da, this)) == null || e.disconnect(), clearInterval(S(Ea, this)), clearTimeout(S(Ta, this)), document.removeEventListener("keydown", S(Oa, this)), document.removeEventListener("visibilitychange", S(ka, this));
+		super.disconnectedCallback(), x(Ta, this).stop(), (e = x(Oa, this)) == null || e.disconnect(), clearInterval(x(Da, this)), clearTimeout(x(Ea, this)), document.removeEventListener("keydown", x(ka, this)), document.removeEventListener("visibilitychange", x(Aa, this));
 	}
 	show(e) {
-		this.screen = e, v(Z, this, ja).call(this), e === "horario" && !this.timetable && v(Z, this, Ma).call(this), v(Z, this, Na).call(this);
+		this.screen = e, _(Z, this, Ma).call(this), e === "horario" && !this.timetable && _(Z, this, Na).call(this), _(Z, this, Pa).call(this);
 	}
 	close() {
 		this.dispatchEvent(new CustomEvent("route-close", {
@@ -2581,24 +2599,24 @@ var xa = /* @__PURE__ */ new WeakMap(), Sa = /* @__PURE__ */ new WeakMap(), Ca =
 		}));
 	}
 	get patternId() {
-		return this.card ? Mi(this.card) : null;
+		return this.card ? Ni(this.card) : null;
 	}
 	render() {
 		let e = this.card;
 		if (!e) return G;
-		let t = this.route, n = this.vehicles ? this.now - S(Sa, this) : 0, r = t && t.buses.length === 0 && t.earlierBuses.length === 0, i = r && !S(Ca, this) && !this.problem && n <= 18e4, a = t && n <= 18e4 && !(r && S(Ca, this)) ? t : null;
+		let t = this.route, n = this.vehicles ? this.now - x(Ca, this) : 0, r = t && t.buses.length === 0 && t.earlierBuses.length === 0, i = r && !x(wa, this) && !this.problem && n <= 18e4, a = t && n <= 18e4 && !(r && x(wa, this)) ? t : null;
 		return U`
       <header
-        style=${vi({
+        style=${yi({
 			"--line-colour": e.colour,
 			"--line-text": e.text_colour
 		})}
-        @click=${() => v(Z, this, Na).call(this)}
+        @click=${() => _(Z, this, Pa).call(this)}
       >
         <span class="badge">${e.line_label}</span>
         <div class="title">
           <strong>→ ${(t == null ? void 0 : t.headsign) ?? e.headsign ?? e.line_name}</strong>
-          <span>${ya(e, this.now)}</span>
+          <span>${ba(e, this.now)}</span>
         </div>
         <div class="actions">
           <button @click=${() => this.show(this.screen === "horario" ? "recorrido" : "horario")}>
@@ -2609,29 +2627,29 @@ var xa = /* @__PURE__ */ new WeakMap(), Sa = /* @__PURE__ */ new WeakMap(), Ca =
       </header>
       <div
         class="body"
-        style=${vi({
+        style=${yi({
 			"--line-colour": e.colour,
 			"--line-text": e.text_colour
 		})}
-        @click=${() => v(Z, this, Na).call(this)}
+        @click=${() => _(Z, this, Pa).call(this)}
       >
-        ${this.screen === "horario" ? this.timetableProblem ? U`<p class="note" role="alert">${this.timetableProblem}</p>` : v(Z, this, La).call(this, e) : this.problem && a ? v(Z, this, Ia).call(this, a) : this.problem ? U`<p class="note" role="alert">${this.problem}</p>` : t ? v(Z, this, Ia).call(this, t) : U`<p class="note" role="status">Buscando los autobuses…</p>`}
+        ${this.screen === "horario" ? this.timetableProblem ? U`<p class="note" role="alert">${this.timetableProblem}</p>` : _(Z, this, Ra).call(this, e) : this.problem && a ? _(Z, this, La).call(this, a) : this.problem ? U`<p class="note" role="alert">${this.problem}</p>` : t ? _(Z, this, La).call(this, t) : U`<p class="note" role="status">Buscando los autobuses…</p>`}
       </div>
       <footer ?hidden=${this.screen === "horario"}>
         <span>
-          ${[t && t.hiddenStops > 0 ? `${this.orientation === "horizontal" ? "←" : "↓"} ${_a(t)}` : "", i ? "Ningún autobús en camino ahora mismo." : ""].filter(Boolean).join(" · ")}
+          ${[t && t.hiddenStops > 0 ? `${this.orientation === "horizontal" ? "←" : "↓"} ${va(t)}` : "", i ? "Ningún autobús en camino ahora mismo." : ""].filter(Boolean).join(" · ")}
         </span>
-        <span>${this.vehicles ? `Posiciones ${ei(n)}` : ""}</span>
+        <span>${this.vehicles ? `Posiciones ${ti(n)}` : ""}</span>
         ${this.problem && a ? U`<span class="problem" role="alert">${this.problem}</span>` : G}
       </footer>
     `;
 	}
 };
-la = Aa;
-function ja() {
-	S(wa, this).setPaused(this.screen === "horario" || document.hidden);
+ua = ja;
+function Ma() {
+	x(Ta, this).setPaused(this.screen === "horario" || document.hidden);
 }
-async function Ma() {
+async function Na() {
 	let e = this.card, t = this.source;
 	if (e && t) try {
 		this.timetable = await t.timetable(e.line_id), this.timetableProblem = void 0;
@@ -2639,25 +2657,25 @@ async function Ma() {
 		this.timetableProblem = "No se puede obtener ahora el horario de la línea.";
 	}
 }
-function Na() {
-	clearTimeout(S(Ta, this)), b(Ta, this, setTimeout(() => this.close(), da));
+function Pa() {
+	clearTimeout(x(Ea, this)), y(Ea, this, setTimeout(() => this.close(), fa));
 }
-async function Pa(e) {
+async function Fa(e) {
 	let t = this.card, n = this.source, r = this.patternId;
 	if (t && n && r) try {
 		let [r, i] = await Promise.all([n.catalog(), n.vehicles(t.line_id, e)]);
-		b(xa, this, r), b(Sa, this, Date.now()), this.vehicles = i, this.problem = void 0;
+		y(Sa, this, r), y(Ca, this, Date.now()), this.vehicles = i, this.problem = void 0;
 	} catch (t) {
 		throw e.aborted || (this.problem = "No se pueden obtener ahora las posiciones de los autobuses."), t;
 	}
 }
-function Fa(e, t) {
+function Ia(e, t) {
 	let n = t > 0 ? e / t : 1;
 	return this.orientation === "horizontal" ? { left: `${n * 100}%` } : { top: `${(1 - n) * 100}%` };
 }
-function Ia(e) {
-	let t = e.stops.length - 1, n = ga(e), [r, ...i] = e.earlierBuses, a = t % 2 == 1;
-	return U`<div class="track" role="img" aria-label=${v(Z, this, Ra).call(this, e)}>
+function La(e) {
+	let t = e.stops.length - 1, n = _a(e), [r, ...i] = e.earlierBuses, a = t % 2 == 1;
+	return U`<div class="track" role="img" aria-label=${_(Z, this, za).call(this, e)}>
       <div class="line"></div>
       ${e.hiddenStops > 0 ? U`<div class="more before"></div>` : G}
       ${e.stopsAfter > 0 ? U`<div class="more after"></div>` : G}
@@ -2669,16 +2687,16 @@ function Ia(e) {
 		(t - r) % 2 == 1 ? "above" : "",
 		n.has(r) ? "covered" : ""
 	].join(" ")}
-            style=${vi(v(Z, this, Fa).call(this, r, t))}
+            style=${yi(_(Z, this, Ia).call(this, r, t))}
           >
             <span class="dot"></span><span class="name">${e.name}</span>
           </div>`)}
-      ${hi(e.buses, (e) => e.vehicleId, (e, n) => U`<div
+      ${gi(e.buses, (e) => e.vehicleId, (e, n) => U`<div
             class=${n === 0 ? "bus first" : "bus"}
             data-vehicle=${e.vehicleId}
-            style=${vi(v(Z, this, Fa).call(this, e.at, t))}
+            style=${yi(_(Z, this, Ia).call(this, e.at, t))}
           >
-            <span class="pill">🚌 ${va(e)}</span>
+            <span class="pill">🚌 ${ya(e)}</span>
           </div>`)}
       ${r ? U`<div
               class=${[
@@ -2689,26 +2707,26 @@ function Ia(e) {
             >
               <span class="pill"
                 >🚌
-                ${va(r)}${i.length > 0 ? ` +${i.length}` : ""}</span
+                ${ya(r)}${i.length > 0 ? ` +${i.length}` : ""}</span
               >
             </div>` : G}
     </div>`;
 }
-function La(e) {
+function Ra(e) {
 	return this.timetable ? U`<lb-timetable
-      .timetable=${It(this.timetable, this.patternId) ?? null}
+      .timetable=${Rt(this.timetable, this.patternId) ?? null}
       .now=${this.now}
       stop-name=${e.stop_name}
     ></lb-timetable>` : U`<p class="note" role="status">Buscando el horario…</p>`;
 }
-function Ra(e) {
+function za(e) {
 	let t = e.stops.length - 1, n = e.stops.flatMap((e, n) => e.terminus ? e.position === 1 ? [`La línea empieza en ${e.name}`] : [n === t ? "La línea acaba en tu parada" : `La línea acaba en ${e.name}`] : []), r = [...e.buses, ...e.earlierBuses];
 	return r.length === 0 ? [...n, "Ningún autobús de esta línea en camino ahora mismo."].join(". ") : [...n, ...r.map((e) => {
 		let t = e.stopsAway === 0 ? "llegando a tu parada" : `a ${e.stopsAway + 1} paradas`;
 		return e.minutes === null ? `Un autobús ${t}` : `Un autobús ${t}, ${e.minutes} minutos`;
 	})].join(". ");
 }
-la.properties = {
+ua.properties = {
 	card: { attribute: !1 },
 	source: { attribute: !1 },
 	arrivals: { attribute: !1 },
@@ -2731,7 +2749,7 @@ la.properties = {
 	},
 	timetable: { state: !0 },
 	timetableProblem: { state: !0 }
-}, la.styles = L`
+}, ua.styles = R`
     :host {
       position: fixed;
       inset: 0;
@@ -3045,37 +3063,37 @@ la.properties = {
         transition: none;
       }
     }
-  `, customElements.get("lb-route") || customElements.define("lb-route", Aa), F(), Xr(), A(), _(), C(), x(), y();
-var za, Ba = 5e3, Va = /* @__PURE__ */ new WeakMap(), Ha = /* @__PURE__ */ new WeakMap(), Ua = /* @__PURE__ */ new WeakMap(), Wa = /* @__PURE__ */ new WeakMap(), Ga = /* @__PURE__ */ new WeakMap(), Ka = /* @__PURE__ */ new WeakMap(), qa = /* @__PURE__ */ new WeakSet(), Ja = class extends q {
+  `, customElements.get("lb-route") || customElements.define("lb-route", ja), I(), Zr(), k(), g(), S(), b(), v();
+var Ba, Va = 5e3, Ha = /* @__PURE__ */ new WeakMap(), Ua = /* @__PURE__ */ new WeakMap(), Wa = /* @__PURE__ */ new WeakMap(), Ga = /* @__PURE__ */ new WeakMap(), Ka = /* @__PURE__ */ new WeakMap(), qa = /* @__PURE__ */ new WeakMap(), Ja = /* @__PURE__ */ new WeakSet(), Ya = class extends q {
 	constructor() {
-		super(), k(this, qa), g(this, Va, new sa((e) => this.refresh(e))), g(this, Ha, /* @__PURE__ */ new Map()), g(this, Ua, void 0), g(this, Wa, void 0), g(this, Ga, () => S(Va, this).setPaused(document.hidden)), g(this, Ka, /* @__PURE__ */ new Map()), this.config = void 0, this.source = void 0, this.status = "loading", this.layout = "auto", this.cards = [], this.now = Date.now(), this.updatedAt = void 0, this.error = void 0, this.opened = void 0, this.timetables = /* @__PURE__ */ new Map();
+		super(), O(this, Ja), h(this, Ha, new ca((e) => this.refresh(e))), h(this, Ua, /* @__PURE__ */ new Map()), h(this, Wa, void 0), h(this, Ga, void 0), h(this, Ka, () => x(Ha, this).setPaused(document.hidden)), h(this, qa, /* @__PURE__ */ new Map()), this.config = void 0, this.source = void 0, this.status = "loading", this.layout = "auto", this.cards = [], this.now = Date.now(), this.updatedAt = void 0, this.error = void 0, this.opened = void 0, this.timetables = /* @__PURE__ */ new Map();
 	}
 	connectedCallback() {
-		super.connectedCallback(), document.addEventListener("visibilitychange", S(Ga, this)), b(Ua, this, setInterval(() => {
+		super.connectedCallback(), document.addEventListener("visibilitychange", x(Ka, this)), y(Wa, this, setInterval(() => {
 			this.now = Date.now();
-		}, Ba)), this.config && S(Va, this).start();
+		}, Va)), this.config && x(Ha, this).start();
 	}
 	disconnectedCallback() {
-		super.disconnectedCallback(), document.removeEventListener("visibilitychange", S(Ga, this)), clearInterval(S(Ua, this)), S(Va, this).stop();
+		super.disconnectedCallback(), document.removeEventListener("visibilitychange", x(Ka, this)), clearInterval(x(Wa, this)), x(Ha, this).stop();
 	}
 	willUpdate(e) {
-		this.config && (this.style.setProperty("--lb-text-scale", String(this.config.textScale / 100)), this.style.setProperty("font-family", Qa[this.config.font]));
-		let t = e.get("config"), n = e.has("config") && $a(t) !== $a(this.config) || e.has("source");
-		e.has("source") && (S(Ha, this).clear(), this.timetables = /* @__PURE__ */ new Map()), n && this.hasUpdated && this.isConnected && this.config && (b(Wa, this, void 0), S(Va, this).stop(), S(Va, this).start());
+		this.config && (this.style.setProperty("--lb-text-scale", String(this.config.textScale / 100)), this.style.setProperty("font-family", $a[this.config.font]));
+		let t = e.get("config"), n = e.has("config") && eo(t) !== eo(this.config) || e.has("source");
+		e.has("source") && (x(Ua, this).clear(), this.timetables = /* @__PURE__ */ new Map()), n && this.hasUpdated && this.isConnected && this.config && (y(Ga, this, void 0), x(Ha, this).stop(), x(Ha, this).start());
 	}
 	async refresh(e) {
 		let t = this.config;
 		if (t) try {
-			this.source ?? (this.source = await fn(t, { pageProtocol: location.protocol }));
+			this.source ?? (this.source = await mn(t, { pageProtocol: location.protocol }));
 			let n = this.source;
-			S(Wa, this) ?? b(Wa, this, await n.catalog());
-			let r = S(Wa, this), i = [...new Set(t.stops.map((e) => e.stop_id))], a = await Promise.all(i.map((t) => n.arrivals(t, e))), o = new Map(a.map((e) => [e.stop_id, e]));
-			b(Ka, this, o), this.cards = t.stops.flatMap((e) => {
+			x(Ga, this) ?? y(Ga, this, await n.catalog());
+			let r = x(Ga, this), i = [...new Set(t.stops.map((e) => e.stop_id))], a = await Promise.all(i.map((t) => n.arrivals(t, e))), o = new Map(a.map((e) => [e.stop_id, e]));
+			y(qa, this, o), this.cards = t.stops.flatMap((e) => {
 				let n = o.get(e.stop_id);
-				return n ? Te(r, e, n, t.perCard) : [];
-			}), this.updatedAt = Math.min(...a.map((e) => Date.parse(e.generated_at))), this.now = Date.now(), this.error = void 0, this.status = "ready", v(qa, this, Ya).call(this, n, this.cards);
+				return n ? Ee(r, e, n, t.perCard) : [];
+			}), this.updatedAt = Math.min(...a.map((e) => Date.parse(e.generated_at))), this.now = Date.now(), this.error = void 0, this.status = "ready", _(Ja, this, Xa).call(this, n, this.cards);
 		} catch (t) {
-			throw e != null && e.aborted ? t : (this.error = eo(t), this.cards.length === 0 && (this.status = "error"), t);
+			throw e != null && e.aborted ? t : (this.error = to(t), this.cards.length === 0 && (this.status = "error"), t);
 		} finally {
 			this.dispatchEvent(new CustomEvent("board-refresh", {
 				bubbles: !0,
@@ -3090,7 +3108,7 @@ var za, Ba = 5e3, Va = /* @__PURE__ */ new WeakMap(), Ha = /* @__PURE__ */ new W
 		if (this.status === "error") return U`<p class="message" role="alert">${this.error}</p>`;
 		let t = this.updatedAt === void 0 ? 0 : this.now - this.updatedAt;
 		return U`
-      ${v(qa, this, Za).call(this)}
+      ${_(Ja, this, Qa).call(this)}
       <lb-card-grid
         .cards=${this.cards}
         .now=${this.now}
@@ -3099,48 +3117,48 @@ var za, Ba = 5e3, Va = /* @__PURE__ */ new WeakMap(), Ha = /* @__PURE__ */ new W
         effect=${e.effect}
         alert-minutes=${e.alertMinutes}
         layout=${this.layout}
-        .services=${v(qa, this, Xa).call(this)}
+        .services=${_(Ja, this, Za).call(this)}
         @card-open=${(e) => this.opened = Y(e.detail)}
       ></lb-card-grid>
       <div class="status" part="status" role="status">
-        <span>Actualizado ${ei(t)}</span>
+        <span>Actualizado ${ti(t)}</span>
         ${t > 9e4 ? U`<span class="stale">Datos sin actualizar: comprobando de nuevo</span>` : G}
         ${this.error ? U`<span class="problem">${this.error}</span>` : G}
       </div>
     `;
 	}
 };
-za = Ja;
-async function Ya(e, t) {
-	let n = At(Date.now()), r = new Set(t.filter((e) => !e.arrivals.some((e) => !e.cancelled)).map((e) => e.line_id).filter((e) => S(Ha, this).get(e) !== n));
+Ba = Ya;
+async function Xa(e, t) {
+	let n = Mt(Date.now()), r = new Set(t.filter((e) => !e.arrivals.some((e) => !e.cancelled)).map((e) => e.line_id).filter((e) => x(Ua, this).get(e) !== n));
 	if (r.size === 0) return;
-	for (let e of r) S(Ha, this).set(e, n);
+	for (let e of r) x(Ua, this).set(e, n);
 	let i = await Promise.allSettled([...r].map(async (t) => e.timetable(t)));
 	if (e !== this.source) return;
 	let a = new Map(this.timetables);
 	for (let e of i) e.status === "fulfilled" && a.set(e.value.line_id, e.value);
 	this.timetables = a;
 }
-function Xa() {
-	let e = /* @__PURE__ */ new Map(), t = At(this.now);
+function Za() {
+	let e = /* @__PURE__ */ new Map(), t = Mt(this.now);
 	for (let n of this.cards) {
 		let r = this.timetables.get(n.line_id);
-		(r == null ? void 0 : r.service_date) === t && e.set(Y(n), Ft(It(r, Mi(n)), this.now));
+		(r == null ? void 0 : r.service_date) === t && e.set(Y(n), Lt(Rt(r, Ni(n)), this.now));
 	}
 	return e;
 }
-function Za() {
+function Qa() {
 	var e;
 	let t = this.cards.find((e) => Y(e) === this.opened);
 	return !t || !this.source ? G : U`<lb-route
       .card=${t}
       .source=${this.source}
-      .arrivals=${S(Ka, this).get(t.stop_id) ?? null}
+      .arrivals=${x(qa, this).get(t.stop_id) ?? null}
       .previousStops=${((e = this.config) == null ? void 0 : e.previousStops) ?? 4}
       @route-close=${() => this.opened = void 0}
     ></lb-route>`;
 }
-za.properties = {
+Ba.properties = {
 	config: { attribute: !1 },
 	source: { attribute: !1 },
 	status: {
@@ -3157,7 +3175,7 @@ za.properties = {
 	error: { state: !0 },
 	opened: { state: !0 },
 	timetables: { state: !0 }
-}, za.styles = L`
+}, Ba.styles = R`
     :host {
       display: block;
       color: var(--lb-fg, inherit);
@@ -3195,34 +3213,34 @@ za.properties = {
       border: 1px solid var(--lb-border, currentColor);
     }
   `;
-var Qa = {
+var $a = {
 	sistema: "var(--lb-font, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif)",
 	legible: "'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, sans-serif",
 	redondeada: "ui-rounded, 'SF Pro Rounded', 'Nunito', 'Varela Round', system-ui, sans-serif",
 	mono: "ui-monospace, 'SF Mono', 'DejaVu Sans Mono', Menlo, Consolas, monospace"
 };
-function $a(e) {
-	return e ? `${Se(e.stops)}|${e.perCard}` : "";
-}
 function eo(e) {
+	return e ? `${Ce(e.stops)}|${e.perCard}` : "";
+}
+function to(e) {
 	return e instanceof s ? "El servicio de autobuses del Ayuntamiento ha cambiado. Hace falta actualizar esta aplicación." : e instanceof o ? "No se puede contactar con el servicio de autobuses. Se reintentará automáticamente." : e instanceof i ? e.message : "Error inesperado al cargar las llegadas.";
 }
 //#endregion
 //#region src/entities.ts
-customElements.get("logrono-bus-board") || customElements.define("logrono-bus-board", Ja), F();
-var Q = (e) => typeof e == "string" ? e : null, to = (e) => typeof e == "number" ? e : null;
-function no(e) {
+customElements.get("logrono-bus-board") || customElements.define("logrono-bus-board", Ya), I();
+var Q = (e) => typeof e == "string" ? e : null, no = (e) => typeof e == "number" ? e : null;
+function ro(e) {
 	return e === "asc" || e === "desc" ? e : null;
 }
-function ro(e) {
+function io(e) {
 	return Array.isArray(e) ? e.filter((e) => typeof e == "object" && !!e && typeof e.hora == "string" && typeof e.tiempo_real == "boolean") : [];
 }
-function io(e) {
+function ao(e) {
 	return e !== void 0 && Q(e.attributes.linea_id) !== null;
 }
-function ao(e) {
-	if (!io(e)) return null;
-	let t = e.attributes, n = Q(t.parada_id) ?? "", r = Q(t.linea_id) ?? "", i = no(t.sentido), a = Q(t.destino), o = i ? `${r}:${i}` : null, s = ro(t.llegadas).map((e) => ({
+function oo(e) {
+	if (!ao(e)) return null;
+	let t = e.attributes, n = Q(t.parada_id) ?? "", r = Q(t.linea_id) ?? "", i = ro(t.sentido), a = Q(t.destino), o = i ? `${r}:${i}` : null, s = io(t.llegadas).map((e) => ({
 		stop_id: n,
 		line_id: r,
 		pattern_id: o,
@@ -3251,69 +3269,69 @@ function ao(e) {
 		arrivals: s
 	};
 }
-function oo(e, t) {
+function so(e, t) {
 	let n = /* @__PURE__ */ new Set(), r = [];
 	for (let i of t) {
-		let t = ao(e.states[i]);
+		let t = oo(e.states[i]);
 		if (!t) continue;
 		let a = Y(t);
 		n.has(a) || (n.add(a), r.push(t));
 	}
 	return r;
 }
-function so(e) {
-	return Object.values(e.states).filter((e) => io(e)).filter((e) => e.attributes.unit_of_measurement === "min").map((e) => e.entity_id).sort();
-}
 function co(e) {
-	if (!io(e)) return null;
+	return Object.values(e.states).filter((e) => ao(e)).filter((e) => e.attributes.unit_of_measurement === "min").map((e) => e.entity_id).sort();
+}
+function lo(e) {
+	if (!ao(e)) return null;
 	let t = e.attributes, n = t.servicio;
-	return Lt.includes(n) ? {
+	return zt.includes(n) ? {
 		state: n,
 		first: Q(t.primera_salida),
 		last: Q(t.ultima_salida),
 		next_departure: Q(t.proxima_salida),
-		interval_min: to(t.frecuencia_min),
-		interval_max_min: to(t.frecuencia_max_min)
+		interval_min: no(t.frecuencia_min),
+		interval_max_min: no(t.frecuencia_max_min)
 	} : null;
 }
-function lo(e, t) {
+function uo(e, t) {
 	let n = /* @__PURE__ */ new Map();
 	for (let r of t) {
-		let t = e.states[r], i = ao(t), a = co(t);
+		let t = e.states[r], i = oo(t), a = lo(t);
 		i && a && n.set(Y(i), a);
 	}
 	return n;
 }
 //#endregion
 //#region src/ha.ts
-function uo(e, t) {
+function fo(e, t) {
 	e.dispatchEvent(new CustomEvent("config-changed", {
 		detail: { config: t },
 		bubbles: !0,
 		composed: !0
 	}));
 }
-var fo = t((() => {})), po = /* @__PURE__ */ n({
-	EDITOR_LABELS: () => _o,
-	EDITOR_SCHEMA: () => go,
-	LogronoBusCardEditor: () => yo
+var po = t((() => {})), mo = /* @__PURE__ */ n({
+	EDITOR_LABELS: () => vo,
+	EDITOR_SCHEMA: () => _o,
+	LogronoBusCardEditor: () => bo
 });
-function mo(e) {
+function ho(e) {
 	e.stopPropagation();
 	let t = {
 		...e.detail.value,
-		type: `custom:${I}`
+		type: `custom:${L}`
 	};
 	try {
 		Fn(t);
 	} catch {}
-	this.config = t, uo(this, t);
+	this.config = t, fo(this, t);
 }
-var ho, $, go, _o, vo, yo, bo, xo = t((() => {
-	F(), Xr(), fo(), A(), y(), $ = (e, t) => ({
+var go, $, _o, vo, yo, bo, xo, So = t((() => {
+	I(), Zr(), po(), k(), v(), $ = (e, t) => ({
 		value: e,
 		label: t
-	}), go = [
+	}), _o = [
 		{
 			name: "entities",
 			required: !0,
@@ -3422,7 +3440,7 @@ var ho, $, go, _o, vo, yo, bo, xo = t((() => {
 				}
 			]
 		}
-	], _o = {
+	], vo = {
 		entities: "Líneas (sensores «… minutos» de Logroño Bus)",
 		titulo: "Título",
 		orden: "Orden de las tarjetas",
@@ -3434,24 +3452,24 @@ var ho, $, go, _o, vo, yo, bo, xo = t((() => {
 		tam: "Tamaño del texto",
 		recorrido: "Al tocar, ver el recorrido y dónde está el autobús",
 		previas: "Paradas previas en el recorrido"
-	}, vo = /* @__PURE__ */ new WeakSet(), yo = class extends q {
+	}, yo = /* @__PURE__ */ new WeakSet(), bo = class extends q {
 		constructor() {
-			super(), k(this, vo), this.hass = void 0, this.config = void 0;
+			super(), O(this, yo), this.hass = void 0, this.config = void 0;
 		}
 		setConfig(e) {
 			this.config = e;
 		}
 		get formData() {
 			return {
-				orden: w.order,
-				aviso: w.alertMinutes,
-				efecto: w.effect,
-				color: w.colour,
-				letra: w.font,
-				tam: w.textScale,
+				orden: C.order,
+				aviso: C.alertMinutes,
+				efecto: C.effect,
+				color: C.colour,
+				letra: C.font,
+				tam: C.textScale,
 				modo: "normal",
 				recorrido: !0,
-				previas: w.previousStops,
+				previas: C.previousStops,
 				...this.config
 			};
 		}
@@ -3459,27 +3477,27 @@ var ho, $, go, _o, vo, yo, bo, xo = t((() => {
 			return !this.hass || !this.config ? G : U`<ha-form
       .hass=${this.hass}
       .data=${this.formData}
-      .schema=${go}
-      .computeLabel=${(e) => _o[e.name] ?? e.name}
-      @value-changed=${v(vo, this, mo)}
+      .schema=${_o}
+      .computeLabel=${(e) => vo[e.name] ?? e.name}
+      @value-changed=${_(yo, this, ho)}
     ></ha-form>`;
 		}
-	}, ho = yo, ho.properties = {
+	}, go = bo, go.properties = {
 		hass: { attribute: !1 },
 		config: { state: !0 }
-	}, bo = `${I}-editor`, customElements.get(bo) || customElements.define(bo, yo);
+	}, xo = `${L}-editor`, customElements.get(xo) || customElements.define(xo, bo);
 }));
-F(), Xr(), zn(), A(), _(), x(), C(), y();
-var So, Co = 5e3, wo = 3, To = /* @__PURE__ */ new WeakMap(), Eo = /* @__PURE__ */ new WeakMap(), Do = /* @__PURE__ */ new WeakMap(), Oo = /* @__PURE__ */ new WeakMap(), ko = /* @__PURE__ */ new WeakSet(), Ao = class extends q {
+I(), Zr(), zn(), k(), g(), b(), S(), v();
+var Co, wo = 5e3, To = 3, Eo = /* @__PURE__ */ new WeakMap(), Do = /* @__PURE__ */ new WeakMap(), Oo = /* @__PURE__ */ new WeakMap(), ko = /* @__PURE__ */ new WeakMap(), Ao = /* @__PURE__ */ new WeakSet(), jo = class extends q {
 	constructor() {
-		super(), k(this, ko), g(this, To, void 0), g(this, Eo, void 0), g(this, Do, []), g(this, Oo, /* @__PURE__ */ new Map()), this.hass = void 0, this.config = void 0, this.now = Date.now(), this.opened = void 0;
+		super(), O(this, Ao), h(this, Eo, void 0), h(this, Do, void 0), h(this, Oo, []), h(this, ko, /* @__PURE__ */ new Map()), this.hass = void 0, this.config = void 0, this.now = Date.now(), this.opened = void 0;
 	}
 	setConfig(e) {
 		this.config = Fn(e);
 	}
 	getCardSize() {
 		var e;
-		return Math.max(2, (((e = this.config) == null ? void 0 : e.entities.length) ?? 1) * wo);
+		return Math.max(2, (((e = this.config) == null ? void 0 : e.entities.length) ?? 1) * To);
 	}
 	getGridOptions() {
 		return {
@@ -3488,19 +3506,19 @@ var So, Co = 5e3, wo = 3, To = /* @__PURE__ */ new WeakMap(), Eo = /* @__PURE__ 
 		};
 	}
 	static async getConfigElement() {
-		return await Promise.resolve().then(() => (xo(), po)), document.createElement(`${I}-editor`);
+		return await Promise.resolve().then(() => (So(), mo)), document.createElement(`${L}-editor`);
 	}
 	static getStubConfig(e) {
 		return {
-			entities: so(e).slice(0, 4),
+			entities: co(e).slice(0, 4),
 			orden: "llegada"
 		};
 	}
 	connectedCallback() {
-		super.connectedCallback(), b(To, this, setInterval(() => this.now = Date.now(), Co));
+		super.connectedCallback(), y(Eo, this, setInterval(() => this.now = Date.now(), wo));
 	}
 	disconnectedCallback() {
-		super.disconnectedCallback(), clearInterval(S(To, this));
+		super.disconnectedCallback(), clearInterval(x(Eo, this));
 	}
 	shouldUpdate(e) {
 		if (!e.has("hass") || e.size > 1) return !0;
@@ -3512,7 +3530,7 @@ var So, Co = 5e3, wo = 3, To = /* @__PURE__ */ new WeakMap(), Eo = /* @__PURE__ 
 	}
 	willUpdate() {
 		let e = this.config;
-		e && (this.setAttribute("modo", e.modo), this.style.setProperty("--lb-text-scale", String(e.tam / 100)), this.style.fontFamily = e.letra === "sistema" ? "" : Qa[e.letra], this.hass && (b(Do, this, oo(this.hass, e.entities)), b(Oo, this, lo(this.hass, e.entities))));
+		e && (this.setAttribute("modo", e.modo), this.style.setProperty("--lb-text-scale", String(e.tam / 100)), this.style.fontFamily = e.letra === "sistema" ? "" : $a[e.letra], this.hass && (y(Oo, this, so(this.hass, e.entities)), y(ko, this, uo(this.hass, e.entities))));
 	}
 	render() {
 		let e = this.config;
@@ -3520,12 +3538,12 @@ var So, Co = 5e3, wo = 3, To = /* @__PURE__ */ new WeakMap(), Eo = /* @__PURE__ 
 		let t = e.modo === "pantalla" ? "kiosk" : "auto";
 		return U`<ha-card>
       ${e.titulo ? U`<h1>${e.titulo}</h1>` : G}
-      ${S(Do, this).length === 0 ? U`<p class="empty">
+      ${x(Oo, this).length === 0 ? U`<p class="empty">
               No hay datos de los sensores elegidos. Comprueba que pertenecen a la integración
               Logroño Bus.
             </p>` : U`<lb-card-grid
-              .cards=${S(Do, this)}
-              .services=${S(Oo, this)}
+              .cards=${x(Oo, this)}
+              .services=${x(ko, this)}
               .now=${this.now}
               order=${e.orden}
               colour=${e.color}
@@ -3535,19 +3553,19 @@ var So, Co = 5e3, wo = 3, To = /* @__PURE__ */ new WeakMap(), Eo = /* @__PURE__ 
               .openable=${e.recorrido}
               @card-open=${(e) => this.opened = e.detail}
             ></lb-card-grid>`}
-      ${v(ko, this, Mo).call(this)}
+      ${_(Ao, this, No).call(this)}
     </ha-card>`;
 	}
 };
-So = Ao;
-function jo() {
-	return S(Eo, this) ?? b(Eo, this, new Tn("https://transporteurbano.logrono.es/api/", { store: new Nn(() => globalThis.localStorage) })), S(Eo, this);
-}
+Co = jo;
 function Mo() {
+	return x(Do, this) ?? y(Do, this, new En("https://transporteurbano.logrono.es/api/", { store: new Nn(() => globalThis.localStorage) })), x(Do, this);
+}
+function No() {
 	let e = this.opened, t = this.config;
 	return !e || !t ? G : U`<lb-route
       .card=${e}
-      .source=${jo.call(v(ko, this))}
+      .source=${Mo.call(_(Ao, this))}
       .previousStops=${t.previas}
       .arrivals=${{
 		stop_id: e.stop_id,
@@ -3559,12 +3577,12 @@ function Mo() {
 }
 //#endregion
 //#region src/index.ts
-So.properties = {
+Co.properties = {
 	hass: { attribute: !1 },
 	config: { state: !0 },
 	now: { state: !0 },
 	opened: { state: !0 }
-}, So.styles = L`
+}, Co.styles = R`
     :host {
       display: block;
       /* Home Assistant theme → card tokens. */
@@ -3602,13 +3620,13 @@ So.properties = {
       margin: 8px 4px;
       color: var(--lb-muted);
     }
-  `, customElements.get("logrono-bus-card") || customElements.define(I, Ao), zn();
-var No;
-(No = window).customCards ?? (No.customCards = []), window.customCards.some((e) => e.type === "logrono-bus-card") || window.customCards.push({
-	type: I,
+  `, customElements.get("logrono-bus-card") || customElements.define(L, jo), zn();
+var Po;
+(Po = window).customCards ?? (Po.customCards = []), window.customCards.some((e) => e.type === "logrono-bus-card") || window.customCards.push({
+	type: L,
 	name: "Logroño Bus",
 	description: "Próximos autobuses de tus paradas, con el aspecto de la web de Logroño Bus.",
 	preview: !0
 }), console.info(`%c LOGROÑO-BUS-CARD %c ${r} `, "color:#fff;background:#8c1c2c", "");
 //#endregion
-export { Ao as LogronoBusCard, ao as cardFromEntity, oo as cardsFromHass, Fn as normalizeConfig };
+export { jo as LogronoBusCard, oo as cardFromEntity, so as cardsFromHass, Fn as normalizeConfig };
