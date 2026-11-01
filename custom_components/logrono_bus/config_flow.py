@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-import voluptuous as vol
+import probatio
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigEntryState,
@@ -93,10 +93,10 @@ def pattern_options(catalog: Catalog, stop_id: str) -> list[SelectOptionDict]:
     ]
 
 
-def patterns_schema(catalog: Catalog, stop_id: str, default: list[str]) -> vol.Schema:
-    return vol.Schema(
+def patterns_schema(catalog: Catalog, stop_id: str, default: list[str]) -> probatio.Schema:
+    return probatio.Schema(
         {
-            vol.Required(CONF_PATTERNS, default=default): SelectSelector(
+            probatio.Required(CONF_PATTERNS, default=default): SelectSelector(
                 SelectSelectorConfig(
                     options=pattern_options(catalog, stop_id),
                     multiple=True,
@@ -153,9 +153,9 @@ class StopSubentryFlow(ConfigSubentryFlow):
             else None
         )
         followed = {s.data[CONF_STOP_ID] for s in self._get_entry().subentries.values()}
-        schema = vol.Schema(
+        schema = probatio.Schema(
             {
-                vol.Required(CONF_STOP_ID): SelectSelector(
+                probatio.Required(CONF_STOP_ID): SelectSelector(
                     SelectSelectorConfig(
                         options=stop_options(catalog, home, followed),
                         mode=SelectSelectorMode.DROPDOWN,
@@ -234,9 +234,9 @@ class LogronoBusOptionsFlow(OptionsFlow):
                 }
             )
         options = self.config_entry.options
-        schema = vol.Schema(
+        schema = probatio.Schema(
             {
-                vol.Required(
+                probatio.Required(
                     CONF_SCAN_INTERVAL,
                     default=options.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL_S),
                 ): NumberSelector(
@@ -248,7 +248,7 @@ class LogronoBusOptionsFlow(OptionsFlow):
                         mode=NumberSelectorMode.SLIDER,
                     )
                 ),
-                vol.Required(
+                probatio.Required(
                     CONF_FOLLOWING, default=options.get(CONF_FOLLOWING, DEFAULT_FOLLOWING)
                 ): NumberSelector(
                     NumberSelectorConfig(min=1, max=MAX_FOLLOWING, mode=NumberSelectorMode.BOX)
