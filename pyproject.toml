@@ -23,7 +23,7 @@ default-groups = ["dev"]
 
 [dependency-groups]
 # Must match custom_components/logrono_bus/manifest.json "requirements" (Renovate keeps both in step).
-runtime = ["logrono-bus==0.1.0"]
+runtime = ["logrono-bus==0.1.1"]
 test = [
     { include-group = "runtime" },
     # Pins Home Assistant itself (and pytest, syrupy…) to a consistent, released set.
