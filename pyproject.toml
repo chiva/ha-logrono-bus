@@ -27,7 +27,7 @@ runtime = ["logrono-bus==0.1.0"]
 test = [
     { include-group = "runtime" },
     # Pins Home Assistant itself (and pytest, syrupy…) to a consistent, released set.
-    "pytest-homeassistant-custom-component==0.13.367",
+    "pytest-homeassistant-custom-component==0.13.375",
 ]
 lint = ["ruff==0.16.10"]
 typing = ["mypy==2.4.0"]
