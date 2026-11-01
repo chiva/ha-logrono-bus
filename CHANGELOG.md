@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/chiva/ha-logrono-bus/compare/v0.3.3...v0.4.0) (2026-11-01)
+
+
+### Features
+
+* **card:** texto proporcional en Echo Show y Portal, y «Luego» bajo el tiempo principal ([#29](https://github.com/chiva/ha-logrono-bus/issues/29)) ([556ade4](https://github.com/chiva/ha-logrono-bus/commit/556ade4fc967c9d433b27fbc19e0a0efe8e9ca79))
+* **deps:** update dependency logrono-bus to v0.1.1 ([#28](https://github.com/chiva/ha-logrono-bus/issues/28)) ([8cfb80f](https://github.com/chiva/ha-logrono-bus/commit/8cfb80f736a3ace2ba328683d1b8f81d2fcaf658))
+
 ## [0.3.3](https://github.com/chiva/ha-logrono-bus/compare/v0.3.2...v0.3.3) (2026-10-14)
 
 
