@@ -12,13 +12,14 @@
   ],
   "packageRules": [
     {
-      "description": "The library pin lives in manifest.json (users) and pyproject (tests): one PR, typed feat so it triggers a release, no stability wait for our own release.",
+      "description": "The library pin lives in manifest.json (users) and pyproject (tests): one PR, typed feat so it triggers a release. Our own release skips both the stability wait and the weekly window, so it lands on the next Renovate run.",
       "matchPackageNames": [
         "logrono-bus"
       ],
       "groupName": "logrono-bus",
       "semanticCommitType": "feat",
-      "minimumReleaseAge": "0 days"
+      "minimumReleaseAge": "0 days",
+      "schedule": ["at any time"]
     }
   ]
 }
