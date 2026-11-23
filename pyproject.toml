@@ -29,7 +29,7 @@ test = [
     # Pins Home Assistant itself (and pytest, syrupy…) to a consistent, released set.
     "pytest-homeassistant-custom-component==0.13.375",
 ]
-lint = ["ruff==0.17.5"]
+lint = ["ruff==0.17.6"]
 typing = ["mypy==2.4.1"]
 dev = [
     { include-group = "test" },
